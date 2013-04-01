@@ -95,10 +95,11 @@ Each array in `results` contains a match for the query, where the first feature 
 
 Each carmen index is an MBTiles file with an additional SQLite fulltext search table `carmen`. The table can be added by running
 
-    ./scripts/addindex.sh MBTILES [SEARCH-FIELD]
+    ./scripts/carmen-index.js MBTILES
 
 The only requirement for a carmen MBTiles file is that it contains grids and features with a field suitable for use as search terms. Any additional keys included with features will be automatically passed through to the results. The following fields have special meaning to carmen if present:
 
+- `search` - text to be indexed for forward geocoding.
 - `lon` - longitude of the feature. If omitted, `lon` is calculated from the UTFGrid.
 - `lat` - latitude of the feature. If omitted, `lat` is calculated from the UTFGrid.
 - `type` - type of feature. If omitted, the index key is used.
@@ -134,12 +135,12 @@ Two other projects are available in the `data` branch:
 
 Fully rendered and indexed copies of these sources can be downloaded at:
 
-    http://mapbox.s3.amazonaws.com/carmen/flickr-places.mbtiles
-    http://mapbox.s3.amazonaws.com/carmen/ne-countries.mbtiles
-    http://mapbox.s3.amazonaws.com/carmen/ne-provinces.mbtiles
-    http://mapbox.s3.amazonaws.com/carmen/osm-places.mbtiles
-    http://mapbox.s3.amazonaws.com/carmen/tiger-zipcodes.mbtiles
-    http://mapbox.s3.amazonaws.com/carmen/tiger-places.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/flickr-places.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/ne-countries.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/ne-provinces.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/osm-places.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/tiger-zipcodes.mbtiles
+    http://mapbox-carmen.s3.amazonaws.com/carmen/tiger-places.mbtiles
 
 ## Known issues
 

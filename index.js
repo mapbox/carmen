@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var fs = require('fs');
 var path = require('path');
-var MBTiles = require('mbtiles');
 var Step = require('step');
 var basepath = path.resolve(__dirname + '/tiles');
 var sm = new (require('sphericalmercator'))();
@@ -44,24 +43,7 @@ function toChar(key) {
 };
 
 function Carmen(options) {
-    options = options || {
-        country: {
-            weight: 2,
-            source: new MBTiles(basepath + '/ne-countries.mbtiles', function(){})
-        },
-        province: {
-            weight: 1.5,
-            source: new MBTiles(basepath + '/ne-provinces.mbtiles', function(){})
-        },
-        place: {
-            source: new MBTiles(basepath + '/osm-places.mbtiles', function(){})
-        },
-        zipcode: {
-            context: false,
-            source: new MBTiles(basepath + '/tiger-zipcodes.mbtiles', function(){}),
-            filter: function(token) { return /[0-9]{5}/.test(token); }
-        }
-    };
+    if (!options) throw new Error('Carmen options required.');
     this.indexes = _(options).reduce(function(memo, db, key) {
         var dbname = key;
         memo[key] = _(db).defaults({
@@ -82,6 +64,9 @@ function Carmen(options) {
     }, {});
 };
 
+Carmen.S3 = function() { return require('./api-s3') };
+Carmen.MBTiles = function() { return require('./api-mbtiles') };
+
 Carmen.prototype._open = function(callback) {
     if (!_(this.indexes).all(function(d) { return d.source.open }))
         return callback(new Error('DB not open.'));
@@ -98,6 +83,11 @@ Carmen.prototype._open = function(callback) {
                 return callback(err);
             }
             if (--remaining === 0) {
+                carmen.zooms = _(carmen.indexes).chain()
+                    .pluck('zoom')
+                    .uniq()
+                    .sortBy(function(z) { return z })
+                    .value();
                 carmen._opened = true;
                 return callback();
             }
@@ -217,6 +207,11 @@ Carmen.prototype.contextByFeature = function(id, callback) {
 // Get the [lon,lat] of a feature given its id in the form [type].[id].
 // Looks up a point in the feature geometry using a point from a central grid.
 Carmen.prototype.centroid = function(id, callback) {
+    if (!this._opened) return this._open(function(err) {
+        if (err) return callback(err);
+        this.centroid(id, callback);
+    }.bind(this));
+
     var type = id.split('.').shift();
     var id = id.split('.').pop();
     var carmen = this;
@@ -224,14 +219,12 @@ Carmen.prototype.centroid = function(id, callback) {
     var c = {};
 
     Step(function() {
-        carmen._open(this);
-    }, function(err) {
-        if (err) throw err;
-        indexes[type].source._db.get('SELECT zxy FROM carmen WHERE id MATCH(?)', id, this);
+        indexes[type].source.search(null, id, this);
     }, function(err, row) {
         if (err) throw err;
-        if (!row) return this();
-        var rows = row.zxy.split(',').map(function(zxy) {
+        if (!row || !row.length) return this();
+        row = row.shift();
+        var rows = row.zxy.map(function(zxy) {
             zxy = zxy.split('/');
             return _({
                 z: zxy[0] | 0,
@@ -277,10 +270,14 @@ Carmen.prototype.centroid = function(id, callback) {
 };
 
 Carmen.prototype.geocode = function(query, callback) {
+    if (!this._opened) return this._open(function(err) {
+        if (err) return callback(err);
+        this.geocode(query, callback);
+    }.bind(this));
+
     var indexes = this.indexes;
+    var zooms = this.zooms;
     var types = Object.keys(indexes);
-    var minweight = _(indexes).chain().pluck('weight').min().value();
-    var maxweight = _(indexes).chain().pluck('weight').max().value();
     var data = { query: this.tokenize(query) };
     var carmen = this;
 
@@ -295,54 +292,51 @@ Carmen.prototype.geocode = function(query, callback) {
 
     // keyword search. Find matching features.
     Step(function() {
-        carmen._open(this);
-    }, function(err) {
-        if (err) throw err;
-
         var group = this.group();
-        var sql = '\
-            SELECT c.id, c.text, c.zxy, ? AS db, ? AS i, ? AS token\
-            FROM carmen c\
-            WHERE c.text MATCH(?)\
-            LIMIT 1000';
         _(indexes).each(function(db, dbname) {
-            if (!db.query) return;
-            var statement = db.source._db.prepare(sql);
-            _(data.query).each(function(t, i) {
+            _(data.query||[]).each(function(t, i) {
+                // Skip tokens that do not pass filter callback.
                 if (!db.filter(t)) return;
+
                 var next = group();
-                statement.all(dbname, i, t, t, next);
+                db.source.search(t, null, function(err, rows) {
+                    if (err) return next(err);
+                    rows = rows.map(function(row) {
+                        row.token = t;
+                        row.db = dbname;
+                        row.i = i;
+                        return row;
+                    });
+                    next(err, rows);
+                });
             });
-            statement.finalize();
-            statement.on('error', function(err) { callback(err) });
         });
     }, function(err, rows) {
         if (err) throw err;
 
-        var zooms = _(indexes).chain()
-            .pluck('zoom')
-            .uniq()
-            .sortBy(function(z) { return z })
-            .value();
         var results = _(rows).chain()
-            .flatten()
-            .map(function(row) {
-                return row.zxy.split(',').map(function(zxy) {
-                    return _({zxy:zxy}).defaults(row);
-                });
-            })
             .flatten()
             .reduce(function(memo, row) {
                 // Reward exact matches.
                 var score = (_(row.text.split(',')).chain()
                     .map(function(part) { return part.toLowerCase().replace(/^\s+|\s+$/g, ''); })
                     .any(function(part) { return part === row.token; })
-                    .value() ? 1 : 0.5) * indexes[row.db].weight
-                memo[row.zxy] = memo[row.zxy] || [];
-                memo[row.zxy].push(_({score:score, i:row.i}).defaults(row));
+                    .value() ? 1 : 0.5) * indexes[row.db].weight;
+                row.zxy.forEach(function(zxy) {
+                    memo[zxy] = memo[zxy] || [];
+                    memo[zxy].push({
+                        i:row.i,
+                        id:row.id,
+                        db:row.db,
+                        text:row.text,
+                        token:row.token,
+                        score:score
+                    });
+                });
                 return memo;
             }, {})
             .reduce(function(memo, rows, zxy) {
+                if (rows.length <= 1) return (memo[zxy] = rows) && memo;
                 rows = _(rows).chain()
                     .sortBy(function(r) { return r.score })
                     .reverse()
@@ -368,6 +362,9 @@ Carmen.prototype.geocode = function(query, callback) {
                             return types.indexOf(r.db) <= types.indexOf(rows[0].db);
                         }));
                     });
+
+                if (rows.length <= 1) return rows;
+
                 rows = _(rows).chain()
                     // prevent db/token reduction from reducing to single case
                     // when there are identical tokens e.g. "new york, new york"
@@ -417,17 +414,18 @@ Carmen.prototype.geocode = function(query, callback) {
         var matches = [];
         var contexts = [];
         var remaining = results.length;
-        var sql = 'SELECT ? AS terms, ?||"."||key_name AS id, key_json AS data FROM keymap WHERE key_name = ?';
         _(results).each(function(terms) {
             var term = terms.split(',')[0];
             var termid = term.split('.')[1];
             var dbname = term.split('.')[0];
-            indexes[dbname].source._db.get(sql, terms, dbname, termid, function(err, r) {
+            indexes[dbname].source.feature(termid, function(err, data) {
                 if (err) return next(err);
-                r.type = r.id.split('.')[0];
-                r.data = JSON.parse(r.data) || {};
+                var r = {};
+                r.id = dbname + '.' + termid;
+                r.type = dbname;
+                r.data = data;
                 r.data.id = r.data.id || r.id;
-                r.terms = r.terms.split(',');
+                r.terms = terms.split(',');
 
                 var args = [r.id];
                 var method = 'contextByFeature';

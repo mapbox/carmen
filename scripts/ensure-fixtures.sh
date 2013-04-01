@@ -11,6 +11,6 @@ fi
 for NAME in $FIXTURES; do
   if [ ! -f "$DIR/$NAME.csv" ]; then
     echo "Downloading fixture $NAME..."
-    curl -s -o "$DIR/$NAME.csv" "http://s3.amazonaws.com/mapbox/carmen/$NAME.csv"
+    curl -s -o "$DIR/$NAME.csv" "http://mapbox-carmen.s3.amazonaws.com/carmen/$NAME.csv"
   fi
 done
