@@ -18,7 +18,8 @@
     },
     "devDependencies": {
         "mbtiles": "~0.2.x",
-        "tilelive-s3": "0.5.x"
+        "tilelive-s3": "0.5.x",
+        "retry": "0.6.0"
     },
     "main": "./index.js",
     "scripts": {

@@ -64,7 +64,7 @@ function Carmen(options) {
     }, {});
 };
 
-Carmen.S3 = function() { return require('./api-s3') };
+Carmen.S3 = function(opts) { return require('./api-s3')(opts || {}) };
 Carmen.MBTiles = function() { return require('./api-mbtiles') };
 
 Carmen.prototype._open = function(callback) {
