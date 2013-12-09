@@ -1,6 +1,6 @@
+*.sqlite
+*.sqlite.index
 /flickr-places/layers/
-/ne-countries/layers/
-/ne-provinces/layers/
 /osm-places/layers/
 /tiger-zipcodes/layers/
 /tiger-places/layers/

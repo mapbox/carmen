@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34">
+
+<Parameters>
+  <Parameter name="center">0,0,3</Parameter>
+  <Parameter name="format">pbf</Parameter>
+  <Parameter name="geocoder_layer"><![CDATA[data._text]]></Parameter>
+  <Parameter name="json"><![CDATA[{"vector_layers":[{"id":"data","description":"","minzoom":0,"maxzoom":22,"fields":{"_id":"Number","name":"String","_text":"String","lon":"Number","lat":"Number","bounds":"String","area":"Number"}}]}]]></Parameter>
+  <Parameter name="maxzoom">6</Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="name"><![CDATA[ne-province]]></Parameter>
+</Parameters>
+
+
+<Layer name="data"
+  buffer-size="4"
+  minzoom="100"
+  maxzoom="1000000000"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    
+    <Datasource>
+       <Parameter name="dbname"><![CDATA[carmen_ne_province]]></Parameter>
+       <Parameter name="extent"><![CDATA[-20037508.34,-20037508.34,20037508.34,20037508.34]]></Parameter>
+       <Parameter name="geometry_field"><![CDATA[geometry]]></Parameter>
+       <Parameter name="geometry_table"><![CDATA[]]></Parameter>
+       <Parameter name="host"><![CDATA[localhost]]></Parameter>
+       <Parameter name="key_field"><![CDATA[_id]]></Parameter>
+       <Parameter name="max_size"><![CDATA[512]]></Parameter>
+       <Parameter name="port"><![CDATA[]]></Parameter>
+       <Parameter name="table"><![CDATA[(select * from data) as data]]></Parameter>
+       <Parameter name="type"><![CDATA[postgis]]></Parameter>
+       <Parameter name="user"><![CDATA[postgres]]></Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>

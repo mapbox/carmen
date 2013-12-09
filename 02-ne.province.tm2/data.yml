@@ -1,0 +1,43 @@
+_prefs: 
+  disabled: []
+  inspector: false
+  saveCenter: false
+attribution: ''
+center: 
+  - 0
+  - 0
+  - 3
+description: ''
+geocoder_layer: data._text
+Layer: 
+  - id: data
+    Datasource: 
+      dbname: carmen_ne_province
+      extent: -20037508.34,-20037508.34,20037508.34,20037508.34
+      geometry_field: geometry
+      geometry_table: ''
+      host: localhost
+      key_field: _id
+      max_size: 512
+      port: ''
+      table: (select * from data) as data
+      type: postgis
+      user: postgres
+    description: ''
+    fields: 
+      _id: Number
+      _text: String
+      area: Number
+      bounds: String
+      lat: Number
+      lon: Number
+      name: String
+    properties: 
+      "buffer-size": 4
+      maxzoom: 22
+      minzoom: 0
+    srs: +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+maxzoom: 6
+minzoom: 0
+mtime: 1386560812366
+name: ne-province

@@ -1,0 +1,44 @@
+_prefs: 
+  disabled: []
+  inspector: data
+  saveCenter: true
+attribution: ''
+center: 
+  - -93.55957031249999
+  - 43.59630591596548
+  - 5
+description: ''
+geocoder_layer: data._text
+Layer: 
+  - id: data
+    Datasource: 
+      dbname: carmen_ne_country
+      extent: -180,-85.0511,180,85.0511
+      geometry_field: geometry
+      geometry_table: ''
+      host: localhost
+      key_field: _id
+      max_size: 512
+      port: ''
+      table: (select * from data) as data
+      type: postgis
+      user: postgres
+    description: ''
+    fields: 
+      _id: Number
+      _text: String
+      bounds: String
+      iso2: String
+      lat: Number
+      lon: Number
+      name: String
+      population: Number
+    properties: 
+      "buffer-size": 4
+      maxzoom: 22
+      minzoom: 0
+    srs: +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+maxzoom: 6
+minzoom: 0
+mtime: 1386267702624
+name: ne-country
