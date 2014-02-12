@@ -19,6 +19,20 @@ describe('geocode', function() {
             done();
         });
     });
+    it ('threshold', function(done) {
+        geocoder.geocode('congo', {}, function(err, res) {
+            assert.ifError(err);
+            assert.equal(1, res.features.length);
+            done();
+        });
+    });
+    it ('threshold higher', function(done) {
+        geocoder.geocode('congo', { phrasematch: 0.9 }, function(err, res) {
+            assert.ifError(err);
+            assert.equal(0, res.features.length);
+            done();
+        });
+    });
     it ('reverse', function(done) {
         geocoder.geocode('0, 40', {}, function(err, res) {
             assert.ifError(err);

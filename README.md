@@ -86,7 +86,12 @@ geocoder_group      | Optional + advanced. For indexes that share the exact same
 ### geocode(query, options, callback)
 
 Given a `query` string, call callback with `(err, results)` of possible contexts
-represented by that string.
+represented by that string. `options` is an object with optional keys:
+
+- `limit`: number of max feature results to return. Defaults to 5.
+- `phrasematch`: threshold between 0 and 1 for phrasematch results. Lower values
+  result in looser (but less performant) phrase matching. Defaults to 0.75.
+- `stats`: boolean to enable return of a debugging stats object.
 
 ### index(from, to, pointer, callback)
 
