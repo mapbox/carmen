@@ -56,16 +56,17 @@ Each `CarmenSource` is a tilelive API source that has additional geocoder
 methods (see **Carmen Source API** below). In addition following
 `tilelive#getInfo` keys affect how Carmen source objects operate.
 
-attribute           | description
---------------------|------------
-maxzoom             | The assumed zoom level of the zxy geocoder grid index.
-format              | Optional. If set to `pbf` context operations will make use of vector tiles rather than utf grids.
-geocoder_layer      | Optional. A string in the form `layer.field`. `layer` is used to determine what layer to query for context operations. Defaults to the first layer found in a vector source.
-geocoder_address    | Optional. A flag (0/1) to indicate that an index can geocode address (house numbers) queries. Defaults to 0.
-geocoder_resolution | Optional. Integer bonus against maxzoom used to increase the grid index resolution when indexing. Defaults to 0.
-geocoder_shardlevel | Optional. An integer order of magnitude that geocoder data is sharded. Defaults to 0.
-geocoder_group      | Optional + advanced. For indexes that share the exact same tile source, IO operations can be grouped. No default.
-geocoder_tokens     | Optional + advanced. An object with a 1:1 from => to mapping of token strings to replace in input queries. e.g. 'Streets' => 'St'.
+attribute                  | description
+---------------------------|------------
+maxzoom                    | The assumed zoom level of the zxy geocoder grid index.
+format                     | Optional. If set to `pbf` context operations will make use of vector tiles rather than utf grids.
+geocoder_layer             | Optional. A string in the form `layer.field`. `layer` is used to determine what layer to query for context operations. Defaults to the first layer found in a vector source.
+geocoder_address           | Optional. A flag (0/1) to indicate that an index can geocode address (house numbers) queries. Defaults to 0.
+geocoder_resolution        | Optional. Integer bonus against maxzoom used to increase the grid index resolution when indexing. Defaults to 0.
+geocoder_shardlevel        | Optional. An integer order of magnitude that geocoder data is sharded. Defaults to 0.
+geocoder_group             | Optional + advanced. For indexes that share the exact same tile source, IO operations can be grouped. No default.
+geocoder_tokens            | Optional + advanced. An object with a 1:1 from => to mapping of token strings to replace in input queries. e.g. 'Streets' => 'St'.
+geocoder_vector_tolerance  | Optional + advanced. Allows a custom tolerance level around vector tile features for calculating pyramids. Defaults to 50 mercator metres.
 
 ### geocode(query, options, callback)
 
