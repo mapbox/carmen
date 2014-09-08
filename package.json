@@ -20,6 +20,7 @@
     "queue-async": "1.0.x",
     "sphericalmercator": "~1.0.1",
     "split": "0.2.x",
+    "tile-cover": "^0.3.1",
     "tilelive": "5.0.x",
     "unidecode": "0.1.3"
   },
