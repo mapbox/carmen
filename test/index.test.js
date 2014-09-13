@@ -17,18 +17,6 @@ test('index.update', function(t) {
             q.end();
         });
     });
-    t.test('error no _zxy', function(q) {
-        index.update(to, [{_text:'main st',_id:1}], function(err) {
-            q.equal('Error: doc has no _zxy on _id:1', err.toString());
-            q.end();
-        });
-    });
-    t.test('error no _zxy (empty array)', function(q) {
-        index.update(to, [{_text:'main st',_id:1,_zxy:[]}], function(err) {
-            q.equal('Error: doc has no _zxy on _id:1', err.toString());
-            q.end();
-        });
-    });
     t.test('error no _center', function(q) {
         index.update(to, [{_text:'main st',_id:1,_zxy:['0/0/0']}], function(err) {
             q.equal('Error: doc has no _center on _id:1', err.toString());
