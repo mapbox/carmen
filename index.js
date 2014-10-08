@@ -41,7 +41,7 @@ function Geocoder(options) {
             var source = indexes[i][1];
             var name = info.geocoder_name || id;
             if (names.indexOf(name) === -1) names.push(name);
-            source._geocoder = source._geocoder || new Cache(key, +info.geocoder_shardlevel || 0);
+            source._geocoder = source._geocoder || new Cache(name, +info.geocoder_shardlevel || 0);
             source._geocoder.geocoder_address = !!parseInt(info.geocoder_address||0,10);
             source._geocoder.geocoder_layer = (info.geocoder_layer||'').split('.').shift();
             source._geocoder.geocoder_tokens = termops.tokenizeMapping(info.geocoder_tokens||{});
