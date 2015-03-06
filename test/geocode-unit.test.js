@@ -804,7 +804,8 @@ function addFeature(source, doc, callback) {
         feature.geometry = {
             type: 'MultiPolygon',
             coordinates: zxys.map(function(zxy) {
-                return tilebelt.tileToGeoJSON([zxy[1], zxy[2], zxy[0]]).geometry.coordinates;
+                console.log(tilebelt.tileToGeoJSON([zxy[1], zxy[2], zxy[0]]))
+                return tilebelt.tileToGeoJSON([zxy[1], zxy[2], zxy[0]]).coordinates;
             })
         };
     }
