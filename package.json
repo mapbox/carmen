@@ -8,13 +8,13 @@
   "dependencies": {
     "carmen-cache": "0.2.1",
     "mapnik": "~3.1.0",
-    "minimist": "0.0.5",
+    "minimist": "1.1.0",
     "queue-async": "1.0.x",
     "sphericalmercator": "~1.0.1",
-    "split": "0.2.x",
+    "split": "0.3.x",
     "tile-cover": "2.4.x",
-    "tilebelt": "^0.5.3",
-    "tilelive": "5.2.x",
+    "tilebelt": "0.7.0",
+    "tilelive": "5.6.x",
     "turf-bearing": "1.0.x",
     "turf-center": "1.0.x",
     "turf-destination": "1.2.x",
@@ -22,7 +22,7 @@
     "turf-line-distance": "1.0.x",
     "turf-linestring": "1.0.x",
     "turf-point": "2.0.x",
-    "turf-point-on-surface": "1.0.x",
+    "turf-point-on-surface": "1.1.x",
     "unidecode": "0.1.3"
   },
   "devDependencies": {
@@ -30,9 +30,9 @@
     "coveralls": "^2.11.2",
     "retire": "0.4.x",
     "bytes": "^1.0.0",
-    "tape": "^2.13.4",
+    "tape": "3.5.0",
     "mbtiles": "0.7.x",
-    "tilelive-s3": "~0.14.0",
+    "tilelive-s3": "1.4.0",
     "benchmark": "~1.0.0"
   },
   "bin": {
