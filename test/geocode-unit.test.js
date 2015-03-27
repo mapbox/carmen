@@ -1075,6 +1075,42 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
     });
 })();
 
+//POI Tests
+(function() {
+    var conf = {
+        poi: new mem({maxzoom: 6}, function() {})
+    };
+    var c = new Carmen(conf);
+    test('index POI', function(t) {
+            var poi = {
+                _id:1,
+                _text:'this and that',
+                _zxy:['6/32/32'],
+                _center:[0,0],
+                _geometry: {
+                    type: "Point",
+                    coordinates: [0,0]
+                }
+            };
+            addFeature(conf.poi, poi, t.end);
+    });
+    test('', function(t) {
+        c.geocode('this and that', { limit_verify: 1 }, function (err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 1, 'POI Returned');
+            t.end();
+        });
+    });
+
+    test('', function(t) {
+        c.geocode('this that', { limit_verify: 1 }, function (err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 0, 'Relev Fails');
+            t.end();
+        });
+    });
+})();
+
 test('index.teardown', function(assert) {
     index.teardown();
     assert.end();
