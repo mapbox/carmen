@@ -569,12 +569,12 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         });
     });
 
-    //This test should have a very poor relev as the number
-    // is found within the street name
+    //This relev revieves a 0.10 relev penalty as the street has a foreign
+    //token in the middle
     test('test address index for random relev', function(t) {
         c.geocode('fake 9 street', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.3225806451612903);
+            t.equals(res.features[0].relevance, 0.8709677419354839);
             t.end();
         });
     });
@@ -1084,7 +1084,7 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
     test('index POI', function(t) {
             var poi = {
                 _id:1,
-                _text:'this and that',
+                _text:'this and that and those',
                 _zxy:['6/32/32'],
                 _center:[0,0],
                 _geometry: {
@@ -1095,18 +1095,19 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
             addFeature(conf.poi, poi, t.end);
     });
     test('a b c query', function(t) {
-        c.geocode('this and that', { limit_verify: 1 }, function (err, res) {
+        c.geocode('this and that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
             t.equals(res.features.length, 1, 'POI Returned');
+            t.equals(res.features[0].relevance, 1, 'Full relev');
             t.end();
         });
     });
 
     test('a b query', function(t) {
-        c.geocode('this that', { limit_verify: 1 }, function (err, res) {
+        c.geocode('this that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
-            console.log(res)
-            t.equals(res.features.length, 0, 'Relev Fails');
+            t.equals(res.features.length, 1, 'POI Returned');
+            t.equals(res.features[0].relevance, 0.7741935483870968, 'Relev Penalty');
             t.end();
         });
     });
