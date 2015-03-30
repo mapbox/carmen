@@ -1094,7 +1094,7 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
             };
             addFeature(conf.poi, poi, t.end);
     });
-    test('', function(t) {
+    test('a b c query', function(t) {
         c.geocode('this and that', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
             t.equals(res.features.length, 1, 'POI Returned');
@@ -1102,9 +1102,10 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         });
     });
 
-    test('', function(t) {
+    test('a b query', function(t) {
         c.geocode('this that', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
+            console.log(res)
             t.equals(res.features.length, 0, 'Relev Fails');
             t.end();
         });
