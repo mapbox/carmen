@@ -573,7 +573,7 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
     test('test address index for random relev', function(t) {
         c.geocode('fake 9 street', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.3225806451612903);
+            t.equals(res.features[0].relevance, 0.8709677419354839);
             t.end();
         });
     });
@@ -1093,6 +1093,20 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
             };
             addFeature(conf.poi, poi, t.end);
     });
+    test('index POI', function(t) {
+        var poi = {
+            _id: 2,
+            _text: 'captain groovys grill and raw bar',
+            _zxy: ['6/32/32'],
+            _center: [0,0],
+            _geometry: {
+                type: "Point",
+                coordinates: [0,0]
+            }
+        }
+        addFeature(conf.poi, poi ,t.end);
+    });
+    
     test('a b c query', function(t) {
         c.geocode('this and that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
@@ -1106,7 +1120,25 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         c.geocode('this that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
             t.equals(res.features.length, 1, 'POI Returned');
-            t.equals(res.features[0].relevance, 0.8387096774193549, 'Relev Penalty');
+            t.equals(res.features[0].relevance, 0.8709677419354839, 'Relev Penalty');
+            t.end();
+        });
+    });
+
+    test('captain groovys grill and raw bar', function(t) {
+        c.geocode('captain groovys grill and raw bar', { limit_verify: 1 }, function (err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 1, 'POI Returned');
+            t.equals(res.features[0].relevance, 1, 'Full relev');
+            t.end();
+        });
+    });
+
+    test('captain groovys raw bar', function(t) {
+        c.geocode('captain groovys raw bar', { limit_verify: 1 }, function (err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 1, 'POI Returned');
+            t.equals(res.features[0].relevance, 0.4838709677419355, 'Relev Penalty');
             t.end();
         });
     });
