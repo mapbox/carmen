@@ -569,12 +569,11 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         });
     });
 
-    //This relev revieves a 0.10 relev penalty as the street has a foreign
-    //token in the middle
+    // Penalty for non-continuous token
     test('test address index for random relev', function(t) {
         c.geocode('fake 9 street', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.8709677419354839);
+            t.equals(res.features[0].relevance, 0.3225806451612903);
             t.end();
         });
     });
@@ -1107,7 +1106,7 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         c.geocode('this that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
             t.equals(res.features.length, 1, 'POI Returned');
-            t.equals(res.features[0].relevance, 0.8709677419354839, 'Relev Penalty');
+            t.equals(res.features[0].relevance, 0.8387096774193549, 'Relev Penalty');
             t.end();
         });
     });
