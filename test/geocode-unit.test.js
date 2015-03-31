@@ -1103,11 +1103,11 @@ mapnik.register_datasource(path.join(mapnik.settings.paths.input_plugins,'geojso
         });
     });
 
-    test('a b query', function(t) {
+    test('a c query', function(t) {
         c.geocode('this that and those', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
             t.equals(res.features.length, 1, 'POI Returned');
-            t.equals(res.features[0].relevance, 0.7741935483870968, 'Relev Penalty');
+            t.equals(res.features[0].relevance, 0.8709677419354839, 'Relev Penalty');
             t.end();
         });
     });
