@@ -75,7 +75,6 @@ var addFeature = require('../lib/util/addfeature');
 })();
 
 // RegExp captures have been put on hiatus per https://github.com/mapbox/carmen/pull/283.
-/*
 (function() {
     var conf = {
         address: new mem({
@@ -100,12 +99,11 @@ var addFeature = require('../lib/util/addfeature');
     tape('test token replacement', function(t) {
         c.geocode('qabc', { limit_verify: 1 }, function (err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.99, 'token regex named group test, a-b-c => cba');
+            t.equals(res.features[0].relevance, 0.99, 'token regex numbered group test, qabc => qcba');
             t.end();
         });
     });
 })();
-*/
 
 tape('index.teardown', function(assert) {
     index.teardown();
