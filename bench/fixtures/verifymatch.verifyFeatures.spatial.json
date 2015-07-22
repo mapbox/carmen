@@ -1,0 +1,602 @@
+[
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 916,
+      "id": 617759,
+      "idx": 39,
+      "tmpid": 1309240607,
+      "distance": 0,
+      "scoredist": 732800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 58,
+      "id": 403422,
+      "idx": 38,
+      "tmpid": 1275471838,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 58,
+      "id": 946305,
+      "idx": 38,
+      "tmpid": 1276014721,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 203,
+      "id": 903382,
+      "idx": 38,
+      "tmpid": 1275971798,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 87,
+      "id": 842736,
+      "idx": 38,
+      "tmpid": 1275911152,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 29,
+      "id": 745287,
+      "idx": 38,
+      "tmpid": 1275813703,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6267,
+      "relev": 1,
+      "score": 145,
+      "id": 365886,
+      "idx": 38,
+      "tmpid": 1275434302,
+      "distance": 0,
+      "scoredist": 92800,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4684,
+      "y": 6267,
+      "relev": 1,
+      "score": 229,
+      "id": 771891,
+      "idx": 39,
+      "tmpid": 1309394739,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 229,
+      "id": 342067,
+      "idx": 39,
+      "tmpid": 1308964915,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4684,
+      "y": 6267,
+      "relev": 1,
+      "score": 0,
+      "id": 948563,
+      "idx": 39,
+      "tmpid": 1309571411,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 229,
+      "id": 955894,
+      "idx": 39,
+      "tmpid": 1309578742,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 458,
+      "id": 655895,
+      "idx": 39,
+      "tmpid": 1309278743,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4684,
+      "y": 6267,
+      "relev": 1,
+      "score": 229,
+      "id": 9393,
+      "idx": 39,
+      "tmpid": 1308632241,
+      "distance": 1,
+      "scoredist": 7328,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 527817,
+      "idx": 39,
+      "tmpid": 1309150665,
+      "distance": 2,
+      "scoredist": 3664,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6265,
+      "relev": 1,
+      "score": 0,
+      "id": 326533,
+      "idx": 39,
+      "tmpid": 1308949381,
+      "distance": 2,
+      "scoredist": 3664,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4683,
+      "y": 6267,
+      "relev": 1,
+      "score": 229,
+      "id": 618811,
+      "idx": 39,
+      "tmpid": 1309241659,
+      "distance": 2,
+      "scoredist": 3664,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 428358,
+      "idx": 39,
+      "tmpid": 1309051206,
+      "distance": 2,
+      "scoredist": 3664,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4684,
+      "y": 6266,
+      "relev": 1,
+      "score": 0,
+      "id": 800361,
+      "idx": 39,
+      "tmpid": 1309423209,
+      "distance": 2,
+      "scoredist": 3664,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4686,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 1468,
+      "idx": 39,
+      "tmpid": 1308624316,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4687,
+      "y": 6266,
+      "relev": 1,
+      "score": 0,
+      "id": 29773,
+      "idx": 39,
+      "tmpid": 1308652621,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4686,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 156094,
+      "idx": 39,
+      "tmpid": 1308778942,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4688,
+      "y": 6267,
+      "relev": 1,
+      "score": 0,
+      "id": 384695,
+      "idx": 39,
+      "tmpid": 1309007543,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4687,
+      "y": 6268,
+      "relev": 1,
+      "score": 229,
+      "id": 838326,
+      "idx": 39,
+      "tmpid": 1309461174,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4686,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 803951,
+      "idx": 39,
+      "tmpid": 1309426799,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6270,
+      "relev": 1,
+      "score": 229,
+      "id": 543668,
+      "idx": 39,
+      "tmpid": 1309166516,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4687,
+      "y": 6268,
+      "relev": 1,
+      "score": 458,
+      "id": 508628,
+      "idx": 39,
+      "tmpid": 1309131476,
+      "distance": 3,
+      "scoredist": 2442.6666666666665,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4681,
+      "y": 6267,
+      "relev": 1,
+      "score": 229,
+      "id": 670698,
+      "idx": 39,
+      "tmpid": 1309293546,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4687,
+      "y": 6265,
+      "relev": 1,
+      "score": 229,
+      "id": 285343,
+      "idx": 39,
+      "tmpid": 1308908191,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6271,
+      "relev": 1,
+      "score": 229,
+      "id": 879368,
+      "idx": 39,
+      "tmpid": 1309502216,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4687,
+      "y": 6269,
+      "relev": 1,
+      "score": 229,
+      "id": 1034586,
+      "idx": 39,
+      "tmpid": 1309657434,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4688,
+      "y": 6266,
+      "relev": 1,
+      "score": 0,
+      "id": 48014,
+      "idx": 39,
+      "tmpid": 1308670862,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4688,
+      "y": 6266,
+      "relev": 1,
+      "score": 229,
+      "id": 384790,
+      "idx": 39,
+      "tmpid": 1309007638,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4686,
+      "y": 6264,
+      "relev": 1,
+      "score": 229,
+      "id": 208953,
+      "idx": 39,
+      "tmpid": 1308831801,
+      "distance": 4,
+      "scoredist": 1832,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4351,
+      "y": 6558,
+      "relev": 1,
+      "score": 1603,
+      "id": 908551,
+      "idx": 39,
+      "tmpid": 1309531399,
+      "distance": 625,
+      "scoredist": 1603,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4824,
+      "y": 6158,
+      "relev": 1,
+      "score": 1603,
+      "id": 839160,
+      "idx": 39,
+      "tmpid": 1309462008,
+      "distance": 248,
+      "scoredist": 1603,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4682,
+      "y": 6265,
+      "relev": 1,
+      "score": 0,
+      "id": 766,
+      "idx": 39,
+      "tmpid": 1308623614,
+      "distance": 5,
+      "scoredist": 1465.6000000000001,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 0,
+      "id": 862209,
+      "idx": 38,
+      "tmpid": 1275930625,
+      "distance": 1,
+      "scoredist": 928,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 29,
+      "id": 772082,
+      "idx": 38,
+      "tmpid": 1275840498,
+      "distance": 1,
+      "scoredist": 928,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4685,
+      "y": 6266,
+      "relev": 1,
+      "score": 0,
+      "id": 612727,
+      "idx": 38,
+      "tmpid": 1275681143,
+      "distance": 1,
+      "scoredist": 928,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ],
+  [
+    {
+      "x": 4686,
+      "y": 6267,
+      "relev": 1,
+      "score": 203,
+      "id": 547838,
+      "idx": 38,
+      "tmpid": 1275616254,
+      "distance": 1,
+      "scoredist": 928,
+      "mask": 3,
+      "text": "#### p"
+    }
+  ]
+]

@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.3
+
+- Fix for decollide bug.
+
+## 5.0.2
+
+- Improved performance for feature verification in verifymatch.
+
+## 5.0.1
+
+- More efficient spatialmatch by introducing a bounds mask per index and loading grids at spatialmatch time.
+
 ## 5.0.0
 
 - Update index format for delta encoding in carmen-cache@0.7.x. This is a breaking change that requires reindexing. See https://github.com/mapbox/carmen/pull/301 and https://github.com/mapbox/carmen-cache/pull/37 for details.
