@@ -99,6 +99,8 @@ function Geocoder(options) {
             this.byidx[i] = source;
         }.bind(this));
 
+        this.replacer = token.createReplacer(this.replacer);
+
         // Second pass -- generate bmask (bounds mask) per index.
         // The bmask of an index represents a mask of all indexes that its
         // bounds do not intersect with -- ie. a spatialmatch with any of
