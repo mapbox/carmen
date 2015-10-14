@@ -24,6 +24,7 @@ function Geocoder(options) {
         indexes = pairs(options);
 
     this.indexes = indexes.reduce(toObject, {});
+    this.replacer = {};
     this.byname = {};
     this.byidx = [];
     this.names = [];
@@ -65,6 +66,17 @@ function Geocoder(options) {
             for (var ix = 0; ix < keys.length; ix ++) {
                 if (/geocoder_format_/.test(keys[ix])) source._geocoder[keys[ix]] = info[keys[ix]]||false;
             }
+
+            //Maps all geocoder_tokens to a global list
+            var tokens = Object.keys(info.geocoder_tokens||{});
+            for (var ix = 0; ix < tokens.length; ix++) {
+                if (!this.replacer[tokens[ix]]) {
+                    this.replacer[tokens[ix]] = info.geocoder_tokens[tokens[ix]];
+                } else {
+                    throw new Error('Conflicting replacement token ' + tokens[ix]);
+                }
+            }
+
             source._geocoder.geocoder_format = info.geocoder_format||false;
             source._geocoder.geocoder_layer = (info.geocoder_layer||'').split('.').shift();
             source._geocoder.geocoder_tokens = info.geocoder_tokens||{};
