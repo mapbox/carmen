@@ -12,5 +12,5 @@ test:
     - "tape ./test/*.js":
         parallel: true
     - "node bench/runbench.js":
-        parllel: true
+        parallel: true
 
