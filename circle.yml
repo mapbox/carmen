@@ -9,8 +9,8 @@ test:
   override:
     - "npm run lint && retire -n":
         parallel: true
-    - "tape ./test/*.js"
+    - "tape ./test/*.js":
         parallel: true
-    - "node bench/runbench.js"
+    - "node bench/runbench.js":
         parllel: true
 
