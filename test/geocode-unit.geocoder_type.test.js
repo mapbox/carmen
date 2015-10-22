@@ -124,14 +124,71 @@ var addFeature = require('../lib/util/addfeature');
     tape('query on address with type poi', function(t) {
         c.geocode('-77.04312264919281,38.91041215085371', { types: ['poi'] }, function(err, res) {
             t.ifError(err);
-            t.equals(res.features.length, 0);
+            t.equals(res.features.length, 1);
+            t.equals(res.features[0].place_name, 'big bank')
             t.end();
         });
     });
     tape('query on poi with type address', function(t) {
         c.geocode('-77.04441547393799,38.909427030614665', { types: ['address'] }, function(err, res) {
             t.ifError(err);
-            t.equals(res.features.length, 0);
+            t.equals(res.features.length, 1);
+            t.equals(res.features[0].place_name, '100 fake street');
+            t.end();
+        });
+    });
+})();
+
+(function() {
+    var conf = {
+        address:    new mem({maxzoom: 12, geocoder_name: 'address', geocoder_type: 'address', geocoder_address: 1}, function() {}),
+        poi:        new mem({maxzoom: 12, geocoder_name: 'address', geocoder_type: 'poi' }, function() {})
+    };
+    var c = new Carmen(conf);
+    tape('index address', function(t) {
+        var address = {
+            id:1,
+            type: 'Feature',
+            properties:  {
+                'carmen:text': 'fake street',
+                'carmen:addressnumber': [100],
+                'carmen:center': [-77.04312264919281,38.91041215085371]
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: [[-77.04312264919281,38.91041215085371]]
+            }
+        };
+        addFeature(conf.address, address, t.end);
+    });
+    tape('index poi', function(t) {
+        var poi = {
+            id:1,
+            type: 'Feature',
+            properties:  {
+                'carmen:text': 'big bank',
+                'carmen:center': [-77.04320579767227,38.910435109001334]
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [-77.04320579767227,38.910435109001334]
+            }
+        };
+        addFeature(conf.poi, poi, t.end);
+    });
+    tape('return poi if type filtering removes address', function(t) {
+        c.geocode('-77.04320579767227,38.910435109001334', { types: ['poi'] }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 1);
+            t.equals(res.features[0].place_name, 'big bank');
+            t.end();
+        });
+    });
+    tape('return address if type filtering removes poi', function(t) {
+        c.geocode('-77.04312264919281,38.91041215085371', { types: ['address'] }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features.length, 1);
+            t.equals(res.features[0].place_name, '100 fake street');
             t.end();
         });
     });
