@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.5.1
+
+- Perform type filtering for reverse geocodes at the context.js level instead of after the context stack has been generated.
+
+## 8.5.0
+
+- Add `geocoder_type` flag which allows non-similiar indexes to compete for the lowest result in a reverse geocode.
+
 ## 8.3.2
 - Set better text templating failovers for localization support.
 

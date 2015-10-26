@@ -4,6 +4,12 @@
             "carmen:extid": "province.3427",
             "carmen:tmpid": 33557859,
             "carmen:dbidx": 1,
+            "carmen:vtquerydist": 0,
+            "carmen:geomtype": "Polygon",
+            "carmen:center": [
+                -0.751446,
+                39.311412
+            ],
             "carmen:text": "Comunidad Valenciana,VC"
         }
     },
@@ -12,6 +18,12 @@
             "carmen:extid": "country.33",
             "carmen:tmpid": 33,
             "carmen:dbidx": 0,
+            "carmen:vtquerydist": 0,
+            "carmen:geomtype": "Polygon",
+            "carmen:center": [
+                -3.47836,
+                39.909167
+            ],
             "carmen:text": "Spain"
         }
     }

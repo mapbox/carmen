@@ -66,44 +66,45 @@ if (argv.types) {
 if (argv.debug) argv.debug = parseInt(argv.debug);
 
 var load = +new Date();
-carmen.geocode(argv.query, { 'types': argv.types, 'proximity': argv.proximity, 'debug': argv.debug, 'language': argv.language }, function(err, data) {
+
+carmen.geocode(argv.query, { 'types': argv.types, 'proximity': argv.proximity, 'debug': argv.debug, stats:true, 'language': argv.language, indexes: true }, function(err, data) {
     if (err) throw err;
+    if (data.features.length && !argv.geojson) {
+        console.log('Tokens');
+        console.log('------');
+        console.log(data.query.join(', '));
+        console.log('');
+        console.log('Features');
+        console.log('--------');
+        data.features.forEach(function(f) {
+            console.log('- %s %s (%s)', f.relevance.toFixed(2), f.place_name, f.id);
+        });
+        console.log('');
+        console.log('Indexes');
+        console.log('--------');
+        data.indexes.forEach(function(i) {
+            console.log('- %s', i);
+        });
+        console.log('');
+    }
+    if (data.features.length && argv.geojson) {
+        console.log(JSON.stringify(data, null, 2));
+    }
 
-    load = +new Date() - load;
+    if (argv.debug) {
+        console.log('Debug\n-----');
+        console.log(data.debug);
+        console.log();
+    }
 
-    carmen.geocode(argv.query, { 'types': argv.types, 'proximity': argv.proximity, 'debug': argv.debug, stats:true, 'language': argv.language }, function(err, data) {
-        if (err) throw err;
-        if (data.features.length && !argv.geojson) {
-            console.log('Tokens');
-            console.log('------');
-            console.log(data.query.join(', '));
-            console.log('');
-            console.log('Features');
-            console.log('--------');
-            data.features.forEach(function(f) {
-                console.log('- %s %s (%s)', f.relevance.toFixed(2), f.place_name, f.id);
-            });
-            console.log('');
-        }
-        if (data.features.length && argv.geojson) {
-            console.log(JSON.stringify(data, null, 2));
-        }
-
-        if (argv.debug) {
-            console.log('Debug\n-----');
-            console.log(data.debug);
-            console.log();
-        }
-
-        if (!argv.stats) return;
-        console.log('Stats');
-        console.log('-----');
-        console.log('- warmup:       %sms', load);
-        console.log('- phrasematch:  %sms', data.stats.phrasematch.time);
-        console.log('- spatialmatch: %sms', data.stats.spatialmatch.time);
-        console.log('- verifymatch:  %sms', data.stats.verifymatch.time);
-        console.log('- totaltime:    %sms', data.stats.time);
-    });
+    if (!argv.stats) return;
+    console.log('Stats');
+    console.log('-----');
+    console.log('- warmup:       %sms', load);
+    console.log('- phrasematch:  %sms', data.stats.phrasematch.time);
+    console.log('- spatialmatch: %sms', data.stats.spatialmatch.time);
+    console.log('- verifymatch:  %sms', data.stats.verifymatch.time);
+    console.log('- totaltime:    %sms', data.stats.time);
 });
 
 function rpad(str, len) {

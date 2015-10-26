@@ -3425,6 +3425,7 @@
         "token_replacer": [],
         "maxzoom": 6,
         "zoom": 6,
+        "type": "to",
         "name": "to",
         "idx": 1,
         "ndx": 1,

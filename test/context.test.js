@@ -57,6 +57,7 @@ test('contextVector deflate', function(t) {
             maxzoom: 0,
             minzoom: 0,
             name: 'test',
+            type: 'test',
             id: 'testA',
             idx: 1
         }
@@ -65,8 +66,11 @@ test('contextVector deflate', function(t) {
         t.ifError(err);
         t.deepEqual(data, {
             properties: {
+                'carmen:center': [ -99.693234, 37.245325 ],
                 'carmen:extid': 'test.5',
                 'carmen:dbidx': 1,
+                'carmen:vtquerydist': 0,
+                'carmen:geomtype': 'Polygon',
                 'carmen:tmpid': Math.pow(2,25) + 5,
                 'carmen:text': 'United States of America, United States, America, USA, US'
             }
@@ -90,6 +94,7 @@ test('contextVector gzip', function(t) {
             maxzoom: 0,
             minzoom: 0,
             name: 'test',
+            type: 'test',
             id: 'testA',
             idx: 1
         }
@@ -98,9 +103,12 @@ test('contextVector gzip', function(t) {
         t.ifError(err);
         t.deepEqual(data, {
             properties: {
+                'carmen:center': [ -99.693234, 37.245325 ],
                 'carmen:dbidx': 1,
                 'carmen:extid': 'test.5',
                 'carmen:tmpid': Math.pow(2,25) + 5,
+                'carmen:vtquerydist': 0,
+                'carmen:geomtype': 'Polygon',
                 'carmen:text': 'United States of America, United States, America, USA, US'
             }
         });
@@ -120,6 +128,7 @@ test('contextVector badbuffer', function(t) {
             maxzoom: 0,
             minzoom: 0,
             name: 'test',
+            type: 'test',
             id: 'testA',
             idx: 0
         }
@@ -150,6 +159,7 @@ test('contextVector empty VT buffer', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
@@ -191,6 +201,7 @@ test('contextVector ignores negative score', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
@@ -228,6 +239,7 @@ test('contextVector only negative score', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
@@ -265,6 +277,7 @@ test('contextVector matched negative score', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
@@ -309,6 +322,7 @@ test('contextVector restricts distance', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
@@ -366,6 +380,7 @@ test('contextVector restricts distance', function(assert) {
                     maxzoom: 0,
                     minzoom: 0,
                     name: 'test',
+                    type: 'test',
                     id: 'testA',
                     idx: 0
                 }
@@ -392,6 +407,7 @@ test('contextVector restricts distance', function(assert) {
                     maxzoom: 0,
                     minzoom: 0,
                     name: 'test',
+                    type: 'test',
                     id: 'testA',
                     idx: 0
                 }
@@ -418,6 +434,7 @@ test('contextVector restricts distance', function(assert) {
                     maxzoom: 0,
                     minzoom: 0,
                     name: 'test',
+                    type: 'test',
                     id: 'testA',
                     idx: 0
                 }
@@ -456,6 +473,7 @@ test('contextVector caching', function(assert) {
                 maxzoom: 0,
                 minzoom: 0,
                 name: 'test',
+                type: 'test',
                 id: 'testA',
                 idx: 0
             }
