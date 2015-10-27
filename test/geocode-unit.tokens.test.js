@@ -42,6 +42,47 @@ var addFeature = require('../lib/util/addfeature');
     var conf = {
         address: new mem({
             maxzoom: 6,
+            geocoder_tokens: {"East Street": "West Road"}
+        }, function() {})
+    };
+    var c = new Carmen(conf);
+    tape('geocoder token test', function(t) {
+        var address = {
+            _id:1,
+            _text:'East Street',
+            _zxy:['6/32/32'],
+            _center:[0,0],
+            _geometry: {
+                type: "Point",
+                coordinates: [0,0]
+            }
+        };
+        addFeature(conf.address, address, t.end);
+    });
+    tape('test address index for relev', function(t) {
+        c.geocode('West Road', { limit_verify: 1 }, function(err, res) {
+            t.ifError(err);
+            t.deepEquals(res.query,  ['west', 'road']);
+            t.equals(res.features[0].place_name, 'East Street');
+            t.equals(res.features[0].relevance, 0.99, 'token replacement test, west road');
+            t.end();
+        });
+    });
+    tape('test address index for relev', function(t) {
+        c.geocode('East Street', { limit_verify: 1 }, function(err, res) {
+            t.ifError(err);
+            t.deepEquals(res.query,  ['west', 'road']);
+            t.equals(res.features[0].place_name, 'East Street');
+            t.equals(res.features[0].relevance, 0.99, 'token replacement test, east street');
+            t.end();
+        });
+    });
+})();
+
+(function() {
+    var conf = {
+        address: new mem({
+            maxzoom: 6,
             geocoder_tokens: {"dix-huitième": "18e"}
         }, function() {})
     };
