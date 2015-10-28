@@ -79,7 +79,7 @@ function Geocoder(options) {
             for (var ix = 0; ix < tokens.length; ix++) {
                 if (!this.replacer[tokens[ix]]) {
                     this.replacer[tokens[ix]] = info.geocoder_tokens[tokens[ix]];
-                } else {
+                } else if (this.replacer[tokens[ix]] !== info.geocoder_tokens[tokens[ix]]) {
                     throw new Error('Conflicting replacement token ' + tokens[ix]);
                 }
             }
