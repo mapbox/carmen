@@ -42,6 +42,41 @@ var addFeature = require('../lib/util/addfeature');
     var conf = {
         address: new mem({
             maxzoom: 6,
+            geocoder_tokens: {"Lot [0-9]+": ""},
+            geocoder_address: 1
+        }, function() {})
+    };
+    var c = new Carmen(conf);
+    tape('geocoder token test', function(t) {
+        var address = {
+            id:1,
+            properties: {
+                'carmen:text': 'fake street',
+                'carmen:center': [0,0],
+                'carmen:addressnumber': [12]
+            },
+            geometry: {
+                type: "MultiPoint",
+                coordinates: [[0,0]]
+            }
+        };
+        addFeature(conf.address, address, t.end);
+    });
+    tape('test address index for relev', function(t) {
+        c.geocode('12 Lot 34 fake street', { limit_verify: 1, debug: 1 }, function(err, res) {
+            t.ifError(err, 'no errors');
+            t.deepEquals(res.query, ['12', 'fake', 'street'], 'query removed lot');
+            t.equals(res.features[0].relevance, 0.99, 'token replacement test, fake st');
+            t.equals(res.features[0].place_name, '12 fake street');
+            t.end();
+        });
+    });
+})();
+
+(function() {
+    var conf = {
+        address: new mem({
+            maxzoom: 6,
             geocoder_tokens: {"East Street": "West Road"}
         }, function() {})
     };
