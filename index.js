@@ -24,6 +24,7 @@ function Geocoder(options) {
         indexes = pairs(options);
 
     this.indexes = indexes.reduce(toObject, {});
+    this.replacer = {};
     this.byname = {};
     this.bytype = {};
     this.byidx = [];
@@ -72,6 +73,17 @@ function Geocoder(options) {
             for (var ix = 0; ix < keys.length; ix ++) {
                 if (/geocoder_format_/.test(keys[ix])) source._geocoder[keys[ix]] = info[keys[ix]]||false;
             }
+
+            //Maps all geocoder_tokens to a global list
+            var tokens = Object.keys(info.geocoder_tokens||{});
+            for (var ix = 0; ix < tokens.length; ix++) {
+                if (!this.replacer[tokens[ix]]) {
+                    this.replacer[tokens[ix]] = info.geocoder_tokens[tokens[ix]];
+                } else if (this.replacer[tokens[ix]] !== info.geocoder_tokens[tokens[ix]]) {
+                    throw new Error('Conflicting replacement token ' + tokens[ix]);
+                }
+            }
+
             source._geocoder.geocoder_format = info.geocoder_format||false;
             source._geocoder.geocoder_layer = (info.geocoder_layer||'').split('.').shift();
             source._geocoder.geocoder_tokens = info.geocoder_tokens||{};
@@ -97,6 +109,8 @@ function Geocoder(options) {
             // add byidx index lookup
             this.byidx[i] = source;
         }.bind(this));
+
+        this.replacer = token.createReplacer(this.replacer);
 
         // Second pass -- generate bmask (bounds mask) per index.
         // The bmask of an index represents a mask of all indexes that its
