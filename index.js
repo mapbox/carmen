@@ -2,7 +2,7 @@ var path = require('path'),
     EventEmitter = require('events').EventEmitter,
     queue = require('queue-async');
 
-var dictcache = require('./lib/util/dictcache');
+var dawgcache = require('./lib/util/dawg');
 var Cache = require('./lib/util/cxxcache'),
     getContext = require('./lib/context'),
     loader = require('./lib/loader'),
@@ -71,8 +71,8 @@ function Geocoder(indexes, options) {
 
             if (info.geocoder_version) {
                 source.version = parseInt(info.geocoder_version, 10);
-                if (source.version !== 5) {
-                    err = new Error('geocoder version is not 5, index: ' + id);
+                if (source.version !== 6) {
+                    err = new Error('geocoder version is not 6, index: ' + id);
                     return;
                 }
             } else {
@@ -156,11 +156,10 @@ function Geocoder(indexes, options) {
                     });
                 // create dictcache at load time to allow incremental gc
                 } else {
-                    var geocoder_type = loaded[0].geocoder_dictcache_type || process.env.CARMEN_DEFAULT_DICTCACHE || 'bitcache';
                     callback(null, {
                         id: id,
                         info: loaded[0],
-                        dictcache: new dictcache[geocoder_type](loaded[1], loaded[0].geocoder_dictcache_opts)
+                        dictcache: new dawgcache(loaded[1])
                     });
                 }
             });

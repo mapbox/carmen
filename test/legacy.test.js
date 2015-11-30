@@ -13,13 +13,14 @@ tape('legacy version (pre-v1 => ok)', function(assert) {
     });
 });
 
+
 tape('legacy version (v1 => error)', function(assert) {
     var c = new Carmen({
         test: new mem({ maxzoom:6, geocoder_version:1 }, function() {})
     });
     c.geocode('test', {}, function(err, res) {
         assert.ok(err);
-        assert.deepEqual(err.toString(), 'Error: geocoder version is not 5, index: test');
+        assert.deepEqual(err.toString(), 'Error: geocoder version is not 6, index: test');
         assert.end();
     });
 });
@@ -30,7 +31,7 @@ tape('current version (v2 => error)', function(assert) {
     });
     c.geocode('test', {}, function(err, res) {
         assert.ok(err);
-        assert.deepEqual(err.toString(), 'Error: geocoder version is not 5, index: test');
+        assert.deepEqual(err.toString(), 'Error: geocoder version is not 6, index: test');
         assert.end();
     });
 });
@@ -41,7 +42,7 @@ tape('current version (v3 => error)', function(assert) {
     });
     c.geocode('test', {}, function(err, res) {
         assert.ok(err);
-        assert.deepEqual(err.toString(), 'Error: geocoder version is not 5, index: test');
+        assert.deepEqual(err.toString(), 'Error: geocoder version is not 6, index: test');
         assert.end();
     });
 });
@@ -52,7 +53,18 @@ tape('current version (v4 => error)', function(assert) {
     });
     c.geocode('test', {}, function(err, res) {
         assert.ok(err);
-        assert.deepEqual(err.toString(), 'Error: geocoder version is not 5, index: test');
+        assert.deepEqual(err.toString(), 'Error: geocoder version is not 6, index: test');
+        assert.end();
+    });
+});
+
+tape('current version (v5 => error)', function(assert) {
+    var c = new Carmen({
+        test: new mem({ maxzoom:6, geocoder_version:5 }, function() {})
+    });
+    c.geocode('test', {}, function(err, res) {
+        assert.ok(err);
+        assert.deepEqual(err.toString(), 'Error: geocoder version is not 6, index: test');
         assert.end();
     });
 });

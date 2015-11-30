@@ -65,9 +65,8 @@ geocoder_group          | Optional + advanced. For indexes that share the exact 
 geocoder_tokens         | Optional + advanced. An object with a 1:1 from => to mapping of token strings to replace in input queries. e.g. 'Streets' => 'St'.
 geocoder_name           | Optional + advanced. A string to use instead of the provided config index id/key allowing multiple indexes to be treated as a single "logical" index.
 geocoder_type           | Optional + advanced. A string to be used instead the config index id/key. Omission of this falls back to geocoder_name and then to the id.
-geocoder_version        | Required. Should be set to **5** for carmen@v9.x. Index versions <= 1 can be used for reverse geocoding but not forward.
+geocoder_version        | Required. Should be set to **6** for carmen@v11.x. Index versions <= 1 can be used for reverse geocoding but not forward.
 geocoder_cachesize      | Optional + advanced. Maximum number of shards to allow in the `carmen-cache` message cache. Defaults uptream to 65536 (maximum number of possible shards).
-geocoder_dictsize       | Optional + advanced. Bit size to use for dict cache. Defaults to 24.
 
 *Note: The sum of maxzoom + geocoder_resolution must be no greater than 14.*
 

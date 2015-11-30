@@ -3,7 +3,6 @@ var grid = require('../lib/util/grid.js');
 var tape = require('tape');
 var termops = require('../lib/util/termops.js');
 var token = require('../lib/util/token.js');
-var Bitcache = require('../lib/util/bitcache.js');
 
 tape('worker.loadDoc', function(assert) {
     var token_replacer = token.createReplacer({});

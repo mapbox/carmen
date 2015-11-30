@@ -5,7 +5,6 @@ var context = require('../lib/context');
 var mem = require('../lib/api-mem');
 var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
-var Bitcache = require('../lib/util/dictcache').bitcache;
 var termops = require('../lib/util/termops.js');
 
 var conf = {
@@ -13,93 +12,33 @@ var conf = {
 };
 var c = new Carmen(conf);
 
-tape('setup', function(t) {
-    // shrink the dictcache a lot
-    Bitcache.sizes[10] = Math.pow(2,10);
-    Bitcache.bufferSizes[Math.pow(2,10)/8] = 10;
-    c.indexes.place._dictcache = new Bitcache(null, 10);
-    t.end();
-});
-
-tape('index junk places', function(t) {
-    var q = queue(1);
-    for (var i = 1; i < 101; i++) {
-        q.defer(function(j, callback) {
-            var place = {
-                _id: j,
-                _text: 'a' + j,
-                _zxy:['6/32/32','6/34/32'],
-                _center:[0,0]
-            };
-            addFeature(conf.place, place, callback);
-        }, i);
-    }
-    q.awaitAll(t.end);
+tape('index unicode place', function(t) {
+    var place = {
+        _id: 1,
+        _text: '京都市',
+        _zxy:['6/32/32'],
+        _center:[0,0]
+    };
+    addFeature(conf.place, place, t.end);
 });
 
 tape('valid match', function(t) {
-    c.geocode('a1', { limit_verify:1, debug:4 }, function(err, res) {
+    c.geocode('京都市', { limit_verify:1 }, function(err, res) {
         t.ifError(err);
         t.equal(res.features.length, 1);
         t.end();
     });
 });
 
-tape('no match', function(t) {
-    c.geocode('b1', { limit_verify:1, debug:4 }, function(err, res) {
-        t.ifError(err);
-        t.equal(res.features.length, 0);
+tape('find collisions (coalesceSingle)', function(t) {
+    c.geocode('j', { limit_verify:1 }, function(err, res) {
+        t.equal(res.features.length, 0, 'not in index');
+        t.deepEqual(res.waste[0], ['place'], 'has i/o waste for place');
         t.end();
     });
 });
 
-tape('find collisions (coalesceSingle)', function(t) {
-    var q = queue(1);
-    for (var i = 1; i < 21; i++) {
-        q.defer(function(j, callback) {
-            var query = 'b' + j;
-            c.geocode(query, { limit_verify:1, debug:4 }, function(err, res) {
-                t.equal(res.features.length, 0, 'not in index')
-                if (c.indexes.place._dictcache.hasId(termops.encodeTerm(query))) {
-                    // this should collide
-                    t.equal(res.waste.length, 1, 'collides');
-                } else {
-                    // this should not collide
-                    t.equal(res.waste, undefined, 'does not collide');
-                }
-                callback();
-            });
-        }, i);
-    }
-    q.awaitAll(t.end);
-});
-
-tape('find collisions (coalesceMulti)', function(t) {
-    var q = queue(1);
-    for (var i = 1; i < 21; i++) {
-        q.defer(function(j, callback) {
-            var query = 'b' + j + ' x' + j;
-            c.geocode(query, { limit_verify:1, debug:4 }, function(err, res) {
-                t.equal(res.features.length, 0, 'not in index')
-                if (c.indexes.place._dictcache.hasId(termops.encodeTerm(query))) {
-                    // this should collide
-                    t.equal(res.waste.length, 1, 'collides');
-                } else {
-                    // this should not collide
-                    t.equal(res.waste, undefined, 'does not collide');
-                }
-                callback();
-            });
-        }, i);
-    }
-    q.awaitAll(t.end);
-});
-
 tape('index.teardown', function(assert) {
-    // cleanup dictcache size override
-    delete Bitcache.sizes[10];
-    delete Bitcache.bufferSizes[Math.pow(2,10)/8];
-
     index.teardown();
     context.getTile.cache.reset();
     assert.end();

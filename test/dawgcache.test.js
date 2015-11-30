@@ -1,7 +1,7 @@
 var tape = require('tape');
 var zlib = require('zlib');
 var encodePhrase = require('../lib/util/termops').encodePhrase;
-var DawgCache = require('../lib/util/dictcache').dawg;
+var DawgCache = require('../lib/util/dawg');
 
 tape('create', function(assert) {
     var dict = new DawgCache();
