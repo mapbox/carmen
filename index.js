@@ -156,11 +156,12 @@ function Geocoder(indexes, options) {
                     });
                 // create dictcache at load time to allow incremental gc
                 } else {
-                    var geocoder_type = loaded[0].geocoder_dictcache_type || process.env.CARMEN_DEFAULT_DICTCACHE || 'bitcache';
+                    var dicttype = loaded[0].geocoder_dicttype || 'bitcache';
+                    var dictsize = dicttype === 'bitcache' ? loaded[0].geocoder_dictsize : undefined;
                     callback(null, {
                         id: id,
                         info: loaded[0],
-                        dictcache: new dictcache[geocoder_type](loaded[1], loaded[0].geocoder_dictcache_opts)
+                        dictcache: new dictcache[dicttype](loaded[1], dictsize)
                     });
                 }
             });

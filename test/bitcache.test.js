@@ -4,7 +4,7 @@ var encodePhrase = require('../lib/util/termops').encodePhrase;
 var Bitcache = require('../lib/util/dictcache').bitcache;
 
 tape('create (30 bit)', function(assert) {
-    var dict = new Bitcache(null, {size: 30});
+    var dict = new Bitcache(null, 30);
     assert.equal(dict.cache.length, 4, 'created 128MiB cache');
     for (var i = 0; i < Bitcache.shardLength; i++) {
         if (dict.cache[0][i] !== 0) {
@@ -15,7 +15,7 @@ tape('create (30 bit)', function(assert) {
 });
 
 tape('create (31 bit)', function(assert) {
-    var dict = new Bitcache(null, {size: 31});
+    var dict = new Bitcache(null, 31);
     assert.equal(dict.cache.length, 8, 'created 256MiB cache');
     for (var i = 0; i < Bitcache.shardLength; i++) {
         if (dict.cache[0][i] !== 0) {
@@ -41,7 +41,7 @@ tape('create (256 MiB buffer)', function(assert) {
 
 tape('create (err: size)', function(assert) {
     assert.throws(function() {
-        var dict = new Bitcache(null, {size: 34});
+        var dict = new Bitcache(null, 34);
     });
     assert.end();
 });
@@ -145,7 +145,7 @@ tape('auto', function(assert) {
 [10000, 100000, 1000000].forEach(function(ids) {
     var size = Bitcache.auto(ids);
     tape('fuzz auto: ' + ids + ' = ' + size, function(assert) {
-        var dict = new Bitcache(null, {size: size});
+        var dict = new Bitcache(null, size);
         var used = {};
         var count = 0;
         for (var i = 0; i < ids; i++) {
@@ -164,7 +164,7 @@ tape('auto', function(assert) {
 // fuzz test
 [32,31,30].forEach(function(bitSize) {
     tape('fuzz: ' + bitSize, function(assert) {
-        var dict = new Bitcache(null, {size: bitSize});
+        var dict = new Bitcache(null, bitSize);
         var used = {};
         var count = 0;
         for (var i = 0; i < 100000; i++) {
