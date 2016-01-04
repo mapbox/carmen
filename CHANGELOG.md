@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.2.2
+
+- Fix wasteful duplicate I/O when loading grid cache shards.
+
 ## 11.2.1
 
 - Stop addFeature() in unit tests from overwiting VT. Instead decode and append to it.
