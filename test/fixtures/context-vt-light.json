@@ -5,7 +5,7 @@
             "carmen:tmpid": 33557859,
             "carmen:dbidx": 1,
             "carmen:vtquerydist": 0,
-            "carmen:geomtype": "Polygon",
+            "carmen:geomtype": 3,
             "carmen:center": [
                 -0.751446,
                 39.311412
@@ -21,7 +21,7 @@
             "carmen:tmpid": 33,
             "carmen:dbidx": 0,
             "carmen:vtquerydist": 0,
-            "carmen:geomtype": "Polygon",
+            "carmen:geomtype": 3,
             "carmen:center": [
                 -3.47836,
                 39.909167

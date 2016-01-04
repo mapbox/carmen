@@ -19,6 +19,7 @@ if (argv.help) {
     console.log('[options]:');
     console.log('  --version               Print the carmen version');
     console.log('  --config=<file.js>      Load index config from js (module)');
+    console.log('  --limit="{limit}"       Customize the number of results returned');
     console.log('  --proximity="lat,lng"   Favour results by proximity');
     console.log('  --types="{type},..."    Only return results of a given type');
     console.log('  --stacks="{stack},..."  Only return results of a given stack');
@@ -70,9 +71,20 @@ if (argv.stacks) {
 
 if (argv.debug) argv.debug = parseInt(argv.debug);
 
+if (argv.limit) argv.limit = parseInt(argv.limit);
+
 var load = +new Date();
 
-carmen.geocode(argv.query, { 'stacks': argv.stacks, 'types': argv.types, 'proximity': argv.proximity, 'debug': argv.debug, stats:true, 'language': argv.language, indexes: true }, function(err, data) {
+carmen.geocode(argv.query, {
+    'limit': argv.limit,
+    'stacks': argv.stacks,
+    'types': argv.types,
+    'proximity': argv.proximity,
+    'debug': argv.debug,
+    'stats': true,
+    'language': argv.language,
+    'indexes': true
+}, function(err, data) {
     if (err) throw err;
     if (data.features.length && !argv.geojson) {
         console.log('Tokens');
