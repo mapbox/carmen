@@ -80,11 +80,13 @@ test('index.generateStats', function(assert) {
     });
     // @TODO should 'main' in this case collapse down to 2?
     assert.deepEqual(index.generateFrequency(docs, geocoder_tokens), {
-        0: [ 4 ],           // 4 total
+        0: [ 8 ],           // 8 total
         1: [ 2 ],           // 2 maxscore
+        1247264641460936: [ 1 ], 
+        1804046053253033: [ 1 ],         
         3363289958149993: [ 1 ],  // 1 road
         441841902895320: [ 1 ],  // 1 street
-        609659059851264: [ 2 ]   // 2 main
+        609659059851264: [ 4 ]   // 4 main
     });
     assert.end();
 });
