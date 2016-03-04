@@ -28,7 +28,8 @@ tape('[100 main st] vs [seattle][washington]', function(assert) {
 
     // TODO relev should be roughly equal to 0.50 once rebalanced
     // [100 main st] [?????]
-    assert.equal(verifyContext(query, context, strict, {}, groups), 0.59);
+    console.log(verifyContext(query, context, strict, {}, groups));
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.5);
     assert.end();
 });
 
@@ -64,7 +65,7 @@ tape('[100 main st] vs [seattle][washington]', function(assert) {
 
     // TODO relev should be roughly equal to 0.66 once rebalanced
     // [?????] [seattle] [washington]
-    assert.equal(verifyContext(query, context, strict, {}, groups), 0.39);
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.66);
     assert.end();
 });
 
@@ -89,7 +90,7 @@ tape('[100 market] vs [12345][seattle][washington]', function(assert) {
 
     // TODO relev should be roughly equal to 0.50 once rebalanced
     // [100 market] [?????]
-    assert.equal(verifyContext(query, context, strict, {}, groups), 0.39);
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.5);
     assert.end();
 });
 
@@ -136,7 +137,7 @@ tape('[100 market] vs [12345][seattle][washington]', function(assert) {
 
     // TODO relev should be roughly equal to 0.75 once rebalanced
     // [?????] [12345] [seattle] [washington]
-    assert.equal(verifyContext(query, context, strict, {}, groups), 0.5900000000000001);
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.75);
     assert.end();
 });
 
