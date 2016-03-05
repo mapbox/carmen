@@ -30,6 +30,64 @@ tape('[100 main st] vs [seattle][washington]', function(assert) {
     assert.end();
 });
 
+tape('[100 main st] vs [seattle][washington][abskdbvlaejwblafs]', function(assert) {
+    var groups = [ 0, 1, 2, 3 ];
+    var query = ["100", "main", "st", "seattle", "washington", "abskdbvlaejwblafs"];
+    var context = [
+        {
+            "properties": {
+                "carmen:text": "Main St",
+                "carmen:tmpid": 100663396
+            }
+        },
+        {
+            "properties": {
+                "carmen:text": "Cold City",
+                "carmen:tmpid": 33554537
+            }
+        }
+    ];
+    var strict = {
+        "100663396": {
+            "relev": 0.6,
+            "mask": parseInt('111',2),
+            "text": "1## main st"
+        }
+    };
+
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.49);
+    assert.end();
+});
+
+tape('[100 main st] vs [fyoweifheilfl][seattle][washington][abskdbvlaejwblafs]', function(assert) {
+    var groups = [ 0, 1, 2, 3 ];
+    var query = ["100", "main", "st", "fyoweifheilfl", "seattle", "washington", "abskdbvlaejwblafs"];
+    var context = [
+        {
+            "properties": {
+                "carmen:text": "Main St",
+                "carmen:tmpid": 100663396
+            }
+        },
+        {
+            "properties": {
+                "carmen:text": "Cold City",
+                "carmen:tmpid": 33554537
+            }
+        }
+    ];
+    var strict = {
+        "100663396": {
+            "relev": 0.6,
+            "mask": parseInt('111',2),
+            "text": "1## main st"
+        }
+    };
+
+    assert.equal(verifyContext(query, context, strict, {}, groups), 0.49);
+    assert.end();
+});
+
 tape('[100 main st] vs [seattle][washington]', function(assert) {
     var groups = [ 0, 1, 2, 3 ];
     var query = ["100", "main", "st", "seattle", "washington" ];
@@ -60,6 +118,7 @@ tape('[100 main st] vs [seattle][washington]', function(assert) {
         }
     };
 
+    
     assert.equal(verifyContext(query, context, strict, {}, groups), 0.6566666666666666);
     assert.end();
 });
@@ -83,6 +142,8 @@ tape('[100 market] vs [12345][seattle][washington]', function(assert) {
         }
     };
 
+    // TODO relev should be roughly equal to 0.50 once rebalanced
+    // [100 market] [?????]
     assert.equal(verifyContext(query, context, strict, {}, groups), 0.49);
     assert.end();
 });
@@ -128,6 +189,8 @@ tape('[100 market] vs [12345][seattle][washington]', function(assert) {
         }
     };
 
+    // TODO relev should be roughly equal to 0.75 once rebalanced
+    // [?????] [12345] [seattle] [washington]
     assert.equal(verifyContext(query, context, strict, {}, groups), 0.74);
     assert.end();
 });
