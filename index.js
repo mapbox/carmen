@@ -262,12 +262,21 @@ Geocoder.prototype.index = function(from, to, pointer, callback) {
     });
 };
 
-// Index docs from one source to another.
+// Merge two indexes
 Geocoder.prototype.merge = function(from1, from2, to, pointer, callback) {
     var self = this;
     this._open(function(err) {
         if (err) return callback(err);
         merge(self, from1, from2, to, pointer, callback);
+    });
+};
+
+// Merge arbitrarily maby indexes
+Geocoder.prototype.multimerge = function(froms, to, pointer, callback) {
+    var self = this;
+    this._open(function(err) {
+        if (err) return callback(err);
+        merge.multimerge(self, froms, to, pointer, callback);
     });
 };
 
