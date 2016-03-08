@@ -13,30 +13,29 @@ var UPDATE = process.env.UPDATE;
 var test = require('tape');
 var termops = require('../lib/util/termops');
 var token = require('../lib/util/token');
-var count = 0;
+
 
 test('index - streaming interface', function(assert) {
 
+
     function getIndex(start, end) {
 
-    var inputStream = fs.createReadStream(path.resolve(__dirname, './fixtures/docs.jsonl'), { encoding: 'utf8' });
-    var transformStream = new Stream.Transform();
-    transformStream._transform = function(data, encoding, done) { 
-        if (data) {
-            count ++;
-    }   
-        if (count > start && count <= end) {
-        this.push(data+"\n");
-        //console.log(count);
-        //console.log(data.toString());
-
+        var count = 0;
+        var inputStream = fs.createReadStream(path.resolve(__dirname, './fixtures/docs.jsonl'), { encoding: 'utf8' });
+        var transformStream = new Stream.Transform();
+        transformStream._transform = function(data, encoding, done) {
+            if (data) {
+                count ++;
+            }
+            if (count > start && count <= end) {
+                this.push(data+"\n");
             }
 
-        done();
-    };
-     return inputStream.pipe(split()).pipe(transformStream);
-
-} 
+            done();
+        };
+        inputStream.pipe(split()).pipe(transformStream);
+        return transformStream;
+    }
 
     var outputStream = new Stream.Writable();
     outputStream._write = function(chunk, encoding, done) {
@@ -47,38 +46,44 @@ test('index - streaming interface', function(assert) {
         done();
     };
 
-    var conf = {
+    var confA = {
         to: new mem([], null, function() {})
     };
     
-    var carmen = new Carmen(conf);
-
+    var carmenA = new Carmen(confA);
+    var indexA = getIndex(0,100);
     assert.test('index docs.json', function(q) {
-        carmen.index(getIndex(0,100), conf.to, {
+        carmenA.index(indexA, confA.to, {
             zoom: 6,
             output: outputStream
         }, function(err) {
             q.ifError(err);
             q.end();
         });
-    }); 
+    });
     assert.test('ensure index was successful for index A', function(q) {
-        carmen.geocode("India", {}, function(err, result) {
+        carmenA.geocode("India", {}, function(err, result) {
             assert.ifError(err, "error");
             assert.equal(result.features[0].text, "India", "found India");
             q.end();
         });
     });
     assert.test("can't find Turkmenistan, not in Index A", function(q) {
-            carmen.geocode("Turkmenistan", {}, function(err, result) {
+        carmenA.geocode("Turkmenistan", {}, function(err, result) {
             assert.ifError(err, "error");
             assert.equal(result.features.length, 0, "Can't find Turkmenistan");
             q.end();
         });
     });
 
-     assert.test('index docs.json', function(q) {
-        carmen.index(getIndex(101,200), conf.to, {
+    var confB = {
+        to: new mem([], null, function() {})
+    };
+
+    var carmenB = new Carmen(confB);
+    var indexB = getIndex(101,200);
+    assert.test('index docs.json', function(q) {
+        carmenB.index(indexB, confB.to, {
             zoom: 6,
             output: outputStream
         }, function(err) {
@@ -87,21 +92,52 @@ test('index - streaming interface', function(assert) {
         });
     }); 
     assert.test('ensure index was successful for index B', function(q) {
-        carmen.geocode("Paraguay", {}, function(err, result) {
+        carmenB.geocode("Paraguay", {}, function(err, result) {
             assert.ifError(err, "error");
             assert.equal(result.features[0].text, "Paraguay", "found Paraguay");
             q.end();
         });
     });
-    assert.test("no feature", function(q) {
-            carmen.geocode("India", {}, function(err, result) {
+    assert.test("can't find Nauru, not in index B", function(q) {
+        carmenB.geocode("Nauru", {}, function(err, result) {
             assert.ifError(err, "error");
-            assert.equal(result.features.length, 0, "no feature");
+            assert.equal(result.features.length, 0, "can't find Nauru");
             q.end();
         });
     });
+
+    var confC = {
+        to: new mem([], null, function() {})
+    };
+    var carmenC = new Carmen(confC);
+
+    var indexC = getIndex(201,254);
+    assert.test('index docs.json', function(q) {
+        carmenC.index(indexC, confC.to, {
+            zoom: 6,
+            output: outputStream
+        }, function(err) {
+            q.ifError(err);
+            q.end();
+        });
+    });
+    assert.test('ensure index was successful for index C', function(q) {
+        carmenC.geocode("Monaco", {}, function(err, result) {
+            assert.ifError(err, "error");
+            assert.equal(result.features[0].text, "Monaco", "found Monaco");
+            q.end();
+        });
+    });
+    assert.test("can't find Oman, not in index C", function(q) {
+        carmenC.geocode("Oman", {}, function(err, result) {
+            assert.ifError(err, "error");
+            assert.equal(result.features.length, 0, "can't find Oman");
+            q.end();
+        });
+    });
+
+
+
     assert.end();
 
 });
-
-
