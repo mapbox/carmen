@@ -12,7 +12,8 @@ var Cache = require('./lib/util/cxxcache'),
     termops = require('./lib/util/termops'),
     token = require('./lib/util/token'),
     copy = require('./lib/copy'),
-    index = require('./lib/index');
+    index = require('./lib/index'),
+    merge = require('./lib/merge');
 
 require('util').inherits(Geocoder, EventEmitter);
 module.exports = Geocoder;
@@ -207,6 +208,7 @@ function clone(source) {
         'putTile',
         'getGeocoderData',
         'putGeocoderData',
+        'geocoderDataForEach',
         'startWriting',
         'stopWriting',
         'getIndexableDocs',
@@ -257,6 +259,24 @@ Geocoder.prototype.index = function(from, to, pointer, callback) {
     this._open(function(err) {
         if (err) return callback(err);
         index(self, from, to, pointer, callback);
+    });
+};
+
+// Merge two indexes
+Geocoder.prototype.merge = function(from1, from2, to, pointer, callback) {
+    var self = this;
+    this._open(function(err) {
+        if (err) return callback(err);
+        merge(self, from1, from2, to, pointer, callback);
+    });
+};
+
+// Merge arbitrarily maby indexes
+Geocoder.prototype.multimerge = function(froms, to, pointer, callback) {
+    var self = this;
+    this._open(function(err) {
+        if (err) return callback(err);
+        merge.multimerge(self, froms, to, pointer, callback);
     });
 };
 
