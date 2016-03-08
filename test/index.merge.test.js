@@ -7,7 +7,6 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var MBTiles = require('mbtiles');
 var mem = require('../lib/api-mem');
-var byline = require('byline');
 
 var UPDATE = process.env.UPDATE;
 var test = require('tape');
