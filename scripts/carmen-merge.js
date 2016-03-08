@@ -89,10 +89,17 @@ argv.output = Carmen.auto(argv.output, function() {
         });
 
         doMerge = function(inputCarmens, outputCarmen) {
-            carmen.merge(inputConfs[0].from, inputConfs[1].from, outputConf.to, outputConfig , function(err) {
-                if (err) throw err;
-                process.exit(0);
-            });
+            if (inputConfs.length == 2) {
+                carmen.merge(inputConfs[0].from, inputConfs[1].from, outputConf.to, outputConfig , function(err) {
+                    if (err) throw err;
+                    process.exit(0);
+                });
+            } else {
+                carmen.multimerge(inputConfs.map(function(ic) { return ic.from; }), outputConf.to, outputConfig, function(err) {
+                    if (err) throw err;
+                    process.exit(0);
+                });
+            }
         }
     }
 
