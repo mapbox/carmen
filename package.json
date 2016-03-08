@@ -38,7 +38,7 @@
     "retire": "0.4.x",
     "bytes": "^1.0.0",
     "tape": "^2.13.4",
-    "mbtiles": "~0.8.2",
+    "mbtiles": "https://github.com/mapbox/node-mbtiles/archive/geocoder-iter.tar.gz",
     "tilelive-s3": "~4.1.1",
     "istanbul": "^0.4.0",
     "coveralls": "^2.11.4",
