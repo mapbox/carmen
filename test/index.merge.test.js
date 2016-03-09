@@ -12,6 +12,7 @@ var UPDATE = process.env.UPDATE;
 var test = require('tape');
 var termops = require('../lib/util/termops');
 var token = require('../lib/util/token');
+var merge = require('../lib/merge');
 
 
 test('index - streaming interface', function(assert) {
@@ -45,14 +46,15 @@ test('index - streaming interface', function(assert) {
         done();
     };
 
+    var memObjectA = new mem([], null, function() {});
     var confA = {
-        to: new mem([], null, function() {})
+     country : memObjectA
     };
     
     var carmenA = new Carmen(confA);
     var indexA = getIndex(0,100);
     assert.test('index docs.json', function(q) {
-        carmenA.index(indexA, confA.to, {
+        carmenA.index(indexA, confA.country, {
             zoom: 6,
             output: outputStream
         }, function(err) {
@@ -74,15 +76,16 @@ test('index - streaming interface', function(assert) {
             q.end();
         });
     });
-
+    
+    var memObjectB = new mem([], null, function() {});
     var confB = {
-        to: new mem([], null, function() {})
+        country: memObjectB
     };
 
     var carmenB = new Carmen(confB);
     var indexB = getIndex(101,200);
     assert.test('index docs.json', function(q) {
-        carmenB.index(indexB, confB.to, {
+        carmenB.index(indexB, confB.country, {
             zoom: 6,
             output: outputStream
         }, function(err) {
@@ -104,39 +107,29 @@ test('index - streaming interface', function(assert) {
             q.end();
         });
     });
-
-    var confC = {
-        to: new mem([], null, function() {})
-    };
+    
+    var memObjectC = new mem([], null, function() {});
+    var confC = {};
     var carmenC = new Carmen(confC);
 
-    var indexC = getIndex(201,254);
-    assert.test('index docs.json', function(q) {
-        carmenC.index(indexC, confC.to, {
-            zoom: 6,
-            output: outputStream
-        }, function(err) {
-            q.ifError(err);
-            q.end();
-        });
-    });
-    assert.test('ensure index was successful for index C', function(q) {
-        carmenC.geocode("Monaco", {}, function(err, result) {
+    merge(carmenC, memObjectA, memObjectB, memObjectC, {}, function(err, done) {
+        if (err) throw err;
+                });
+
+    assert.test('ensure index was successful for index A after merging', function(q) {
+        carmenA.geocode("India", {}, function(err, result) {
             assert.ifError(err, "error");
-            assert.equal(result.features[0].text, "Monaco", "found Monaco");
+            assert.equal(result.features[0].text, "India", "found India");
             q.end();
         });
     });
-    assert.test("can't find Oman, not in index C", function(q) {
-        carmenC.geocode("Oman", {}, function(err, result) {
+    assert.test('ensure index was successful for index B after merging', function(q) {
+        carmenB.geocode("Paraguay", {}, function(err, result) {
             assert.ifError(err, "error");
-            assert.equal(result.features.length, 0, "can't find Oman");
+            assert.equal(result.features[0].text, "Paraguay", "found Paraguay");
             q.end();
+
         });
     });
-
-
-
     assert.end();
-
 });
