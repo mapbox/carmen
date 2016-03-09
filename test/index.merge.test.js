@@ -14,9 +14,7 @@ var termops = require('../lib/util/termops');
 var token = require('../lib/util/token');
 var merge = require('../lib/merge');
 
-
 test('index - streaming interface', function(assert) {
-
 
     function getIndex(start, end) {
 
@@ -30,7 +28,6 @@ test('index - streaming interface', function(assert) {
             if (count > start && count <= end) {
                 this.push(data+"\n");
             }
-
             done();
         };
         inputStream.pipe(split()).pipe(transformStream);
@@ -48,7 +45,7 @@ test('index - streaming interface', function(assert) {
 
     var memObjectA = new mem([], null, function() {});
     var confA = {
-     country : memObjectA
+        country : memObjectA
     };
     
     var carmenA = new Carmen(confA);
@@ -114,8 +111,7 @@ test('index - streaming interface', function(assert) {
 
     merge(carmenC, memObjectA, memObjectB, memObjectC, {}, function(err, done) {
         if (err) throw err;
-                });
-
+    });
     assert.test('ensure index was successful for index A after merging', function(q) {
         carmenA.geocode("India", {}, function(err, result) {
             assert.ifError(err, "error");
@@ -128,7 +124,6 @@ test('index - streaming interface', function(assert) {
             assert.ifError(err, "error");
             assert.equal(result.features[0].text, "Paraguay", "found Paraguay");
             q.end();
-
         });
     });
     assert.end();
