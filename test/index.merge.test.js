@@ -7,6 +7,7 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var MBTiles = require('mbtiles');
 var mem = require('../lib/api-mem');
+var de = require('deep-equal');
 
 var UPDATE = process.env.UPDATE;
 var test = require('tape');
@@ -104,27 +105,72 @@ test('index - streaming interface', function(assert) {
             q.end();
         });
     });
-    
+
+    var memObjectD = new mem([], null, function() {});
+    var confD = {
+        country: memObjectD
+    };
+
+    var carmenD = new Carmen(confD);
+    var indexD = getIndex(1,200);
+    assert.test('index docs.json', function(q) {
+        carmenD.index(indexD, confD.country, {
+            zoom: 6,
+            output: outputStream
+        }, function(err) {
+            q.ifError(err);
+            q.end();
+        });
+    });
+
     var memObjectC = new mem([], null, function() {});
-    var confC = {};
+    var confC = { country: memObjectC };
     var carmenC = new Carmen(confC);
 
-    merge(carmenC, memObjectA, memObjectB, memObjectC, {}, function(err, done) {
-        if (err) throw err;
+    assert.test('merged indexes', function(q) {
+        carmenC.merge(memObjectA, memObjectB, memObjectC, {}, function(err) {
+            if (err) throw err;
+            q.end();
+        });
     });
     assert.test('ensure index was successful for index A after merging', function(q) {
-        carmenA.geocode("India", {}, function(err, result) {
+        carmenC.geocode("India", {}, function(err, result) {
             assert.ifError(err, "error");
             assert.equal(result.features[0].text, "India", "found India");
             q.end();
         });
     });
     assert.test('ensure index was successful for index B after merging', function(q) {
-        carmenB.geocode("Paraguay", {}, function(err, result) {
+        carmenC.geocode("Paraguay", {}, function(err, result) {
             assert.ifError(err, "error");
             assert.equal(result.features[0].text, "Paraguay", "found Paraguay");
             q.end();
         });
     });
+    assert.test('ensure total indexes in C is greater than A and B', function(q) {
+     carmenA.analyze(memObjectA, function(err, stats) {
+        var a = stats.total;
+        carmenB.analyze(memObjectB, function(err, stats) {
+            var b = stats.total;
+            carmenC.analyze(memObjectC, function(err,stats) {
+                var c = stats.total;
+                if (c > a && c > b) {
+                    assert.ok('test', true);
+                }
+            });
+        });
+    });
+     q.end();
+ });
+    assert.test('ensure merged index and original are 99 percent similar', function(q) {
+        var count = 0;
+        for (var i = 1; i <= 200; i++) {
+            if(de(memObjectC._shards.feature[i], memObjectD._shards.feature[i], "=="))
+             count ++;
+     }
+     var percentage = (count/200)*100;
+     assert.ok(percentage >=99, "ok");
+     q.end();
+ });
     assert.end();
 });
