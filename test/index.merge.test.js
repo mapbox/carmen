@@ -147,6 +147,7 @@ test('index - streaming interface', function(assert) {
             q.end();
         });
     });
+
     assert.test('ensure total indexes in C is greater than A and B', function(q) {
      carmenA.analyze(memObjectA, function(err, stats) {
         var a = stats.total;
@@ -154,13 +155,11 @@ test('index - streaming interface', function(assert) {
             var b = stats.total;
             carmenC.analyze(memObjectC, function(err,stats) {
                 var c = stats.total;
-                if (c > a && c > b) {
-                    assert.ok('test', true);
-                }
+                assert.ok((c > a && c > b), "ok");
+                 q.end();
             });
         });
     });
-     q.end();
  });
     assert.test('ensure merged index and original are 99 percent similar', function(q) {
         var count = 0;
