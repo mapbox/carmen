@@ -54,7 +54,7 @@ function runphrasematch(cb) {
     suite.add('phrasematch', {
         'defer': true,
         'fn': function(deferred) {
-                phrasematch(conf.street, 'Westside Lake Rd', false, function(err, result) {
+                phrasematch(conf.street, 'Westside Lake Rd', true, function(err, result) {
                 if (!result.length) {
                     throw new Error();
                 } else {
