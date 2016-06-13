@@ -56,11 +56,6 @@ test('copy', function(t) {
         });
     });
 
-    t.test('index.teardown', function(assert) {
-        index.teardown();
-        assert.end();
-    });
-
     t.end();
 });
 

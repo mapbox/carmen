@@ -61,7 +61,6 @@ tape('index', function(assert) {
     }
     function store(err) {
         assert.ifError(err);
-        require('../lib/index.js').teardown();
         require('../lib/index.js').store(conf.index, stop);
     }
     function stop(err) {

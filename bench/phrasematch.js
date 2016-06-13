@@ -40,7 +40,7 @@ function setup(cb) {
             }
             return memo;
         }, []);
-    index.update(conf.street, docs, 14, function(err) {
+    index.update(conf.street, docs, { zoom: 14 }, function(err) {
         if (err) throw err;
         index.store(conf.street, function(err) {
             if (err) throw err;
@@ -54,7 +54,7 @@ function runphrasematch(cb) {
     suite.add('phrasematch', {
         'defer': true,
         'fn': function(deferred) {
-                phrasematch(conf.street, 'Westside Lake Rd', function(err, result) {
+                phrasematch(conf.street, 'Westside Lake Rd', {}, function(err, result) {
                 if (!result.length) {
                     throw new Error();
                 } else {
@@ -65,7 +65,6 @@ function runphrasematch(cb) {
     })
     .on('complete', function(event) {
         console.log(String(event.target), '\n');
-        index.teardown();
         cb(null, suite);
     })
     .run({'async': true});

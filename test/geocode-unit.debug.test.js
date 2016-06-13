@@ -3,7 +3,7 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
+var queue = require('d3-queue').queue;
 var addFeature = require('../lib/util/addfeature');
 
 var conf = {
@@ -90,9 +90,9 @@ tape('west st, tonawanda, ny', function(t) {
 
         // Found debug feature in spatialmatch results @ position 1
         t.deepEqual(res.debug.spatialmatch[0].text, 'west st');
-        t.deepEqual(res.debug.spatialmatch[0].relev, 0.5);
+        t.deepEqual(res.debug.spatialmatch[0].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch[1].text, 'ny');
-        t.deepEqual(res.debug.spatialmatch[1].relev, 0.25);
+        t.deepEqual(res.debug.spatialmatch[1].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch_position, 1);
 
         // Debug feature not found in verifymatch
@@ -125,11 +125,11 @@ tape('west st, tonawanda, ny', function(t) {
         // Found debug feature in spatialmatch results @ position 1
         t.deepEqual(res.debug.spatialmatch[0].id, 5);
         t.deepEqual(res.debug.spatialmatch[0].text, 'west st');
-        t.deepEqual(res.debug.spatialmatch[0].relev, 0.5);
+        t.deepEqual(res.debug.spatialmatch[0].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch[1].text, 'tonawanda');
-        t.deepEqual(res.debug.spatialmatch[1].relev, 0.25);
+        t.deepEqual(res.debug.spatialmatch[1].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch[2].text, 'ny');
-        t.deepEqual(res.debug.spatialmatch[2].relev, 0.25);
+        t.deepEqual(res.debug.spatialmatch[2].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch_position, 0);
 
         // Debug feature not found in verifymatch
@@ -140,8 +140,7 @@ tape('west st, tonawanda, ny', function(t) {
     });
 });
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

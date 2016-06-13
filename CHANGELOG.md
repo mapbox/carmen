@@ -1,5 +1,71 @@
 # Changelog
 
+## 15.1.8
+
+- Fix broken phrasematch bench
+- Use normalized ranges ITP instead of default feature - fixes bug where null lf/lt/rf/rt would hard error if null instead of empty array
+
+## 15.1.7
+
+- Ensure address clusters are all lowercase to ensure no case disparity between input query and cluster
+
+## 15.1.6
+
+- Dedup identical addresses with different cases ie MAIN ST = Main St
+
+## 15.1.5
+
+- Remove unneccesary check for carmen:center at indexing time
+
+## 15.1.4
+
+- Fix bug where non-clustered address ranges (LineString) of a numeric type would fail
+
+## 15.1.3
+
+- Fix bug where copy, merge streams would be considered done prematurely
+
+## 15.1.2
+
+- Moved merge operations to cpp threadpool for better performance
+- carmen-cache@0.13.0
+
+## 15.1.1
+
+- carmen-cache@0.12.1
+
+## 15.1.0
+
+- Add `bbox` query option
+- save memory in addresscluster by calculating minimum without unnecessary array
+- 30% more efficient string traversal in getPhraseDegens
+
+## 15.0.1
+
+- Removes parallel process capability in carmen-indexer
+
+## 15.0.0
+
+- Disables generation of autocomplete degens in the grid cache at indexing time for translated text
+
+## 14.2.0
+
+- Upgrades mapnik to version 3.5
+
+## 14.1.0
+
+ - Add infrastructure for merging multiple indexes together, to facilitate
+   parallel indexing.
+
+## 14.0.2
+
+- Improve query fallback logic by scoring queries per number of matching
+  indexes as well, instead of just per number of matching tokens.
+
+## 14.0.1
+
+- Segment exclusively Chinese/Japanese/Korean (CJK) terms from everthing else in the index in order to avoid collisions introduced by unidecoding (e.g. 'Aruba' / 'Arubatazhou').
+
 ## 13.1.0
 
 - Add a flag to disable autocomplete in forward geocoding

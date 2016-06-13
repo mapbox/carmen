@@ -1,6 +1,36 @@
 var dedupe = require('../lib/util/dedupe');
 var tape = require('tape');
 
+tape('dedup lowercase vs caps', function(assert) {
+    features = [
+        {
+            place_name: '20 main st',
+            text: 'main st',
+            address: 20,
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        },
+        {
+            place_name: '20 MAIN ST',
+            text: 'MAIN ST',
+            address: 20,
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        }
+    ];
+    assert.deepEqual(dedupe(features), [
+        features[0]
+    ], 'dedupes by lowercase vs caps');
+
+    assert.end();
+});
+
 tape('dedupe', function(assert) {
     var features;
 

@@ -6,7 +6,7 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
+var queue = require('d3-queue').queue;
 var addFeature = require('../lib/util/addfeature');
 
 // Test geocoder_address formatting + return place_name as germany style address (address number follows name)
@@ -315,7 +315,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('test address index for relev', function(t) {
         c.geocode('9 fake street', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.6566666666666666);
+            t.equals(res.features[0].relevance, 0.49);
             t.end();
         });
     });
@@ -376,8 +376,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

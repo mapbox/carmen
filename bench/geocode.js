@@ -28,6 +28,7 @@ function setup(cb) {
                 var lon = Math.random() * 360 - 180;
                 memo.push({
                     id: ++seq,
+                    type: 'Feature',
                     properties: {
                         'carmen:text': text,
                         'carmen:center': [lon, lat]
@@ -38,7 +39,7 @@ function setup(cb) {
             }
             return memo;
         }, []);
-    index.update(conf.street, docs, 14, function(err) {            
+    index.update(conf.street, docs, { zoom:14 }, function(err) {
         if (err) throw err;
         index.store(conf.street, function(err) {
             if (err) throw err;
@@ -55,7 +56,6 @@ function runBenchmark(cb) {
     })
     .on('complete', function(event) {
         console.log(String(event.target), '\n');
-        index.teardown();
         cb(null, suite);
     })
     .run({'async': true});

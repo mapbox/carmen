@@ -5,8 +5,39 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
+var queue = require('d3-queue').queue;
 var addFeature = require('../lib/util/addfeature');
+
+//Make sure that capital letters are lowercased on indexing to match input token
+(function() {
+    var conf = {
+        address: new mem({maxzoom: 6, geocoder_address: 1}, function() {})
+    };
+    var c = new Carmen(conf);
+    tape('index alphanum address', function(t) {
+        var address = {
+            id:1,
+            properties: {
+                'carmen:text': 'fake street',
+                'carmen:center': [0,0],
+                'carmen:addressnumber': ['9B', '10C', '7']
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: [[0,0],[0,0],[0,0]]
+            }
+        };
+        addFeature(conf.address, address, t.end);
+    });
+    tape('test address index for alphanumerics', function(t) {
+        c.geocode('9B FAKE STREET', { limit_verify: 1 }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street', 'found 9b fake street');
+            t.equals(res.features[0].relevance, 0.99);
+            t.end();
+        });
+    });
+})();
 
 (function() {
     var conf = {
@@ -63,6 +94,49 @@ var addFeature = require('../lib/util/addfeature');
             t.ifError(err);
             t.equals(res.features[0].place_name, '9b fake street', 'found 9b fake street');
             t.equals(res.features[0].relevance, 0.99);
+            t.end();
+        });
+    });
+})();
+
+(function() {
+    var conf = {
+        address: new mem({maxzoom: 6, geocoder_address: 1}, function() {})
+    };
+    var c = new Carmen(conf);
+    tape('index address', function(t) {
+        var address = {
+            id:1,
+            properties: {
+                'carmen:text':'fake street',
+                'carmen:center':[0,0],
+                'carmen:rangetype':'tiger',
+                'carmen:lfromhn': 0, //Input is numeric
+                'carmen:ltohn': 100,
+            },
+            geometry: {
+                type:'LineString',
+                coordinates:[[0,0],[0,100]]
+            }
+        };
+        addFeature(conf.address, address, t.end);
+    });
+    tape('test alphanumeric address query with address range', function(t) {
+        c.geocode('9b fake street', { limit_verify: 1 }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street', 'found 9b fake street');
+            t.equals(res.features[0].relevance, 0.99);
+            t.equals(res.features[0].address, '9b', 'address number is 9b');
+            t.end();
+        });
+    });
+
+    tape('test alphanumeric address query with invalid address number', function(t) {
+        c.geocode('9bc fake street', { limit_verify: 1 }, function(err, res) {
+            t.ifError(err);
+            t.ok(res.features[0].place_name, 'fake street', 'found fake street feature');
+            t.ok((res.features[0].relevance < 0.6), 'appropriate relevance (9bc token should not be matched)');
+            t.ok((res.features[0].address === undefined), 'address number is not defined');
             t.end();
         });
     });
@@ -189,9 +263,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

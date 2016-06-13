@@ -5,7 +5,7 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
+var queue = require('d3-queue').queue;
 var addFeature = require('../lib/util/addfeature');
 
 (function() {
@@ -42,11 +42,13 @@ var addFeature = require('../lib/util/addfeature');
 (function() {
     var conf = {
         address: new mem({
-            maxzoom: 6,
-            geocoder_tokens: {"dix-huitième": "18e"}
+            maxzoom: 6
         }, function() {})
     };
-    var c = new Carmen(conf);
+    var opts = {
+        tokens: {"dix-huitième": "18e"}
+    };
+    var c = new Carmen(conf, opts);
     tape('geocoder token test', function(t) {
         var address = {
             id:1,
@@ -174,8 +176,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

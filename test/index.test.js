@@ -154,8 +154,9 @@ test('index.update freq', function(t) {
         });
     });
     t.test('indexes doc with geometry and no carmen:center', function(q) {
-        index.update(conf.to, [{ id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}}], { zoom: 6 }, function(err) {
-            q.equal('Error: doc has no carmen:center on id:1', err.toString());
+        var doc = { id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}};
+        index.update(conf.to, [doc], { zoom: 6 }, function(err, res, too) {
+            q.ok(doc.properties['carmen:center'], 'carmen:center has been set');
             q.end();
         });
     });
@@ -234,13 +235,25 @@ test('index', function(t) {
             q.end();
         });
     });
-    t.test('loadall stat ignores Dict', function(q) {
-        q.ok(!conf.to._geocoder.hasDict('stat', 0));
-        carmen.loadall(conf.to, 'stat', 1, function(err) {
+    t.test('confirm that iterator works', function(q) {
+        var monotonic = true;
+        var output = [];
+        var iterator = conf.to.geocoderDataIterator('freq');
+        var next = function(err, n) {
             q.ifError(err);
-            q.ok(!conf.to._geocoder.hasDict('stat', 0));
-            q.end();
-        });
+            if (!n.done) {
+                output.push(n.value.shard);
+                if (output.length > 1) {
+                    monotonic = monotonic && (output[output.length - 1] > output[output.length - 2])
+                }
+                iterator.asyncNext(next);
+            } else {
+                q.ok(monotonic, 'shard iterator produces sorted output');
+                q.equal(output.length, 184, "index has 184 shards");
+                q.end();
+            }
+        };
+        iterator.asyncNext(next);
     });
     t.test('unloadall index', function(q) {
         carmen.unloadall(conf.to, 'freq', function(err) {
@@ -270,8 +283,8 @@ test('error -- zoom too high', function(t) {
     };
 
     var carmen = new Carmen(conf);
-    carmen.index(inputStream, conf.to, { 
-        zoom: 15, 
+    carmen.index(inputStream, conf.to, {
+        zoom: 15,
         output: outputStream
     }, function(err) {
         t.equal('Error: zoom must be less than 15 --- zoom was 15', err.toString());
@@ -422,7 +435,7 @@ test('error -- carmen:zxy too large tile-cover', function(t) {
         to: new mem(docs, null, function() {})
     };
     var carmen = new Carmen(conf);
-    carmen.index(s, conf.to, { 
+    carmen.index(s, conf.to, {
         zoom: 6,
         output: outputStream
     }, function(err) {
@@ -439,11 +452,6 @@ test('index.cleanDocs', function(assert) {
     assert.equal(typeof index.cleanDocs(sourceWithAddress, [{ geometry:{}} ])[0].geometry, 'object', 'with address: preserves geometry');
     assert.equal(typeof index.cleanDocs(sourceWithoutAddress, [{geometry:{}}])[0].geometry, 'undefined', 'without address: removes geometry');
     assert.equal(typeof index.cleanDocs(sourceWithAddress, [{geometry:{},properties: { 'carmen:addressnumber':{}} }])[0]._geometry, 'undefined', 'with carmen:addressnumber: preserves geometry');
-    assert.end();
-});
-
-test('index.teardown', function(assert) {
-    index.teardown();
     assert.end();
 });
 
