@@ -368,15 +368,15 @@ test('address point clustering', function(t) {
     t.deepEqual(
         addressCluster({
             properties: {
-                'carmen:addressnumber': [9,10,7]
+                'carmen:addressnumber': [[9,10,7]]
             },
             geometry: {
-                type: 'MultiPoint',
-                coordinates: [ [1,1], [2,2], [0,0] ]
+                type: 'MultiLineString',
+                coordinates: [ [ [1,1], [2,2], [0,0] ] ]
             }
-        },9), {
-            type:'Point',
-            coordinates:[1,1]
+        }, 9), {
+            type: 'Point',
+            coordinates: [1,1]
         });
     t.end();
 });
@@ -386,13 +386,13 @@ test('reverse address point clustering', function(t) {
         addressCluster.reverse({
             properties: {
                 'carmen:text': "test",
-                'carmen:addressnumber': [9,10,7]
+                'carmen:addressnumber': [[9,10,7]]
             },
             geometry: {
-                type: 'MultiPoint',
-                coordinates: [ [1,3], [2,4], [0,1] ]
+                type: 'MultiLineString',
+                coordinates: [ [ [1,3], [2,4], [0,1] ] ]
             }
-        }, [1,3]), { geometry: { coordinates: [ 1, 3 ], type: 'Point' }, properties: { 'carmen:address': 9, 'carmen:addressnumber': [ 9, 10, 7 ], 'carmen:text': 'test' } });
+        }, [1,3]), { geometry: { coordinates: [ 1, 3 ], type: 'Point' }, properties: { 'carmen:address': 9, 'carmen:addressnumber': [[ 9, 10, 7 ]], 'carmen:text': 'test' } });
     t.end();
 });
 
@@ -400,40 +400,17 @@ test('address point clustering not point', function(t) {
     t.deepEqual(
         addressCluster({
             properties: {
-                'carmen:addressnumber': [9]
+                'carmen:addressnumber': [[9]]
             },
             geometry: {
                 type: 'FeatureCollection',
                 features: [{
                     type: "Polygon",
-                    coordinates: [
-                        [
-                            [
-                                -17.2265625,
-                                8.407168163601076
-                            ],
-                            [
-                                -17.2265625,
-                                53.9560855309879
-                            ],
-                            [
-                                34.80468749999999,
-                                53.9560855309879
-                            ],
-                            [
-                                34.80468749999999,
-                                8.407168163601076
-                            ],
-                            [
-                                -17.2265625,
-                                8.407168163601076
-                            ]
-                        ]
-                    ]
+                    coordinates: [ [ [ -17.2265625, 8.407168163601076 ], [ -17.2265625, 53.9560855309879 ], [ 34.80468749999999, 53.9560855309879 ], [ 34.80468749999999, 8.407168163601076 ], [ -17.2265625, 8.407168163601076 ] ] ]
                 }]
             }
         }, 9),
-        undefined);
+        false);
     t.end();
 });
 
@@ -448,7 +425,7 @@ test('address point clustering fail', function(t) {
                 coordinates: [[1,1],[2,2],[0,0]]
             }
         }, 11),
-        undefined);
+        false);
     t.end();
 });
 
