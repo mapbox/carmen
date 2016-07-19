@@ -50,9 +50,12 @@ tape('index featurecollection address', function(t) {
 });
 
 tape('100 17th st', function(t) {
-    c.geocode('100 17t', {}, function(err, res) {
+    c.geocode('100 17th st', {}, function(err, res) {
         t.ifError(err);
         t.equals(res.features.length, 1);
+        t.equals(res.features[0].place_name, '100 17th st');
+        t.equals(res.features[0].id, 'address.1');
+        t.deepEquals(res.features[0].geometry.coordinates, [0, 0]);
         t.end();
     });
 });
