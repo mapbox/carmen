@@ -49,6 +49,14 @@ tape('index featurecollection address', function(t) {
     addFeature(conf.address, address, t.end);
 });
 
+tape('104 17th st - no result', function(t) {
+    c.geocode('104 17th st', {}, function(err, res) {
+        t.ifError(err);
+        t.equals(res.features.length, 0);
+        t.end();
+    });
+});
+
 tape('100 17th st', function(t) {
     c.geocode('100 17th st', {}, function(err, res) {
         t.ifError(err);
