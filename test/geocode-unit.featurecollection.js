@@ -13,9 +13,9 @@ var c = new Carmen(conf);
 
 tape('index featurecollection address', function(t) {
     var address = {
-        id: 1,
         type: "FeatureCollection",
         features: [{
+            id: 1,
             type: "Feature",
             properties: {
                 'carmen:text':'17th st',
@@ -30,13 +30,14 @@ tape('index featurecollection address', function(t) {
             },
             geometry: {
                 type: 'LineString',
-                coordinates: [[0,0], [ 0.0016307830810546875, -0.00012874603270986282 ]]
+                coordinates: [[0,0], [1,1]]
             }
         },{
+            id: 2,
             type: "Feature",
             properties: {
                 'carmen:text':'17th st',
-                'carmen:center':[0,0],
+                'carmen:center': [0,0],
                 'carmen:addressnumber': ['100']
             },
             geometry: {
@@ -52,9 +53,6 @@ tape('100 17th st', function(t) {
     c.geocode('100 17t', {}, function(err, res) {
         t.ifError(err);
         t.equals(res.features.length, 1);
-        t.equals(res.features[0].id, 'address.2');
-        t.equals(res.features[0].text, '17th st');
-        t.equals(res.features[0].address, '100');
         t.end();
     });
 });
