@@ -38,8 +38,8 @@ tape('indexdocs.loadDoc', function(assert) {
     freq[termops.encodeTerm(tokens[1])] = [100];
 
     // Indexes single doc.
-    err = indexdocs.loadDoc(patch, doc, freq, zoom, token_replacer);
-    assert.ifError(err);
+    newdoc = indexdocs.loadDoc(patch, doc, freq, zoom, token_replacer);
+    assert.deepEquals(newdoc, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:hash': 1, 'carmen:score': 100, 'carmen:text': 'main st', 'carmen:zxy': [ '6/32/32', '14/16384/32' ] }, type: 'Feature' });
 
     assert.deepEqual(Object.keys(patch.grid).length, 8);
     assert.deepEqual(patch.grid[Object.keys(patch.grid)[0]].length, 1);
@@ -93,8 +93,8 @@ tape('indexdocs.loadDoc - No Center', function(assert) {
     assert.deepEqual(doc.properties['carmen:zxy'], ['6/32/32', '14/16384/32']);
 
     // Load doc without center, check that center gets set
-    err = indexdocs.loadDoc(patch, doc, freq, zoom, token_replacer);
-    assert.ifError(err);
+    newdoc = indexdocs.loadDoc(patch, doc, freq, zoom, token_replacer);
+    assert.deepEquals(newdoc, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:hash': 1, 'carmen:score': 100, 'carmen:text': 'main st', 'carmen:zxy': [ '6/32/32', '14/16384/32' ] }, type: 'Feature' });
     assert.deepEqual(doc.properties['carmen:center'],[0,0]);
     assert.deepEqual(doc.properties['carmen:zxy'], ['6/32/32', '14/16384/32']);
 
@@ -122,6 +122,14 @@ tape('indexdocs.verifyCenter', function(assert) {
 
 tape('indexdocs.runChecks', function(assert) {
     assert.equal(indexdocs.runChecks({
+    }), 'doc must be Feature or FeatureCollection');
+    assert.equal(indexdocs.runChecks({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+            type: 'Point',
+            coordinates: [0,0]
+        }
     }), 'doc has no id');
 
     assert.equal(indexdocs.runChecks({
