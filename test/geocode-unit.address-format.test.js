@@ -222,7 +222,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('Search for an address without a number (multiple layers)', function(t) {
         c.geocode('fake street', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
-            t.deepEquals(res, { features: [ { center: [ 0, 0 ], context: [ { id: 'place.1', text: 'springfield' }, { id: 'postcode.1', text: '12345' }, { id: 'region.1', text: 'maine' }, { id: 'country.1', text: 'united states' } ], geometry: { coordinates: [[0,0],[0,0],[0,0]], type: 'MultiPoint' }, id: 'address.1', place_name: 'fake street springfield, maine 12345, united states', properties: {}, relevance: 0.79, text: 'fake street', type: 'Feature' } ], query: [ 'fake', 'street' ], type: 'FeatureCollection' });
+            t.deepEquals(res, { features: [ { center: [ 0, 0 ], context: [ { id: 'place.1', text: 'springfield' }, { id: 'postcode.1', text: '12345' }, { id: 'region.1', text: 'maine' }, { id: 'country.1', text: 'united states' } ], geometry: { coordinates: [[[0,0],[0,0],[0,0]]], type: 'MultiLineString' }, id: 'address.1', place_name: 'fake street springfield, maine 12345, united states', properties: {}, relevance: 0.79, text: 'fake street', type: 'Feature' } ], query: [ 'fake', 'street' ], type: 'FeatureCollection' });
             t.end();
         });
     });
