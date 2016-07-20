@@ -135,15 +135,21 @@ test('index.update -- error', function(t) {
 test('index.update freq', function(t) {
     var conf = { to: new mem(null, function() {}) };
     var carmen = new Carmen(conf);
-    t.test('error no id', function(q) {
-        index.update(conf.to, [{ properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
-            q.equal('Error: doc has no id', err.toString());
+    t.test('error must be feature', function(q) {
+        index.update(conf.to, [{ type: 'Feature', properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
+            q.equal(err.toString(), 'Error: doc has no id');
             q.end();
         });
     });
-    t.test('error no carmen:center', function(q) {
+    t.test('error no geometry', function(q) {
         index.update(conf.to, [{ id: 1, type: 'Feature', properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
-            q.equal('Error: "geometry" property required on id:1', err.toString());
+            q.equal(err.toString(), 'Error: doc must have geometry on: 1');
+            q.end();
+        });
+    });
+    t.test('error no id', function(q) {
+        index.update(conf.to, [{ type: 'Feature', properties: { 'carmen:text': 'main st', 'carmen:center':[0,0]}, geometry: { type: 'Point', coordinates: [0,0] } }], { zoom: 6 }, function(err) {
+            q.equal(err.toString(), 'Error: doc has no id');
             q.end();
         });
     });
@@ -287,7 +293,7 @@ test('error -- zoom too high', function(t) {
         zoom: 15,
         output: outputStream
     }, function(err) {
-        t.equal('Error: zoom must be less than 15 --- zoom was 15', err.toString());
+        t.equal(err.toString(), 'Error: zoom must be less than 15 --- zoom was 15');
         t.end();
     });
 });
@@ -312,7 +318,7 @@ test('error -- zoom too low', function(t) {
         zoom: -1,
         output: outputStream
     }, function(err) {
-        t.equal('Error: zoom must be greater than 0 --- zoom was -1', err.toString());
+        t.equal(err.toString(), 'Error: zoom must be greater than 0 --- zoom was -1');
         t.end();
     });
 });
@@ -381,7 +387,7 @@ test('error -- _geometry too high resolution', function(t) {
         zoom: 6,
         output: outputStream
     }, function(err) {
-        t.equal('Error: Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1', err.toString());
+        t.equal(err.toString(), 'Error: Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1');
         t.end();
     });
 });
@@ -439,7 +445,7 @@ test('error -- carmen:zxy too large tile-cover', function(t) {
         zoom: 6,
         output: outputStream
     }, function(err) {
-        t.equal('Error: zxy exceeded 10000, doc id:1', err.toString());
+        t.equal(err.toString(), 'Error: zxy exceeded 10000, doc id:1');
         t.end();
     });
 });
