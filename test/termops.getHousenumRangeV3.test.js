@@ -6,35 +6,35 @@ test('termops.getHousenumRangeV3', function(assert) {
     assert.deepEqual(getHousenumRangeV3({ properties: {} }), false, 'non-address doc => false');
     
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [] }
+        properties: { 'carmen:addressnumber': [[]] }
     }), false, 'empty carmen:addressnumber => false');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': JSON.stringify([0, 10]) }
+        properties: { 'carmen:addressnumber': JSON.stringify([[0, 10]]) }
     }), ['#','##'], 'parses JSON carmen:addressnumber');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [0, 10] }
+        properties: { 'carmen:addressnumber': [[0, 10]] }
     }), ['#','##'], 'carmen:addressnumber => 0,10');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [ 0, 10000000000 ] }
+        properties: { 'carmen:addressnumber': [[ 0, 10000000000 ]] }
     }), ['#','10#########'], 'carmen:addressnumber => [0,10000000000]');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [ 5, 10, 1, 13, 3100, 3101, 3503 ] }
+        properties: { 'carmen:addressnumber': [[ 5, 10, 1, 13, 3100, 3101, 3503 ]] }
     }), ['#','##','31##','35##'], 'carmen:addressnumber => [1,13,3100,3101,3503]');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [ '5a', '10b', '1c', '13d' ] }
+        properties: { 'carmen:addressnumber': [[ '5a', '10b', '1c', '13d' ]] }
     }), ['#','##'], 'carmen:addressnumber => [1,13]');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [ 'lot 1', 'lot 10' ] }
+        properties: { 'carmen:addressnumber': [[ 'lot 1', 'lot 10' ]] }
     }), ['#','##'], 'carmen:addressnumber => [1,10]');
 
     assert.deepEqual(getHousenumRangeV3({
-        properties: { 'carmen:addressnumber': [ 'apt a', 'apt b' ] }
+        properties: { 'carmen:addressnumber': [[ 'apt a', 'apt b' ]] }
     }), false, 'carmen:addressnumber (non-numeric) => false');
 
     assert.deepEqual(getHousenumRangeV3({
@@ -86,6 +86,15 @@ test('termops.getHousenumRangeV3', function(assert) {
             'carmen:rtohn': ['1000']
         }
     }), ['#', '##','1##','10##','2##', '3##', '4##', '5##', '6##', '7##', '8##', '9##'], 'complex case B');
+
+    assert.deepEqual(getHousenumRangeV3({
+        properties: {
+            'carmen:rangetype': 'tiger',
+            'carmen:rfromhn': ['1'],
+            'carmen:rtohn': ['10'],
+            'carmen:addressnumber': [null, [1000, 3000]]
+        }
+    }), [ '#', '##', '10##', '30##' ], 'Mixed case A');
 
     assert.end();
 });
