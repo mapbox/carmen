@@ -136,14 +136,14 @@ test('index.update freq', function(t) {
     var conf = { to: new mem(null, function() {}) };
     var carmen = new Carmen(conf);
     t.test('error must be feature', function(q) {
-        index.update(conf.to, [{ type: 'Feature', properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
+        index.update(conf.to, [{ type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry: { type: 'Point', coordinates: [0,0]} }], { zoom: 6 }, function(err) {
             q.equal(err.toString(), 'Error: doc has no id');
             q.end();
         });
     });
     t.test('error no geometry', function(q) {
         index.update(conf.to, [{ id: 1, type: 'Feature', properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
-            q.equal(err.toString(), 'Error: doc must have geometry on: 1');
+            q.equal(err.toString(), 'Error: "geometry" property required on id:1');
             q.end();
         });
     });
