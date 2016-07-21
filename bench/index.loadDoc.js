@@ -1,6 +1,6 @@
 var suite = new (require('benchmark').Suite)();
 var assert = require('assert');
-var worker = require('../lib/indexer/indexdocs-worker.js');
+var worker = require('../lib/indexer/indexdocs.js');
 
 var patch = { grid:{}, docs:[] };
 var doc = require('./fixtures/verifymatch.verifyFeatures.loaded.json')[0];
