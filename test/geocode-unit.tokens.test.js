@@ -161,6 +161,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('test address index for relev', function(t) {
         c.geocode('fake st lot 34 Suite 43', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
+            console.log('result', res);
             t.deepEquals(res.query, ['fake', 'st'], 'global tokens removed');
             t.equals(res.features[0].place_name, 'fake street');
             t.end();
@@ -170,6 +171,7 @@ var addFeature = require('../lib/util/addfeature');
         c.geocode('main road lot 34 Suite 43', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
             t.deepEquals(res.query, ['main', 'road'], 'global tokens removed');
+            console.log('res', res);
             t.equals(res.features[0].place_name, 'main road lot 42 suite 432');
             t.end();
         });
