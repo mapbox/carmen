@@ -44,7 +44,7 @@ var queue = require('d3-queue').queue;
                 properties: {
                     'carmen:text':'main st',
                     'carmen:zxy':['6/32/32'],
-                    'carmen:scorei':50,
+                    'carmen:score':50,
                     'carmen:center':[0,0]
                 }
             }, done);

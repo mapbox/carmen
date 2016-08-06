@@ -49,7 +49,7 @@ tape('index', function(assert) {
         }, write2);
     }
     function write2(err) {
-        assert.ifError(err);
+        assert.ifError(err, 'no error');
         addFeature(conf.index, {
             id:39,
             properties: {

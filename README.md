@@ -177,12 +177,12 @@ present in the properties object.
 attribute           | description
 --------------------|------------
 `carmen:rangetype`  | The type of range data available. Only possible value atm is 'tiger'.
-`carmen:lfromhn`    | Single (LineString) or array of values (GeometryCollection) of TIGER LFROMHN field.
-`carmen:ltohn`      | Single (LineString) or array of values (GeometryCollection) of TIGER LTOHN field.
-`carmen:rfromhn`    | Single (LineString) or array of values (GeometryCollection) of TIGER RFROMHN field.
-`carmen:rtohn`      | Single (LineString) or array of values (GeometryCollection) of TIGER RTOHN field.
-`carmen:parityl`    | Single (LineString) or array of values (GeometryCollection) of TIGER PARITYL field.
-`carmen:parityr`    | Single (LineString) or array of values (GeometryCollection) of TIGER PARITYR field.
+`carmen:lfromhn`    | Single (LineString) or array of values (MultiLineString) of TIGER LFROMHN field.
+`carmen:ltohn`      | Single (LineString) or array of values (MultiLineString) of TIGER LTOHN field.
+`carmen:rfromhn`    | Single (LineString) or array of values (MultiLineString) of TIGER RFROMHN field.
+`carmen:rtohn`      | Single (LineString) or array of values (MultiLineString) of TIGER RTOHN field.
+`carmen:parityl`    | Single (LineString) or array of values (MultiLineString) of TIGER PARITYL field.
+`carmen:parityr`    | Single (LineString) or array of values (MultiLineString) of TIGER PARITYR field.
 
 ------
 
