@@ -49,6 +49,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('Invalid stack - not a stack name', function(t) {
         c.geocode('0,0', { stacks: ['zz'] }, function(err, res) {
             t.ok(err, 'throws error');
+            t.equal(err.validStacks.length, 2, 'error includes valid stacks')
             t.end();
         });
     });
