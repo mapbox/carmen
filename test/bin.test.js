@@ -93,11 +93,11 @@ tape('bin/carmen DEBUG', function(t) {
     exec(bin + '/carmen.js ' + tmpindex + ' --query="canada" --debug="38"', function(err, stdout, stderr) {
         t.ifError(err);
         t.equal(/0\.99 Canada/.test(stdout), true, 'finds canada');
-        t.ok(stdout.indexOf('phrasematch:') !== -1, 'debug phrase match');
-        t.ok(stdout.indexOf('spatialmatch:') !== -1, 'debug spatial');
-        t.ok(stdout.indexOf('spatialmatch_position:') !== -1, 'debug spatial');
-        t.ok(stdout.indexOf('verifymatch:') !== -1, 'debug verify match');
-        t.ok(stdout.indexOf('verifymatch_position:') !== -1, 'debug verify match');
+        t.ok(stdout.indexOf('PhraseMatch\n-----------') !== -1, 'debug phrase match');
+        t.ok(stdout.indexOf('SpatialMatch\n------------') !== -1, 'debug spatial');
+        t.ok(stdout.indexOf('spatialmatch position: 0') !== -1, 'debug spatial');
+        t.ok(stdout.indexOf('VerifyMatch\n-----------') !== -1, 'debug verify match');
+        t.ok(stdout.indexOf('verifymatch position: 0') !== -1, 'debug verify match');
         t.end();
     });
 });
