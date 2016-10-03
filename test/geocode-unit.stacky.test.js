@@ -30,7 +30,7 @@ tape('index city', function(t) {
         id:1,
         properties: {
             'carmen:text':'windsor',
-            'carmen:zxy':['6/32/32','6/33/32'],
+            'carmen:zxy':['6/32/32','6/34/32'],
             'carmen:center':[0,0]
         }
     };
@@ -41,8 +41,8 @@ tape('index street', function(t) {
         id:1,
         properties: {
             'carmen:text':'windsor ct',
-            'carmen:zxy':['6/33/32'],
-            'carmen:center':[360/64,0]
+            'carmen:zxy':['6/34/32'],
+            'carmen:center':[360/32,0]
         }
     };
     addFeature(conf.street, street, t.end);

@@ -1,6 +1,15 @@
 # Changelog
 
+## 16.2.3
+
+- Optimize vector geojson output at indexing time for ligther vector tiles.
+
+## 16.2.2
+
+- Bump carmen-cache for better error handling on index merges.
+
 ## 16.2.1
+
 - Use stricter eslint rules.
 
 ## 16.2.0
