@@ -14,68 +14,6 @@
         0,
         0
       ],
-      "carmen:addressnumber": "100",
-      "carmen:lfromhn": [
-        [],
-        [
-          "1",
-          "101",
-          "201",
-          "301"
-        ]
-      ],
-      "carmen:ltohn": [
-        [],
-        [
-          "99",
-          "199",
-          "299",
-          "399"
-        ]
-      ],
-      "carmen:rfromhn": [
-        [],
-        [
-          "0",
-          "100",
-          "200",
-          "300"
-        ]
-      ],
-      "carmen:rtohn": [
-        [],
-        [
-          "98",
-          "198",
-          "298",
-          "398"
-        ]
-      ],
-      "carmen:parityl": [
-        [],
-        [
-          "O",
-          "O",
-          "O",
-          "O"
-        ]
-      ],
-      "carmen:parityr": [
-        [],
-        [
-          "E",
-          "E",
-          "E",
-          "E"
-        ]
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -92,71 +30,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        1,
+        0,
         0
       ],
-      "carmen:addressnumber": "200",
-      "carmen:lfromhn": [
-        [],
-        [
-          "1",
-          "101",
-          "201",
-          "301"
-        ]
-      ],
-      "carmen:ltohn": [
-        [],
-        [
-          "99",
-          "199",
-          "299",
-          "399"
-        ]
-      ],
-      "carmen:rfromhn": [
-        [],
-        [
-          "0",
-          "100",
-          "200",
-          "300"
-        ]
-      ],
-      "carmen:rtohn": [
-        [],
-        [
-          "98",
-          "198",
-          "298",
-          "398"
-        ]
-      ],
-      "carmen:parityl": [
-        [],
-        [
-          "O",
-          "O",
-          "O",
-          "O"
-        ]
-      ],
-      "carmen:parityr": [
-        [],
-        [
-          "E",
-          "E",
-          "E",
-          "E"
-        ]
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -173,71 +49,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        2,
+        0,
         0
       ],
-      "carmen:addressnumber": "300",
-      "carmen:lfromhn": [
-        [],
-        [
-          "1",
-          "101",
-          "201",
-          "301"
-        ]
-      ],
-      "carmen:ltohn": [
-        [],
-        [
-          "99",
-          "199",
-          "299",
-          "399"
-        ]
-      ],
-      "carmen:rfromhn": [
-        [],
-        [
-          "0",
-          "100",
-          "200",
-          "300"
-        ]
-      ],
-      "carmen:rtohn": [
-        [],
-        [
-          "98",
-          "198",
-          "298",
-          "398"
-        ]
-      ],
-      "carmen:parityl": [
-        [],
-        [
-          "O",
-          "O",
-          "O",
-          "O"
-        ]
-      ],
-      "carmen:parityr": [
-        [],
-        [
-          "E",
-          "E",
-          "E",
-          "E"
-        ]
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -254,71 +68,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        3,
+        0,
         0
       ],
-      "carmen:addressnumber": "400",
-      "carmen:lfromhn": [
-        [],
-        [
-          "1",
-          "101",
-          "201",
-          "301"
-        ]
-      ],
-      "carmen:ltohn": [
-        [],
-        [
-          "99",
-          "199",
-          "299",
-          "399"
-        ]
-      ],
-      "carmen:rfromhn": [
-        [],
-        [
-          "0",
-          "100",
-          "200",
-          "300"
-        ]
-      ],
-      "carmen:rtohn": [
-        [],
-        [
-          "98",
-          "198",
-          "298",
-          "398"
-        ]
-      ],
-      "carmen:parityl": [
-        [],
-        [
-          "O",
-          "O",
-          "O",
-          "O"
-        ]
-      ],
-      "carmen:parityr": [
-        [],
-        [
-          "E",
-          "E",
-          "E",
-          "E"
-        ]
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -341,43 +93,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        0.5,
+        0,
         0
       ],
-      "carmen:addressnumber": [
-        [
-          "100",
-          "200",
-          "300",
-          "400"
-        ],
-        null
-      ],
-      "carmen:lfromhn": [
-        "1"
-      ],
-      "carmen:ltohn": [
-        "99"
-      ],
-      "carmen:rfromhn": [
-        "0"
-      ],
-      "carmen:rtohn": [
-        "98"
-      ],
-      "carmen:parityl": [
-        "O"
-      ],
-      "carmen:parityr": [
-        "E"
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -400,43 +118,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        2.5,
+        0,
         0
       ],
-      "carmen:addressnumber": [
-        [
-          "100",
-          "200",
-          "300",
-          "400"
-        ],
-        null
-      ],
-      "carmen:lfromhn": [
-        "101"
-      ],
-      "carmen:ltohn": [
-        "199"
-      ],
-      "carmen:rfromhn": [
-        "100"
-      ],
-      "carmen:rtohn": [
-        "198"
-      ],
-      "carmen:parityl": [
-        "O"
-      ],
-      "carmen:parityr": [
-        "E"
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -459,43 +143,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        4.5,
+        0,
         0
       ],
-      "carmen:addressnumber": [
-        [
-          "100",
-          "200",
-          "300",
-          "400"
-        ],
-        null
-      ],
-      "carmen:lfromhn": [
-        "201"
-      ],
-      "carmen:ltohn": [
-        "299"
-      ],
-      "carmen:rfromhn": [
-        "200"
-      ],
-      "carmen:rtohn": [
-        "298"
-      ],
-      "carmen:parityl": [
-        "O"
-      ],
-      "carmen:parityr": [
-        "E"
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1
@@ -518,43 +168,9 @@
     "properties": {
       "carmen:text": "main street",
       "carmen:center": [
-        6.5,
+        0,
         0
       ],
-      "carmen:addressnumber": [
-        [
-          "100",
-          "200",
-          "300",
-          "400"
-        ],
-        null
-      ],
-      "carmen:lfromhn": [
-        "301"
-      ],
-      "carmen:ltohn": [
-        "399"
-      ],
-      "carmen:rfromhn": [
-        "300"
-      ],
-      "carmen:rtohn": [
-        "398"
-      ],
-      "carmen:parityl": [
-        "O"
-      ],
-      "carmen:parityr": [
-        "E"
-      ],
-      "carmen:rangetype": "tiger",
-      "carmen:zxy": [
-        "6/32/32",
-        "6/32/32",
-        "6/33/32"
-      ],
-      "carmen:hash": 1,
       "id": 1
     },
     "id": 1

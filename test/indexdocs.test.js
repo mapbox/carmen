@@ -24,7 +24,6 @@ tape('indexdocs.loadDoc', function(assert) {
             'carmen:text': 'main st',
             'carmen:center': [0, 0],
             'carmen:zxy': ['6/32/32', '6/33/33'],
-            'carmen:hash': 1,
             'carmen:score': 100
         },
         geometry: {
@@ -72,7 +71,7 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:hash': 1, 'carmen:text': 'main street', 'carmen:zxy': [ '6/32/32' ] }, type: 'Feature' });
+        t.deepEquals(res, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:text': 'main street', 'carmen:zxy': [ '6/32/32' ] }, type: 'Feature' });
         t.end();
     });
 
@@ -148,7 +147,7 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:addressnumber":[[9]],"carmen:zxy":["6/32/32"],"carmen:hash":1},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0]]}]}});
+        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:addressnumber":[[9]],"carmen:zxy":["6/32/32"]},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0]]}]}});
         t.end();
     });
 
@@ -167,7 +166,7 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:addressnumber":[['9a']],"carmen:zxy":["6/32/32"],"carmen:hash":1},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0]]}]}});
+        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:addressnumber":[['9a']],"carmen:zxy":["6/32/32"]},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0]]}]}});
         t.end();
     });
 
@@ -211,7 +210,7 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:rangetype":"tiger","carmen:parityl":[["E"]],"carmen:parityr":[["O"]],"carmen:lfromhn":[["2"]],"carmen:ltohn":[["100"]],"carmen:rfromhn":[["1"]],"carmen:rtohn":[["101"]],"carmen:zxy":["6/32/31","6/32/32"],"carmen:hash":1},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiLineString","coordinates":[[[0,0],[1,1]]]}]}});
+        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:rangetype":"tiger","carmen:parityl":[["E"]],"carmen:parityr":[["O"]],"carmen:lfromhn":[["2"]],"carmen:ltohn":[["100"]],"carmen:rfromhn":[["1"]],"carmen:rtohn":[["101"]],"carmen:zxy":["6/32/31","6/32/32"]},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiLineString","coordinates":[[[0,0],[1,1]]]}]}});
         t.end();
     });
 
@@ -236,7 +235,7 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:rangetype":"tiger","carmen:parityl":[["E"]],"carmen:parityr":[["O"]],"carmen:lfromhn":[["2"]],"carmen:ltohn":[["100"]],"carmen:rfromhn":[["1"]],"carmen:rtohn":[["101"]],"carmen:zxy":["6/32/31","6/32/32"],"carmen:hash":1},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiLineString","coordinates":[[[0,0],[1,1]]]}]}});
+        t.deepEquals(res, {"id":1,"type":"Feature","properties":{"carmen:text":"main street","carmen:center":[0,0],"carmen:rangetype":"tiger","carmen:parityl":[["E"]],"carmen:parityr":[["O"]],"carmen:lfromhn":[["2"]],"carmen:ltohn":[["100"]],"carmen:rfromhn":[["1"]],"carmen:rtohn":[["101"]],"carmen:zxy":["6/32/31","6/32/32"]},"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiLineString","coordinates":[[[0,0],[1,1]]]}]}});
         t.end();
     });
 

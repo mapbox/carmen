@@ -16,7 +16,16 @@ tape('indexdocs.parseDocs (passthru)', function(assert) {
     var full = { vectors: [] };
     var err = indexdocs.parseDocs(docs, settings, full);
     assert.ifError(err);
-    assert.deepEqual(full.vectors, docs);
+    assert.deepEqual(full.vectors, [{
+        id: 1,
+        type: 'Feature',
+        properties: {
+            id: 1,
+            'carmen:text': 'main street',
+            'carmen:center': [0,0]
+        },
+        geometry: { type: 'Point', coordinates: [0,0] }
+    }]);
     assert.end();
 });
 

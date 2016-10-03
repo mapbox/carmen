@@ -131,8 +131,8 @@ var addFeature = require('../lib/util/addfeature');
             id:1,
             properties: {
                 'carmen:text':'china',
-                'carmen:zxy':['6/33/32'],
-                'carmen:center':[360/64,0]
+                'carmen:zxy':['6/34/32'],
+                'carmen:center':[360/64*2,0]
             }
         };
         addFeature(conf.province, province, t.end);
@@ -142,8 +142,8 @@ var addFeature = require('../lib/util/addfeature');
             id:1,
             properties: {
                 'carmen:text':'china',
-                'carmen:zxy':['6/34/32'],
-                'carmen:center':[360/64*2,0]
+                'carmen:zxy':['6/36/32'],
+                'carmen:center':[360/64*4,0]
             }
         };
         addFeature(conf.city, city, t.end);
@@ -185,8 +185,8 @@ var addFeature = require('../lib/util/addfeature');
             properties: {
                 'carmen:score': 10,
                 'carmen:text':'china',
-                'carmen:zxy':['6/33/32'],
-                'carmen:center':[360/64,0]
+                'carmen:zxy':['6/34/32'],
+                'carmen:center':[360/64 * 2,0]
             }
         };
         addFeature(conf.province, province, t.end);
@@ -197,8 +197,8 @@ var addFeature = require('../lib/util/addfeature');
             properties: {
                 'carmen:score': 6,
                 'carmen:text':'china',
-                'carmen:zxy':['6/34/32'],
-                'carmen:center':[360/64*2,0]
+                'carmen:zxy':['6/36/32'],
+                'carmen:center':[360/64 * 4,0]
             }
         };
         addFeature(conf.city, city, t.end);

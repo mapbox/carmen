@@ -135,7 +135,7 @@ test('contextVector empty VT buffer', function(assert) {
     });
 });
 
-test('proximityVector empty VT buffer', function(assert) {
+test('nearestPoints empty VT buffer', function(assert) {
     context.getTile.cache.reset();
 
     var vtile = new mapnik.VectorTile(0,0,0);
@@ -153,7 +153,7 @@ test('proximityVector empty VT buffer', function(assert) {
             id: 'testA',
             idx: 0
         };
-        context.proximityVector(source, 0, 0, function(err, data) {
+        context.nearestPoints(source, 0, 0, function(err, data) {
             assert.ifError(err);
             assert.deepEqual(data, []);
             assert.end();
