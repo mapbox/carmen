@@ -66,6 +66,54 @@ tape('verifymatch.dropFeature', function(t) {
         q.end()
     });
 
+    t.test('dropFeature scoreAbove', function(q) {
+        var geocoder = {
+            byidx: [
+                {
+                    stack: ['ca']
+                },
+                {
+                    stack: ['us']
+                }
+            ]
+        };
+        var options = {
+            scoreAbove: 100
+        };
+        var results = [
+            [{ idx: 0, id: 0, score: 200, scoreFactor:2 }],
+            [{ idx: 1, id: 1, score: 0 }]
+        ];
+        var res = verifymatch.dropFeature(geocoder, options, results);
+        t.equals(res.length, 1);
+        t.equals(res[0][0].id, 0);
+        q.end()
+    });
+
+    t.test('dropFeature scoreAbove', function(q) {
+        var geocoder = {
+            byidx: [
+                {
+                    stack: ['ca']
+                },
+                {
+                    stack: ['us']
+                }
+            ]
+        };
+        var options = {
+            scoreAbove: 100
+        };
+        var results = [
+            [{ idx: 0, id: 0, score: 2, scoreFactor: 5 }],
+            [{ idx: 1, id: 1, score: 5, scoreFactor: 3 }]
+        ];
+        var res = verifymatch.dropFeature(geocoder, options, results);
+        t.equals(res.length, 1);
+        t.equals(res[0][0].id, 1);
+        q.end()
+    });
+
     t.test('dropFeature types & stacks', function(q) {
         var geocoder = {
             byidx: [
