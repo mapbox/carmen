@@ -81,6 +81,8 @@ if (argv.debug) argv.debug = parseInt(argv.debug);
 
 if (argv.limit) argv.limit = parseInt(argv.limit);
 
+if (argv.scoreAbove) argv.scoreAbove = parseInt(argv.scoreAbove);
+
 var load = +new Date();
 
 carmen.geocode(argv.query, {
@@ -91,7 +93,8 @@ carmen.geocode(argv.query, {
     'debug': argv.debug,
     'stats': true,
     'language': argv.language,
-    'indexes': true
+    'indexes': true,
+    'scoreAbove': argv.scoreAbove
 }, function(err, data) {
     if (err) throw err;
     if (data.features.length && !argv.geojson) {
