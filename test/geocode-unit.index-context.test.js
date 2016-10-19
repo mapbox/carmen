@@ -11,7 +11,7 @@ var addFeature = require('../lib/util/addfeature');
         region: new mem({maxzoom: 6 }, function() {}),
         postcode: new mem({maxzoom: 6 }, function() {}),
         place: new mem({maxzoom: 6 }, function() {}),
-        address: new mem({maxzoom: 6 }, function() {})
+        address: new mem({maxzoom: 6, geocoder_address: 1}, function() {})
     };
     var c = new Carmen(conf);
     tape('index country', function(t) {

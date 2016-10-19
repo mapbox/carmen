@@ -36,8 +36,8 @@ tape('putFeatures', function(assert) {
         },
     ], function(err) {
         assert.ifError(err);
-        assert.equal(source._shards.feature[1], '{"1":{"type":"Feature","properties":{"carmen:center":[0,0],"carmen:text":"a","carmen:zxy":["6/32/32"]},"geometry":{"type":"Point","coordinates":[0,0]},"id":1},"1048577":{"type":"Feature","properties":{"carmen:zxy":["6/33/32"],"carmen:center":[5.626,0],"carmen:text":"c"},"id":1048577,"geometry":{"type":"MultiPolygon","coordinates":[[[[5.625,-5.615985819155337],[5.625,0],[11.25,0],[11.25,-5.615985819155337],[5.625,-5.615985819155337]]]]},"bbox":[5.625,-5.615985819155337,11.25,0]}}', 'has feature shard 1');
-        assert.equal(source._shards.feature[2], '{"2":{"type":"Feature","properties":{"carmen:center":[0,0],"carmen:text":"b","carmen:zxy":["6/32/32"]},"geometry":{"type":"Point","coordinates":[0,0]},"id":2}}', 'has feature shard 2');
+        assert.equal(source._shards.feature[1], '{"1":"Cg1jYXJtZW46Y2VudGVyCgtjYXJtZW46dGV4dAoKY2FybWVuOnp4eRgAKjMKCAgAGgIAAHoAYAJqBzIFWzAsMF1qAwoBYWoNMgtbIjYvMzIvMzIiXXIGAAABAQICegA=","1048577":"CgpjYXJtZW46enh5Cg1jYXJtZW46Y2VudGVyCgtjYXJtZW46dGV4dAoEYmJveCp3Ch0IBRoX0NKuBePFrQUA5MWtBdDSrgUAAOPFrQV6AGCCgIABag0yC1siNi8zMy8zMiJdagsyCVs1LjYyNiwwXWoDCgFjcgYAAAEBAgJqJDIiWzUuNjI1LC01LjYxNTk4NTgxOTE1NTMzNywxMS4yNSwwXXoCAwA="}', 'has feature shard 1');
+        assert.equal(source._shards.feature[2], '{"2":"Cg1jYXJtZW46Y2VudGVyCgtjYXJtZW46dGV4dAoKY2FybWVuOnp4eRgAKjMKCAgAGgIAAHoAYARqBzIFWzAsMF1qAwoBYmoNMgtbIjYvMzIvMzIiXXIGAAABAQICegA="}', 'has feature shard 2');
         assert.end();
     });
 });

@@ -119,8 +119,12 @@ test('index.update freq', function(t) {
     });
     t.test('indexes doc with geometry and no carmen:center', function(q) {
         var doc = { id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}};
-        index.update(conf.to, [doc], { zoom: 6 }, function(err, res, too) {
-            q.ok(doc.properties['carmen:center'], 'carmen:center has been set');
+        index.update(conf.to, [doc], { zoom: 6 }, function(err) {
+            //Carmen centers used to be stores in the feature index as a property (carmen:center).
+            //Geometry is not retained in the feature index except for addresses
+            //To save space - carmen:center is used as the geometry of the feature
+            //and then on feature.get*() is remapped to the carmen:center property
+            q.ifError(err);
             q.end();
         });
     });
