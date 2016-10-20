@@ -7,7 +7,7 @@ var tape = require('tape');
             'Street': 'st'
         }
         var tokenReplacer = tokenize.createReplacer(tokens)
-        var expected = [ { from: /(\W|^)Street(\W|$)/gi, named: false, rFrom: /(\W|^)st(\W|$)/gi, rTo: '$1Street$2', to: '$1st$2' } ];
+        var expected = [ { from: /^Street$/gi, named: false, rFrom: /^st$/gi, rTo: 'Street', to: 'st' } ];
         t.deepEquals(tokenReplacer, expected, 'okay, created a regex')
         t.end();
     });
@@ -18,10 +18,10 @@ var tape = require('tape');
         var tokens = {
             'Street': 'st'
         }
-        var query = 'fake street';
+        var query = ['fake', 'street'];
         var tokensRegex = tokenize.createReplacer(tokens)
-        var replace = tokenize.replaceToken(tokensRegex, query);
-        t.deepEquals('fake st', replace, 'okay, replaced the token')
+        var replace = tokenize.replaceTokenizedQueryTokens(tokensRegex, query);
+        t.deepEquals(['fake', 'st'], replace, 'okay, replaced the token')
         t.end();
     });
 })();
