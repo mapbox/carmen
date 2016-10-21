@@ -117,7 +117,7 @@ tape('china types: []', function(t) {
 // invalid options.types[0] value
 tape('china types: ["asdf"]', function(t) {
     c.geocode('china', { types: ['asdf'] }, function(err, res) {
-        t.equal(err && err.toString(), 'Error: Type "asdf" is not a known type. Must be one of: country, region, place, poi or poi.landmark');
+        t.equal(err && err.toString(), 'Error: Type "asdf" is not a known type. Must be one of: country, region, place, poi, poi.landmark');
         t.equal(err && err.code, 'EINVALID');
         t.end();
     });
