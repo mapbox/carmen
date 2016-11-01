@@ -49,11 +49,13 @@ var addFeature = require('../lib/util/addfeature');
         c.geocode('place', {  }, function(err, res) {
             t.ifError(err);
             t.equal(res.features.length, 5, 'returns 5 results');
-            t.equal(res.features[0].place_name, 'place 11, United States');
-            t.equal(res.features[1].place_name, 'place 1, United States');
-            t.equal(res.features[2].place_name, 'place 3, United States');
-            t.equal(res.features[3].place_name, 'place 4, United States');
-            t.equal(res.features[4].place_name, 'place 5, United States');
+            t.deepEqual(res.features.map(function(d) { return d.place_name; }), [
+                'place 1, United States',
+                'place 2, United States',
+                'place 3, United States',
+                'place 4, United States',
+                'place 5, United States'
+            ]);
             t.end();
         });
     });
@@ -61,7 +63,7 @@ var addFeature = require('../lib/util/addfeature');
         c.geocode('place', { limit: 1 }, function(err, res) {
             t.ifError(err);
             t.equal(res.features.length, 1, 'returns 1 result');
-            t.equal(res.features[0].place_name, 'place 11, United States');
+            t.equal(res.features[0].place_name, 'place 1, United States');
             t.end();
         });
     });
@@ -69,16 +71,18 @@ var addFeature = require('../lib/util/addfeature');
         c.geocode('place', { limit: 10 }, function(err, res) {
             t.ifError(err);
             t.equal(res.features.length, 10, 'returns 10 results');
-            t.equal(res.features[0].place_name, 'place 11, United States');
-            t.equal(res.features[1].place_name, 'place 1, United States');
-            t.equal(res.features[2].place_name, 'place 3, United States');
-            t.equal(res.features[3].place_name, 'place 4, United States');
-            t.equal(res.features[4].place_name, 'place 5, United States');
-            t.equal(res.features[5].place_name, 'place 6, United States');
-            t.equal(res.features[6].place_name, 'place 7, United States');
-            t.equal(res.features[7].place_name, 'place 8, United States');
-            t.equal(res.features[8].place_name, 'place 9, United States');
-            t.equal(res.features[9].place_name, 'place 10, United States');
+            t.deepEqual(res.features.map(function(d) { return d.place_name; }), [
+                'place 1, United States',
+                'place 2, United States',
+                'place 3, United States',
+                'place 4, United States',
+                'place 5, United States',
+                'place 6, United States',
+                'place 7, United States',
+                'place 8, United States',
+                'place 9, United States',
+                'place 10, United States'
+            ]);
             t.end();
         });
     });
@@ -86,16 +90,18 @@ var addFeature = require('../lib/util/addfeature');
         c.geocode('place', { limit: 11 }, function(err, res) {
             t.ifError(err);
             t.equal(res.features.length, 10, 'hard limit of 10');
-            t.equal(res.features[0].place_name, 'place 11, United States');
-            t.equal(res.features[1].place_name, 'place 1, United States');
-            t.equal(res.features[2].place_name, 'place 3, United States');
-            t.equal(res.features[3].place_name, 'place 4, United States');
-            t.equal(res.features[4].place_name, 'place 5, United States');
-            t.equal(res.features[5].place_name, 'place 6, United States');
-            t.equal(res.features[6].place_name, 'place 7, United States');
-            t.equal(res.features[7].place_name, 'place 8, United States');
-            t.equal(res.features[8].place_name, 'place 9, United States');
-            t.equal(res.features[9].place_name, 'place 10, United States');
+            t.deepEqual(res.features.map(function(d) { return d.place_name; }), [
+                'place 1, United States',
+                'place 2, United States',
+                'place 3, United States',
+                'place 4, United States',
+                'place 5, United States',
+                'place 6, United States',
+                'place 7, United States',
+                'place 8, United States',
+                'place 9, United States',
+                'place 10, United States'
+            ]);
             t.end();
         });
     });
