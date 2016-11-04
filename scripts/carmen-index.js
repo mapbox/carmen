@@ -75,7 +75,6 @@ function index(err) {
     carmen.on('open', function() {
         carmen.index(process.stdin, conf.to, config, function(err) {
             if (err) throw err;
-            process.exitCode = 0;
         });
     });
 }
