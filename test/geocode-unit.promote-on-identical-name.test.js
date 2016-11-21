@@ -61,7 +61,7 @@ tape('index region', function(t) {
         id: 2,
         properties: {
             'carmen:score':3,
-            'carmen:text':'new york',
+            'carmen:text':'new york,ny',
             'carmen:geocoder_stack':'us'
         },
         "geometry": {
@@ -100,7 +100,7 @@ tape('index place', function(t) {
         id: 3,
         properties: {
             'carmen:score':1,
-            'carmen:text':'new york',
+            'carmen:text':'new york,nyc',
             'carmen:geocoder_stack':'us'
         },
         "geometry": {
