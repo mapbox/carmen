@@ -169,3 +169,103 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
+
+
+
+var conf2 = {
+    country: new mem({ maxzoom: 6 }, function() {}),
+    region: new mem({ maxzoom: 6 }, function() {}),
+    district: new mem({ maxzoom: 6 }, function() {}),
+    place: new mem({ maxzoom: 6 }, function() {})
+};
+var c2 = new Carmen(conf2);
+
+tape('index country', function(t) {
+    addFeature(conf2.country, {
+        id: 10,
+        properties: {
+            'carmen:score': 10,
+            'carmen:text':'Thailand',
+            'carmen:geocoder_stack':'th'
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        99.90966796875,
+                        13.325484885597936
+                    ],
+                    [
+                        99.90966796875,
+                        14.381476281951624
+                    ],
+                    [
+                        101.1236572265625,
+                        14.381476281951624
+                    ],
+                    [
+                        101.1236572265625,
+                        13.325484885597936
+                    ],
+                    [
+                        99.90966796875,
+                        13.325484885597936
+                    ]
+                ]
+            ]
+        }
+    }, t.end);
+});
+
+['region', 'district', 'place'].forEach(function(f, i) {
+    tape('index ' + f, function(t) {
+        addFeature(conf2[f], {
+            id: i + 1,
+            properties: {
+                'carmen:score': 5 - i,
+                'carmen:text': 'Nonthaburi',
+                'carmen:geocoder_stack': 'th'
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            100.49571990966797,
+                            13.843746953264152
+                        ],
+                        [
+                            100.49571990966797,
+                            13.878746052885328
+                        ],
+                        [
+                            100.52970886230467,
+                            13.878746052885328
+                        ],
+                        [
+                            100.52970886230467,
+                            13.843746953264152
+                        ],
+                        [
+                            100.49571990966797,
+                            13.843746953264152
+                        ]
+                      ]
+                ]
+            }
+        }, t.end);
+    });
+});
+
+tape('nonthaburi', function(t) {
+    c2.geocode('nonthaburi', {}, function(err, res) {
+        t.equal(res.features[0].id.split('.')[0], 'place', 'lead feature is place');
+        t.end();
+    });
+});
+
+tape('teardown', function(assert) {
+    context.getTile.cache.reset();
+    assert.end();
+});
