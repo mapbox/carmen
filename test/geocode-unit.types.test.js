@@ -33,7 +33,7 @@ tape('index region', function(t) {
         id:1,
         properties: {
             'carmen:score':3500,
-            'carmen:text':'china',
+            'carmen:text':'china region',
             'carmen:zxy':['6/52/25'],
             'carmen:center': [113.65, 34.75],
             'carmen:geocoder_stack':'cn'
@@ -45,7 +45,7 @@ tape('index place', function(t) {
         id:1,
         properties: {
             'carmen:score':2500,
-            'carmen:text':'china',
+            'carmen:text':'china place',
             'carmen:zxy':['6/52/25'],
             'carmen:center': [113.65, 34.75],
             'carmen:geocoder_stack':'cn'
@@ -209,7 +209,7 @@ tape('reverse: country,place', function(t) {
         t.deepEqual(res.features.length, 2, '2 results');
         t.deepEqual(res.features[0].id, 'place.1', '1: place');
         t.deepEqual(res.features[0].context, [
-            { id:'region.1', text:'china' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including region)');
         t.deepEqual(res.features[1].id, 'country.1', '2: country');
@@ -223,8 +223,8 @@ tape('reverse: poi', function(t) {
         t.ifError(err);
         t.deepEqual(res.features.length, 1, '1 results');
         t.deepEqual(res.features[0].context, [
-            { id: 'place.1', text: 'china' },
-            { id:'region.1', text:'china' },
+            { id: 'place.1', text: 'china place' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including place, region, country)');
         t.end();
@@ -237,8 +237,8 @@ tape('reverse: poi.landmark', function(t) {
         t.deepEqual(res.features.length, 1, '1 results');
         t.deepEqual(res.features[0].text, 'china lm', 'landmark is top result');
         t.deepEqual(res.features[0].context, [
-            { id: 'place.1', text: 'china' },
-            { id:'region.1', text:'china' },
+            { id: 'place.1', text: 'china place' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including place, region, country)');
         t.end();
@@ -285,13 +285,13 @@ tape('reverse: poi (limit 5, expect 3)', function(t) {
         t.ifError(err);
         t.deepEqual(res.features.length, 3, '3 results');
         t.deepEqual(res.features[0].context, [
-            { id: 'place.1', text: 'china' },
-            { id:'region.1', text:'china' },
+            { id: 'place.1', text: 'china place' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including place, region, country)');
         t.deepEqual(res.features[1].context, [
-            { id: 'place.1', text: 'china' },
-            { id:'region.1', text:'china' },
+            { id: 'place.1', text: 'china place' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including place, region, country)');
         t.notEqual(res.features[0].id, res.features[1].id, 'returned different features');
@@ -305,8 +305,8 @@ tape('reverse: poi.landmark (limit 5, expect 1)', function(t) {
         t.deepEqual(res.features.length, 1, '1 results');
         t.deepEqual(res.features[0].text, 'china lm', 'landmark is top result');
         t.deepEqual(res.features[0].context, [
-            { id: 'place.1', text: 'china' },
-            { id:'region.1', text:'china' },
+            { id: 'place.1', text: 'china place' },
+            { id:'region.1', text:'china region' },
             { id:'country.1', text:'china' },
         ], 'preserves full context of place result (including place, region, country)');
         t.end();
