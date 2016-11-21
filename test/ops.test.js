@@ -2,43 +2,44 @@ var ops = require('../lib/util/ops');
 var test = require('tape');
 
 test('ops#toFeature', function(t) {
-    t.deepEqual(ops.toFeature([{
+    var feat = [{
         properties: {
             "carmen:center": [-99.392855, 63.004759],
             "carmen:text": "Canada, CA",
             "carmen:extid": "country.1833980151",
-            "carmen:relevance": 1,
             "short_code": "ca"
         }
-    }]), {
+    }];
+    feat._relevance = 1.1;
+    t.deepEqual(ops.toFeature(feat), {
         id: 'country.1833980151',
         type: 'Feature',
         text: 'Canada',
         place_name: 'Canada',
-        relevance: undefined,
+        relevance: 1,
         center: [ -99.392855, 63.004759 ],
         properties: { short_code: "ca" },
         geometry: { type: 'Point', coordinates: [ -99.392855, 63.004759 ] },
     });
 
     //Test Address formatting
-    t.deepEqual(ops.toFeature([{
+    feat = [{
         properties: {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
-    }], "{address._name} {address._number}"), { address: 9, center: [ -99.392855, 63.004759 ], geometry: { coordinates: [ -99.392855, 63.004759 ], type: 'Point' }, id: 'address.1833980151', place_name: 'Fake Street 9', properties: {}, relevance: undefined, text: 'Fake Street', type: 'Feature' });
+    }];
+    feat._relevance = 1;
+    t.deepEqual(ops.toFeature(feat, "{address._name} {address._number}"), { address: 9, center: [ -99.392855, 63.004759 ], geometry: { coordinates: [ -99.392855, 63.004759 ], type: 'Point' }, id: 'address.1833980151', place_name: 'Fake Street 9', properties: {}, relevance: 1, text: 'Fake Street', type: 'Feature' });
 
     t.deepEqual(ops.toFeature([{
         properties: {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     }], "{address._number} {address._name}").place_name, '9 Fake Street', 'Address number & name exist');
 
@@ -46,8 +47,7 @@ test('ops#toFeature', function(t) {
         properties: {
             "carmen:center": [-99.392855,63.004759],
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     }], "{address._number} {address._name}").place_name, 'Fake Street', 'Address number missing');
 
@@ -56,8 +56,7 @@ test('ops#toFeature', function(t) {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     }], "{address._number} {address.name}").place_name, '9', 'Address name missing');
 
@@ -66,8 +65,7 @@ test('ops#toFeature', function(t) {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     },{
         properties: {
@@ -82,8 +80,7 @@ test('ops#toFeature', function(t) {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     },{
         properties: {
@@ -99,8 +96,7 @@ test('ops#toFeature', function(t) {
             "carmen:center": [-99.392855,63.004759],
             "carmen:address": 9,
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     },{
         properties: {
@@ -115,8 +111,7 @@ test('ops#toFeature', function(t) {
         properties: {
             "carmen:center": [-99.392855,63.004759],
             "carmen:text": "Fake Street",
-            "carmen:extid": "address.1833980151",
-            "carmen:relevance": 1
+            "carmen:extid": "address.1833980151"
         }
     },{
         properties: {
@@ -166,7 +161,7 @@ test('ops#toFeature', function(t) {
     t.equals(ops.toFeature(fullStack).context.pop().short_code, 'ca', 'short_code property made it into context array');
 
     // Test language option
-    t.deepEqual(ops.toFeature([{
+    feat = [{
         properties: {
             // Public properties
             'wikidata': 'Q172',
@@ -178,15 +173,16 @@ test('ops#toFeature', function(t) {
             'carmen:score': 1,
             // Public carmen properties
             "carmen:center": [0, 0],
-            "carmen:extid": "place.1",
-            "carmen:relevance": 1
+            "carmen:extid": "place.1"
         }
-    }], {}, 'ru'), {
+    }];
+    feat._relevance = 1;
+    t.deepEqual(ops.toFeature(feat, {}, 'ru'), {
         id: 'place.1',
         type: 'Feature',
         text: 'Торонто',
         place_name: 'Торонто',
-        relevance: undefined,
+        relevance: 1,
         center: [ 0, 0 ],
         properties: {
             wikidata: 'Q172'
@@ -198,7 +194,7 @@ test('ops#toFeature', function(t) {
     });
 
     // Test dev option
-    var input = {
+    feat = [{
         properties: {
             // Public properties
             wikidata: 'Q172',
@@ -210,18 +206,18 @@ test('ops#toFeature', function(t) {
             'carmen:score': 1,
             // Public carmen properties
             "carmen:center": [0, 0],
-            "carmen:extid": "place.1",
-            "carmen:relevance": 1
+            "carmen:extid": "place.1"
         }
-    };
-    t.deepEqual(ops.toFeature([input], {}, 'ru', true), {
+    }];
+    feat._relevance = 0.5;
+    t.deepEqual(ops.toFeature(feat, {}, 'ru', true), {
         id: 'place.1',
         type: 'Feature',
         text: 'Торонто',
         place_name: 'Торонто',
-        relevance: undefined,
+        relevance: 0.5,
         center: [ 0, 0 ],
-        properties: input.properties,
+        properties: feat[0].properties,
         geometry: {
             type: 'Point',
             coordinates: [ 0, 0 ]
