@@ -115,6 +115,8 @@ function Geocoder(indexes, options) {
             source.idx = i;
             source.ndx = names.indexOf(name);
             source.bounds = info.bounds || [ -180, -85, 180, 85 ];
+            if (info.prevent_promotion)
+                source.prevent_promotion = true;
 
             // add byname index lookup
             this.byname[name] = this.byname[name] || [];
