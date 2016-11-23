@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.4.0
+
+- Introduce mechanisms for approximate guessing of requested language, both using heuristics and hard-coded fallbacks.
+
 ## 17.3.0
 
 - Include private `carmen:` properties in feature output when in debug mode.

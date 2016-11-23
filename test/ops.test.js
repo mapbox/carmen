@@ -183,6 +183,7 @@ test('ops#toFeature', function(t) {
         text: 'Торонто',
         place_name: 'Торонто',
         relevance: 1,
+        language: 'ru',
         center: [ 0, 0 ],
         properties: {
             wikidata: 'Q172'
@@ -216,6 +217,7 @@ test('ops#toFeature', function(t) {
         text: 'Торонто',
         place_name: 'Торонто',
         relevance: 0.5,
+        language: 'ru',
         center: [ 0, 0 ],
         properties: feat[0].properties,
         geometry: {

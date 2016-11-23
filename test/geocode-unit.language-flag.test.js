@@ -66,8 +66,9 @@ var addFeature = require('../lib/util/addfeature');
     tape('russia => Russian Federation', function(t) {
         c.geocode('russia', { limit_verify:1 }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Russian Federation');
-            t.deepEqual(res.features[0].id, 'country.1');
+            t.equal(res.features[0].place_name, 'Russian Federation');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, undefined, 'language not set on default text');
             t.end();
         });
     });
@@ -75,8 +76,9 @@ var addFeature = require('../lib/util/addfeature');
     tape('Rossiyskaya => Russian Federation', function(t) {
         c.geocode('Rossiyskaya', { limit_verify:1 }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Russian Federation');
-            t.deepEqual(res.features[0].id, 'country.1');
+            t.equal(res.features[0].place_name, 'Russian Federation');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, undefined, 'language not set');
             t.end();
         });
     });
@@ -84,8 +86,21 @@ var addFeature = require('../lib/util/addfeature');
     tape('Rossiyskaya => Российская Федерация - {language: "ru"}', function(t) {
         c.geocode('Rossiyskaya', { limit_verify:1, language: 'ru' }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Российская Федерация');
-            t.deepEqual(res.features[0].id, 'country.1');
+            t.equal(res.features[0].place_name, 'Российская Федерация');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, 'ru', 'language=ru');
+            t.end();
+        });
+    });
+
+
+    // test that guessing works right
+    tape('Rossiyskaya => Российская Федерация - {language: "ru-RU"}', function(t) {
+        c.geocode('Rossiyskaya', { limit_verify:1, language: 'ru-RU' }, function(err, res) {
+            t.ifError(err);
+            t.equal(res.features[0].place_name, 'Российская Федерация');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, 'ru', 'language=ru');
             t.end();
         });
     });
@@ -94,7 +109,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('Rossiyskaya => Russian Federation - {language: "fake"}', function(t) {
         c.geocode('Rossiyskaya', { limit_verify:1, language: 'fake' }, function(err, res) {
             t.ok(err);
-            t.deepEqual(err.message, '\'fake\' is not a valid language code');
+            t.equal(err.message, '\'fake\' is not a valid language code');
             t.notOk(res);
             t.end();
         });
@@ -104,8 +119,9 @@ var addFeature = require('../lib/util/addfeature');
     tape('Rossiyskaya => Russian Federation - {language: "es"}', function(t) {
         c.geocode('Rossiyskaya', { limit_verify:1, language: 'es' }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Russian Federation');
-            t.deepEqual(res.features[0].id, 'country.1');
+            t.equal(res.features[0].place_name, 'Russian Federation');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, undefined, 'language not set on fall back to default');
             t.end();
         });
     });
@@ -114,8 +130,31 @@ var addFeature = require('../lib/util/addfeature');
     tape('Rossiyskaya => Russian Federation - {language: "fr"}', function(t) {
         c.geocode('Rossiyskaya', { limit_verify:1, language: 'fr' }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Russian Federation');
-            t.deepEqual(res.features[0].id, 'country.1');
+            t.equal(res.features[0].place_name, 'Russian Federation');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, undefined, 'language not set on fall back to default');
+            t.end();
+        });
+    });
+
+    // fallback to ru on az
+    tape('Rossiyskaya => Russian Federation - {language: "az"}', function(t) {
+        c.geocode('Russian Federation', { limit_verify:1, language: 'az' }, function(err, res) {
+            t.ifError(err);
+            t.equal(res.features[0].place_name, 'Российская Федерация');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, 'ru');
+            t.end();
+        });
+    });
+
+    // fallback to ru on bg-nonexistent
+    tape('Rossiyskaya => Russian Federation - {language: "bg-nonexistent"}', function(t) {
+        c.geocode('Russian Federation', { limit_verify:1, language: 'bg-nonexistent' }, function(err, res) {
+            t.ifError(err);
+            t.equal(res.features[0].place_name, 'Российская Федерация');
+            t.equal(res.features[0].id, 'country.1');
+            t.equal(res.features[0].language, 'ru');
             t.end();
         });
     });
@@ -124,9 +163,10 @@ var addFeature = require('../lib/util/addfeature');
     tape('St Petersburg => Санкт-Петербу́рг, Российская Федерация - {language: "ru"}', function(t) {
         c.geocode('St Petersburg', { language: 'ru'}, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Санкт-Петербу́рг, Российская Федерация');
-            t.deepEqual(res.features[0].id, 'place.1');
-            t.deepEqual(res.features[0].context[0].text, 'Российская Федерация');
+            t.equal(res.features[0].place_name, 'Санкт-Петербу́рг, Российская Федерация');
+            t.equal(res.features[0].id, 'place.1');
+            t.equal(res.features[0].context[0].text, 'Российская Федерация');
+            t.equal(res.features[0].context[0].language, 'ru');
             t.end();
         });
     });
@@ -135,9 +175,10 @@ var addFeature = require('../lib/util/addfeature');
     tape('St Petersberg => Saint Petersburg - {language: "fr"}', function(t) {
         c.geocode('St Petersburg', { limit_verify:1, language: 'fr' }, function(err, res) {
             t.ifError(err);
-            t.deepEqual(res.features[0].place_name, 'Saint Petersburg, Russian Federation');
-            t.deepEqual(res.features[0].id, 'place.1');
-            t.deepEqual(res.features[0].context[0].text, 'Russian Federation');
+            t.equal(res.features[0].place_name, 'Saint Petersburg, Russian Federation');
+            t.equal(res.features[0].id, 'place.1');
+            t.equal(res.features[0].context[0].text, 'Russian Federation');
+            t.equal(res.features[0].context[0].language, undefined);
             t.end();
         });
     });
@@ -149,6 +190,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center': [0,0],
                 'carmen:zxy': ['6/32/32'],
                 'carmen:text_zh': '西北部联邦管区',
+                'carmen:text_zh_Hant': '西北部聯邦管區',
                 'carmen:text_ru': 'Северо-Западный федеральный округ',
                 'carmen:text': 'Northwestern Federal District,  Severo-Zapadny federalny okrug',
                 'carmen:text_eo': '!!!!'
@@ -168,6 +210,17 @@ var addFeature = require('../lib/util/addfeature');
     // custom response format template
     tape('Northwestern Federal Distrct => Российская Федерация, Северо-Западный федеральный округ - {language: "ru"}', function(t) {
         c.geocode('Northwestern', { limit_verify:1, language: 'ru' }, function(err, res) {
+            t.ifError(err);
+            t.deepEqual(res.features[0].place_name, 'Российская Федерация, Северо-Западный федеральный округ');
+            t.deepEqual(res.features[0].id, 'region.1');
+            t.deepEqual(res.features[0].context[0].text, 'Российская Федерация');
+            t.end();
+        });
+    });
+
+    // custom response format template -- should guess both correct language and correct template
+    tape('Northwestern Federal Distrct => Российская Федерация, Северо-Западный федеральный округ - {language: "ru-RU"}', function(t) {
+        c.geocode('Northwestern', { limit_verify:1, language: 'ru-RU' }, function(err, res) {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'Российская Федерация, Северо-Западный федеральный округ');
             t.deepEqual(res.features[0].id, 'region.1');
@@ -286,6 +339,30 @@ var addFeature = require('../lib/util/addfeature');
         });
     });
 
+    // test robustness against case and punctuation in the exact-match and fallback subtag case
+    tape('Saint Petersburg => Saint Petersburg, 西北部聯邦管區, Russian Federation - {language: "(zh[-_][Hh]ant|zh[-_][Tt][Ww])"}', function(t) {
+        var done = 0;
+        [
+            'zh_Hant',
+            'zh-Hant',
+            'zh_hant',
+            'zh-hant',
+            'zh_TW',
+            'zh-TW',
+            'zh_tw',
+            'zh-tw'
+        ].forEach(function(language) {
+            c.geocode('Saint Petersburg', { limit_verify:1, language: language }, function(err, res) {
+                t.ifError(err);
+                t.deepEqual(res.features[0].context[0].text, '西北部聯邦管區');
+                t.deepEqual(res.features[0].context[0].language, 'zh-Hant');
+
+                done += 1;
+                if (done == 8) t.end();
+            });
+        });
+    });
+
     //Is not above 0.5 relev so should fail.
     tape('fake blah blah => [fail]', function(t) {
         c.geocode('fake blah blah', { limit_verify:1 }, function(err, res) {
@@ -294,6 +371,7 @@ var addFeature = require('../lib/util/addfeature');
             t.end();
         });
     });
+
 })();
 
 tape('teardown', function(assert) {
