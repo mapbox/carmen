@@ -18,7 +18,7 @@ test('termops.getIndexableText', function(assert) {
     replacer = token.createReplacer({'Street':'St'});
     doc = { properties: { 'carmen:text': 'Main Street' } };
     texts = [
-        [ 'main', 'st' ]
+        [ 'main', 'street' ]
     ];
     texts[0].indexDegens = true;
     assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'creates contracted phrases using geocoder_tokens');
@@ -26,22 +26,22 @@ test('termops.getIndexableText', function(assert) {
     replacer = token.createReplacer({'Street':'St'});
     doc = { properties: { 'carmen:text': 'Main Street, main st' } };
     texts = [
-        [ 'main', 'st' ]
+        ['main', 'street'], ['main', 'st']
     ];
     texts[0].indexDegens = true;
-    assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'dedupes phrases');
+    assert.deepEqual(JSON.stringify(termops.getIndexableText(replacer, [], doc)), JSON.stringify(texts), 'dedupes phrases');
 
     replacer = token.createReplacer({'Street':'St', 'Lane':'Ln'});
     doc = { properties: { 'carmen:text': 'Main Street Lane' } };
     texts = [
-        [ 'main', 'st', 'ln' ]
+        [ 'main', 'street', 'lane' ]
     ];
     texts[0].indexDegens = true;
     assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'dedupes phrases');
 
     replacer = token.createReplacer({'dix-huitième':'18e'});
     doc = { properties: { 'carmen:text': 'Avenue du dix-huitième régiment' } };
-    texts = [[ 'avenue', 'du', '18e', 'régiment' ]];
+    texts = [[ 'avenue', 'du', 'dix', 'huitième', 'régiment' ]];
     texts[0].indexDegens = true;
     assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'hypenated replacement');
 

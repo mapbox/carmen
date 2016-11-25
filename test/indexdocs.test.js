@@ -404,9 +404,9 @@ tape('indexdocs.generateFrequency', function(assert) {
     assert.deepEqual(indexdocs.generateFrequency(docs, geocoder_tokens), {
         0: [ 4 ],           // 4 total
         1: [ 2 ],           // 2 maxscore
-        3363289958149993: [ 1 ],  // 1 road
-        441841902895320: [ 1 ],  // 1 street
+        1247264641460936: [ 1 ],  // 1 road
+        1804046053253033:  [ 1 ],  // 1 street
         609659059851264: [ 2 ]   // 2 main
-    });
+    }, 'does not use token replacer - now done at runtime instead');
     assert.end();
 });
