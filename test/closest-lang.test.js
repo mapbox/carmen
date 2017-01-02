@@ -29,3 +29,13 @@ tape('closestLangLabel', function(assert) {
     assert.end();
 });
 
+tape('handle nulls', function(assert) {
+
+    var zh = '帝力縣';
+    var zhtw = null;
+
+    assert.equal(closestLangLabel('zh-TW', { zh: zh, zh_TW: zhtw }), zh);
+
+    assert.end();
+});
+
