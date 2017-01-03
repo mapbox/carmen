@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.8.1
+
+- Use fallback language when the specified language key exists, but has a null value.
+
 ## 17.8.0
 
 - Update to `carmen-cache@0.15.0`.
