@@ -1,5 +1,38 @@
 # Changelog
 
+## 17.8.1
+
+- Use fallback language when the specified language key exists, but has a null value.
+
+## 17.8.0
+
+- Update to `carmen-cache@0.15.0`.
+
+## 17.7.3
+
+- Automatically lowercase all `stacks` values for a given query
+
+## 17.7.2
+
+- Move eslint to dev dependencies.
+- Update to `carmen-cache@0.14.1`.
+
+## 17.7.1
+
+- Trim whitespace from text values when outputting feature values.
+
+## 17.7.0
+
+- Update to `carmen-cache@0.14.0`.
+
+## 17.6.5
+
+- Robustify language fallback behavior for unmatched language suffixes.
+
+## 17.6.4
+
+- Modified language fallback behavior to reflect feedback collected from human translators.
+
 ## 17.6.3
 
 - Fix multitype corner case where a feature promoted across levels would not always be properly promoted.

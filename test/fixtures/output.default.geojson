@@ -32,12 +32,12 @@
             },
             "context": [
                 {
-                    "id": "region.1",
-                    "text": "Ontario"
+                    "text": "Ontario",
+                    "id": "region.1"
                 },
                 {
-                    "id": "country.1",
-                    "text": "Canada"
+                    "text": "Canada",
+                    "id": "country.1"
                 }
             ]
         }
