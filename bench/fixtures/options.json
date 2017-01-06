@@ -1,0 +1,266 @@
+{
+    "limit": 5,
+    "types": [
+        "place",
+        "district",
+        "region"
+    ],
+    "debug": {
+        "id": 280184,
+        "extid": 7764799857641080,
+        "phrasematch": {
+            "mapbox.places-aa-country-both": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-aa-region-both": {
+                "states": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-aa-district-both": {},
+            "mapbox.places-gb-district-both": {},
+            "mapbox.places-asi-postcode-both": {},
+            "mapbox.places-asiopen-postcode-both": {},
+            "mapbox.places-br-postcode-both": {},
+            "mapbox.places-ca-postcode-both": {},
+            "mapbox.places-eur-postcode-both": {},
+            "mapbox.places-europen-postcode-both": {},
+            "mapbox.places-gb-postcodept-both": {},
+            "mapbox.places-ie-postcode-both": {},
+            "mapbox.places-us-postcode-both": {},
+            "mapbox.places-aa-place-ephemeral": {
+                "midway": 0.3333333333333333
+            },
+            "mapbox.places-zz-place-both": {},
+            "mapbox.places-afr-place-both": {},
+            "mapbox.places-afropen-place-both": {},
+            "mapbox.places-asi-place-both": {},
+            "mapbox.places-asiopen-place-both": {},
+            "mapbox.places-cn-place-ephemeral": {},
+            "mapbox.places-eur-place-both": {},
+            "mapbox.places-europen-place-both": {},
+            "mapbox.places-jp-place-both": {},
+            "mapbox.places-lam-place-both": {},
+            "mapbox.places-lamfree-place-both": {},
+            "mapbox.places-namopen-place-both": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-yy-place-both": {},
+            "mapbox.places-aa-locality-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-aaa-locality-both": {},
+            "mapbox.places-aaaopen-locality-both": {},
+            "mapbox.places-au-locality-both": {},
+            "mapbox.places-cn-locality-ephemeral": {},
+            "mapbox.places-kr-locality-both": {},
+            "mapbox.places-nz-locality-both": {},
+            "mapbox.places-ca-neighborhood-both": {},
+            "mapbox.places-kr-neighborhood-both": {},
+            "mapbox.places-us-neighborhood-both": {
+                "midway": 0.3333333333333333
+            },
+            "mapbox.places-at-addresspt-both": {},
+            "mapbox.places-at-address-both": {},
+            "mapbox.places-au-address-both": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-be-address-both": {},
+            "mapbox.places-be-addresspt-both": {},
+            "mapbox.places-br-address-both": {},
+            "mapbox.places-ca-address-both": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333
+            },
+            "mapbox.places-ch-address-both": {},
+            "mapbox.places-cl-address-both": {},
+            "mapbox.places-de-address-both": {},
+            "mapbox.places-dk-address-both": {},
+            "mapbox.places-dk-addresspt-both": {},
+            "mapbox.places-es-address-both": {},
+            "mapbox.places-fi-address-both": {},
+            "mapbox.places-fi-addresspt-both": {},
+            "mapbox.places-fr-address-both": {},
+            "mapbox.places-gb-address-both": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333
+            },
+            "mapbox.places-hk-address-both": {
+                "united": 0.3333333333333333
+            },
+            "mapbox.places-ie-address-both": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-it-address-both": {},
+            "mapbox.places-jp-address-both": {},
+            "mapbox.places-mx-address-both": {},
+            "mapbox.places-nl-address-both": {},
+            "mapbox.places-nl-addresspt-both": {},
+            "mapbox.places-no-address-both": {},
+            "mapbox.places-nz-address-both": {
+                "states": 0.3333333333333333,
+                "midway": 0.3333333333333333
+            },
+            "mapbox.places-nz-addresspt-both": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-pe-address-both": {},
+            "mapbox.places-se-address-both": {},
+            "mapbox.places-sg-address-both": {},
+            "mapbox.places-us-address-both": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-at-poi-ephemeral": {},
+            "mapbox.places-au-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-be-poi-ephemeral": {},
+            "mapbox.places-br-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-ca-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-ch-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-cl-poi-ephemeral": {
+                "united": 0.3333333333333333
+            },
+            "mapbox.places-cn-poi-ephemeral": {
+                "united": 0.3333333333333333
+            },
+            "mapbox.places-de-poi-ephemeral": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-dk-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-es-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-fi-poi-ephemeral": {},
+            "mapbox.places-fr-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-gb-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-ie-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-il-poi-ephemeral": {},
+            "mapbox.places-in-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-it-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-jp-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-kr-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-mx-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-nl-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-no-poi-ephemeral": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-nz-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-pe-poi-ephemeral": {},
+            "mapbox.places-se-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-sg-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united states": 0.6666666666666666
+            },
+            "mapbox.places-tw-poi-ephemeral": {
+                "states": 0.3333333333333333
+            },
+            "mapbox.places-us-poi-ephemeral": {
+                "states": 0.3333333333333333,
+                "united": 0.3333333333333333,
+                "midway": 0.3333333333333333,
+                "united states": 0.6666666666666666,
+                "midway united": 0.6666666666666666
+            }
+        }
+    },
+    "stats": true,
+    "indexes": true,
+    "allow_dupes": false,
+    "autocomplete": true,
+    "bbox": false,
+    "allowed_idx": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "13": true,
+        "14": true,
+        "15": true,
+        "16": true,
+        "17": true,
+        "18": true,
+        "19": true,
+        "20": true,
+        "21": true,
+        "22": true,
+        "23": true,
+        "24": true,
+        "25": true,
+        "26": true
+    }
+}
