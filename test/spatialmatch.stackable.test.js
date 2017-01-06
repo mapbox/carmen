@@ -45,8 +45,8 @@ test('stackable nmask', function(assert) {
     });
 
     assert.deepEqual(debug, [
-        [ 'b1', 'a1' ],
-        [ 'c1', 'a1' ],
+        [ 'a1', 'b1' ],
+        [ 'a1', 'c1' ],
     ], 'b1 and c1 do not stack (nmask: same geocoder_name)');
     assert.end();
 });
