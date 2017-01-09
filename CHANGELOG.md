@@ -1,5 +1,11 @@
 # Changelog
 
+## 17.8.2
+
+- Filter results disallowed by the `types` filter before sorting and limiting potential matches
+- In spatialmatch, sort stacks by index from lowest to highest when zoom level is the same
+- Add alternate unicode apostrophes for punctuation normalization
+
 ## 17.8.1
 
 - Use fallback language when the specified language key exists, but has a null value.
