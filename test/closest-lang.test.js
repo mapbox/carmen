@@ -29,3 +29,22 @@ tape('closestLangLabel', function(assert) {
     assert.end();
 });
 
+tape('handle nulls', function(assert) {
+
+    var zh = '帝力縣';
+    var zhtw = null;
+
+    assert.equal(closestLangLabel('zh-TW', { zh: zh, zh_TW: zhtw }), zh);
+
+    assert.end();
+});
+
+tape('handle nulls w/ prefix', function(assert) {
+
+    var zh = '帝力縣';
+    var zhtw = null;
+
+    assert.equal(closestLangLabel('zh_TW', { 'carmen:text_zh': zh, 'carmen:text_zh_TW': zhtw }, 'carmen:text_'), zh);
+
+    assert.end();
+});
