@@ -1,5 +1,13 @@
 # Changelog
 
+## 17.8.4
+
+- Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties
+
+## 17.8.3
+
+- Change indexing behavior: don't generate degens (for autocomplete) for feature synonyms
+
 ## 17.8.2
 
 - Filter results disallowed by the `types` filter before sorting and limiting potential matches
