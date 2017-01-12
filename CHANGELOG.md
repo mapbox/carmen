@@ -1,5 +1,19 @@
 # Changelog
 
+## 17.8.4
+
+- Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties
+
+## 17.8.3
+
+- Change indexing behavior: don't generate degens (for autocomplete) for feature synonyms
+
+## 17.8.2
+
+- Filter results disallowed by the `types` filter before sorting and limiting potential matches
+- In spatialmatch, sort stacks by index from lowest to highest when zoom level is the same
+- Add alternate unicode apostrophes for punctuation normalization
+
 ## 17.8.1
 
 - Use fallback language when the specified language key exists, but has a null value.

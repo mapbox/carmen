@@ -1,4 +1,6 @@
 var stackable = require('../lib/spatialmatch.js').stackable;
+var sortByRelevLengthIdx = require('../lib/spatialmatch.js').sortByRelevLengthIdx;
+var sortByZoomIdx = require('../lib/spatialmatch.js').sortByZoomIdx;
 var phrasematch = require('../lib/phrasematch');
 var Phrasematch = phrasematch.Phrasematch;
 var PhrasematchResult = phrasematch.PhrasematchResult;
@@ -11,9 +13,14 @@ test('stackable simple', function(assert) {
     var debug = stackable([
         new PhrasematchResult([a1], null, null, { idx: 0, bmask: {}, ndx: 0 }),
         new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: {}, ndx: 1 })
-    ]).map(function(stack) {
+    ]);
+
+    debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
+    debug.sort(sortByRelevLengthIdx);
+    debug = debug.map(function(stack) {
         return stack.map(function(s) { return s.subquery.join(' '); });
     });
+
     assert.deepEqual(debug, [
         [ 'a1', 'b1' ],
         [ 'a1', 'b2' ]
@@ -29,12 +36,17 @@ test('stackable nmask', function(assert) {
         new PhrasematchResult([a1], null, null, { idx: 0, bmask: {}, ndx: 0 }),
         new PhrasematchResult([b1], null, null, { idx: 1, bmask: {}, ndx: 1 }),
         new PhrasematchResult([c1], null, null, { idx: 2, bmask: {}, ndx: 1 })
-    ]).map(function(stack) {
-        return stack.map(function(s) { return s.subquery.join(' ')});
+    ]);
+
+    debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
+    debug.sort(sortByRelevLengthIdx);
+    debug = debug.map(function(stack) {
+        return stack.map(function(s) { return s.subquery.join(' '); });
     });
+
     assert.deepEqual(debug, [
-        [ 'b1', 'a1' ],
-        [ 'c1', 'a1' ],
+        [ 'a1', 'b1' ],
+        [ 'a1', 'c1' ],
     ], 'b1 and c1 do not stack (nmask: same geocoder_name)');
     assert.end();
 });
@@ -45,9 +57,14 @@ test('stackable bmask', function(assert) {
     var debug = stackable([
         new PhrasematchResult([a1], null, null, { idx: 0, bmask: [0, 1], ndx: 0 }),
         new PhrasematchResult([b1], null, null, { idx: 1, bmask: [1, 0], ndx: 1 })
-    ]).map(function(stack) {
+    ]);
+
+    debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
+    debug.sort(sortByRelevLengthIdx);
+    debug = debug.map(function(stack) {
         return stack.map(function(s) { return s.subquery.join(' '); });
     });
+
     assert.deepEqual(debug, [
         [ 'a1' ],
         [ 'b1' ],
@@ -66,9 +83,14 @@ test('stackable complex', function(assert) {
         new PhrasematchResult([a1, a2], null, null, { idx: 0, bmask: [], ndx: 0 }),
         new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: [], ndx: 1 }),
         new PhrasematchResult([c1, c2], null, null, { idx: 1, bmask: [], ndx: 2 }),
-    ]).map(function(stack) {
+    ]);
+
+    debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
+    debug.sort(sortByRelevLengthIdx);
+    debug = debug.map(function(stack) {
         return stack.relev.toFixed(2) + ' - ' + stack.map(function(s) { return s.subquery.join(' ')}).join(', ');
     });
+
     assert.deepEqual(debug, [
         '0.99 - a2, c1',
         '0.99 - a2, b1',
@@ -97,9 +119,14 @@ test('stackable direction change', function(assert) {
         new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: [], ndx: 1 }),
         new PhrasematchResult([c1, c2], null, null, { idx: 2, bmask: [], ndx: 2 }),
         new PhrasematchResult([d1, d2], null, null, { idx: 3, bmask: [], ndx: 3 }),
-    ]).map(function(stack) {
+    ]);
+
+    debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
+    debug.sort(sortByRelevLengthIdx);
+    debug = debug.map(function(stack) {
         return stack.map(function(s) { return s.subquery.join(' ')});
     });
+
     assert.deepEqual(debug, [
         [ 'a2', 'b2', 'c2', 'd2' ],
         [ 'a2', 'b1', 'c1', 'd2' ],
