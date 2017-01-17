@@ -108,11 +108,11 @@ tape('multitype reverse, types=poi', function(assert) {
 
 tape('multitype reverse, types=place', function(assert) {
     assert.comment('query:  0,0');
-    assert.comment('result: caracas');
-    assert.comment('note:   returns caracas with shift');
+    assert.comment('result: liberatador, caracas');
+    assert.comment('note:   returns libertador, caracas, no shift');
     c.geocode('0,0', {types:['place']}, function(err, res) {
         assert.ifError(err);
-        assert.deepEqual(res.features[0].place_name, 'caracas');
+        assert.deepEqual(res.features[0].place_name, 'libertador, caracas');
         assert.deepEqual(res.features[0].id, 'place.1');
         assert.end();
     });
@@ -132,11 +132,11 @@ tape('multitype reverse, types=region', function(assert) {
 
 tape('multitype reverse, types=place,region', function(assert) {
     assert.comment('query:  0,0');
-    assert.comment('result: caracas');
-    assert.comment('note:   returns caracas with');
+    assert.comment('result: libertador, caracas');
+    assert.comment('note:   returns libertador, caracas, no shift');
     c.geocode('0,0', {types:['place','region']}, function(err, res) {
         assert.ifError(err);
-        assert.deepEqual(res.features[0].place_name, 'caracas');
+        assert.deepEqual(res.features[0].place_name, 'libertador, caracas');
         assert.deepEqual(res.features[0].id, 'place.1');
         assert.end();
     });

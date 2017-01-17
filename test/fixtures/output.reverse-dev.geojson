@@ -10,6 +10,9 @@
             "type": "Feature",
             "text": "Toronto",
             "place_name": "Toronto, Ontario, Canada",
+            "place_type": [
+                "place"
+            ],
             "relevance": 1,
             "properties": {
                 "wikidata": "Q172",
@@ -279,6 +282,9 @@
                     "6/38/39",
                     "6/39/39"
                 ],
+                "carmen:types": [
+                    "place"
+                ],
                 "carmen:index": "place",
                 "carmen:extid": "place.1",
                 "carmen:tmpid": 67108865,
@@ -318,6 +324,9 @@
             "type": "Feature",
             "text": "Ontario",
             "place_name": "Ontario, Canada",
+            "place_type": [
+                "region"
+            ],
             "relevance": 1,
             "properties": {
                 "carmen:text": "Ontario",
@@ -584,6 +593,9 @@
                     "6/38/39",
                     "6/39/39"
                 ],
+                "carmen:types": [
+                    "region"
+                ],
                 "carmen:index": "region",
                 "carmen:extid": "region.1",
                 "carmen:tmpid": 33554433,
@@ -619,6 +631,9 @@
             "type": "Feature",
             "text": "Canada",
             "place_name": "Canada",
+            "place_type": [
+                "country"
+            ],
             "relevance": 1,
             "properties": {
                 "carmen:text": "Canada",
@@ -884,6 +899,9 @@
                     "6/37/39",
                     "6/38/39",
                     "6/39/39"
+                ],
+                "carmen:types": [
+                    "country"
                 ],
                 "carmen:index": "country",
                 "carmen:extid": "country.1",
