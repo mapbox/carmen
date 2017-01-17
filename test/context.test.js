@@ -625,9 +625,9 @@ test('Context eliminates correct properties', function(assert) {
             context(c, [0, 0], { full: false }, function(err, contexts) {
                 assert.ifError(err);
                 var contextObj = contexts.pop();
-                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:center', 'carmen:text', 'idaho_potatoes', 'short_code'], 'found expected keys on country object');
+                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:text', 'idaho_potatoes', 'short_code'], 'found expected keys on country object');
                 contextObj = contexts.pop();
-                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:center', 'carmen:text'], 'found expected keys on region object');
+                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:text'], 'found expected keys on region object');
                 assert.end();
             });
         });

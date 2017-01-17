@@ -21,8 +21,7 @@ tape('indexdocs.parseDocs (passthru)', function(assert) {
         type: 'Feature',
         properties: {
             id: 1,
-            'carmen:text': 'main street',
-            'carmen:center': [0,0]
+            'carmen:text': 'main street'
         },
         geometry: { type: 'Point', coordinates: [0,0] }
     }]);

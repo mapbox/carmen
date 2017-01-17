@@ -10,10 +10,6 @@
     },
     "properties": {
       "carmen:text": "main street",
-      "carmen:center": [
-        0,
-        0
-      ],
       "id": 1
     },
     "id": 1
@@ -29,10 +25,6 @@
     },
     "properties": {
       "carmen:text": "main street",
-      "carmen:center": [
-        0,
-        0
-      ],
       "id": 1
     },
     "id": 1
@@ -48,10 +40,6 @@
     },
     "properties": {
       "carmen:text": "main street",
-      "carmen:center": [
-        0,
-        0
-      ],
       "id": 1
     },
     "id": 1
@@ -67,10 +55,6 @@
     },
     "properties": {
       "carmen:text": "main street",
-      "carmen:center": [
-        0,
-        0
-      ],
       "id": 1
     },
     "id": 1

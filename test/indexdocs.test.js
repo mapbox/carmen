@@ -58,7 +58,7 @@ tape('indexdocs.loadDoc', function(assert) {
 });
 
 tape('indexdocs.standardize', function(assert) {
-    assert.test('indexdocs.standardize - carmen:center & carmen:zxy calculated', function(t) {
+    assert.test('indexdocs.standardize - carmen:zxy calculated for Point geometry', function(t) {
         var res = indexdocs.standardize({
             id: 1,
             type: 'Feature',
@@ -71,7 +71,24 @@ tape('indexdocs.standardize', function(assert) {
             }
         }, 6, {});
 
-        t.deepEquals(res, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:text': 'main street', 'carmen:zxy': [ '6/32/32' ] }, type: 'Feature' });
+        t.deepEquals(res, { geometry: { coordinates: [ 0, 0 ], type: 'Point' }, id: 1, properties: { 'carmen:text': 'main street', 'carmen:zxy': [ '6/32/32' ] }, type: 'Feature' });
+        t.end();
+    });
+
+    assert.test('indexdocs.standardize - carmen:center & carmen:zxy calculated for MultiPoint geometry', function(t) {
+        var res = indexdocs.standardize({
+            id: 1,
+            type: 'Feature',
+            properties: {
+                'carmen:text': 'main street'
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: [[0,0]]
+            }
+        }, 6, {});
+
+        t.deepEquals(res, { geometry: { coordinates: [[ 0, 0 ]], type: 'MultiPoint' }, id: 1, properties: { 'carmen:center': [ 0, 0 ], 'carmen:text': 'main street', 'carmen:zxy': [ '6/32/32' ] }, type: 'Feature' });
         t.end();
     });
 
