@@ -10,20 +10,20 @@ var conf = {
     place: new mem({maxzoom: 6}, function() {})
 };
 var c = new Carmen(conf);
+var tiles = [];
 var tiles1 = [];
 var tiles2 = [];
-var tile1;
-var tile2;
-for (var k=27; k<33; k++) {
-    for (var l=27; l<33; l++) {
-        tile1 = '6/' + k + '/' + l;
-        tile2 = '6/' + (k - 6) + '/' + (l - 6);
-        tiles1.push(tile1);
-        tiles2.push(tile2);
+var tile;
+for (var k=0; k<32; k++) {
+    for (var l=0; l<32; l++) {
+        tile = '6/' + k + '/' + l;
+        tiles.push(tile);
     }
 }
+tiles1 = tiles.slice(100);
+tiles2 = tiles.slice(0, -100);
 
-tape('index batch country', function(t) {
+tape('index country (batch)', function(t) {
     var docs = [];
     var country;
 
@@ -31,9 +31,14 @@ tape('index batch country', function(t) {
         id:1,
         type: 'Feature',
         properties: {
-            'carmen:text':'united states',
+            'carmen:text':'United States',
+            'carmen:score':'10000',
             'carmen:zxy':tiles1,
-            'carmen:center':[0,0]
+            'carmen:center':[-1,1]
+        },
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[[-10,0],[-10,10],[0,10],[0,0],[-10,0]]]
         }
     };
     docs.push(country);
@@ -42,66 +47,131 @@ tape('index batch country', function(t) {
         id:2,
         type: 'Feature',
         properties: {
-            'carmen:text':'united states minor outlying islands',
-            'carmen:zxy':tiles1,
+            'carmen:text':'United States Minor Outlying Islands',
+            'carmen:score':'1000',
+            'carmen:zxy':tiles2,
+            'carmen:center':[-60,60]
+        },
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[[-70,50],[-70,70],[-50,70],[-50,50],[-70,50]]]
+        }
+    };
+    docs.push(country);
+
+    country = {
+        id:3,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'United Arab Emirates',
+            'carmen:zxy':['6/32/32'],
             'carmen:center':[0,0]
         }
     };
     docs.push(country);
 
-    for (var i=3; i < 260; i++) {
-        country = {
-            id:i,
-            type: 'Feature',
-            properties: {
-                'carmen:text':'united arab emirates',
-                'carmen:zxy':['6/10/10'],
-                'carmen:center':[0,0]
-            }
-        };
-        docs.push(country);
-    }
+    country = {
+        id:4,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'United Kingdom',
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    };
+    docs.push(country);
 
     addFeature(conf.country, docs, t.end);
 });
 
 tape('index region', function(t) {
-    var region = {
+    var docs = []
+    var midway = {
         id:1,
         type: 'Feature',
         properties: {
-            'carmen:text':'Texas,TX',
+            'carmen:text':'Midway',
+            'carmen:score':'100',
             'carmen:zxy':tiles1,
-            'carmen:center':[0,0]
+            'carmen:center':[-60,60]
+        },
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[[-70,50],[-70,70],[-50,70],[-50,50],[-70,50]]]
         }
     };
-    addFeature(conf.region, region, t.end);
+    docs.push(midway);
+
+    var usvi = {
+        id:2,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'United States Virgin Islands',
+            'carmen:score':'100',
+            'carmen:zxy':tiles2,
+            'carmen:center':[-6,6]
+        },
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[[-7,5],[-7,7],[-5,7],[-5,5],[-7,5]]]
+        }
+    };
+    docs.push(usvi)
+    addFeature(conf.region, docs, t.end);
 });
 
 tape('index place', function(t) {
-    var place = {
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Dallas',
-            'carmen:zxy':tiles1,
-            'carmen:center':[0,0]
+    var docs = [];
+    var place;
+    for (var i=1; i<5; i++) {
+        place = {
+            id:i,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Midway',
+                'carmen:score':'100',
+                'carmen:zxy':tiles2,
+                'carmen:center':[-1,1]
+            },
+            geometry: {
+                type: 'Polygon',
+                coordinates: [[[-1,0],[-1,1],[0,1],[0,0],[-1,0]]]
+            }
+        };
+        docs.push(place);
+    }
+    for (var i=101; i<105; i++) {
+        place = {
+            id: i,
+            type: 'Feature',
+            properties: {
+                'carmen:text': 'United States',
+                'carmen:score':'100',
+                'carmen:zxy': tiles2,
+                'carmen:center': [-3, 3]
+            },
+            geometry: {
+                type: 'Polygon',
+                coordinates: [[[-4,2],[-4,4],[-2,4],[-2,2],[-4,2]]]
+            }
         }
-    };
-    addFeature(conf.place, place, t.end);
+        docs.push(place);
+    }
+    addFeature(conf.place, docs, t.end);
+    
 });
 
 tape('query batched features', function(t) {
     c.geocode('united', {allow_dupes: true}, function(err, res) {
-        console.log("Res", res);
         t.equals(res.features.length, 5, "finds batched features")
         t.end();
     });
 });
 
 tape('check relevance', function(t) {
-    c.geocode('dallas texas united states', {}, function(err, res) {
-        // TODO
+    c.geocode('midway united states', {allow_dupes: true, types:['place', 'region']}, function(err, res) {
+        t.equals(res.features[0].id, 'region.1', 'finds region feature first');
+        t.equals(res.features[0].relevance, 1, 'region has relevance of 1');
         t.end();
     });
 });
