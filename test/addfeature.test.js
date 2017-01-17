@@ -140,9 +140,9 @@ tape('index place', function(t) {
         };
         docs.push(place);
     }
-    for (var i=101; i<105; i++) {
+    for (var j=101; j<105; j++) {
         place = {
-            id: i,
+            id: j,
             type: 'Feature',
             properties: {
                 'carmen:text': 'United States',
