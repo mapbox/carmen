@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.9.1
+
+- Fix a spatialmatch bug where low relevance partial text matches would displace higher-relevance full text matches
+
 ## 17.9.0
 
 - Refine multitype behavior and add `place_type` key to explicitly enumerate the types a feature can be.
