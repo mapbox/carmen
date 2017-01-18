@@ -1,25 +1,15 @@
 var rebalance = require('../lib/spatialmatch.js').rebalance;
+var Phrasematch = require('../lib/phrasematch').Phrasematch;
 var test = require('tape');
 
 test('rebalance, no garbage', function(assert) {
     var query = ['100','main','st','12345','seattle','washington'];
-    var stack = [];
-
-    stack[0] = ['1##','main','st'];
-    stack[0].mask = 7;
-    stack[0].weight = 0.5;
-
-    stack[1] = ['12345'];
-    stack[1].mask = 8;
-    stack[1].weight = 0.16666666666666666;
-
-    stack[2] = ['seattle'];
-    stack[2].mask = 16;
-    stack[2].weight = 0.16666666666666666;
-
-    stack[3] = ['washington'];
-    stack[3].mask = 32;
-    stack[3].weight = 0.16666666666666666;
+    var stack = [
+        new Phrasematch(['1##','main','st'], 0.5, 7, null, null, null, null),
+        new Phrasematch(['12345'], 0.16666666666666666, 8, null, null, null, null),
+        new Phrasematch(['seattle'], 0.16666666666666666, 16, null, null, null, null),
+        new Phrasematch(['washington'], 0.16666666666666666, 32, null, null, null, null),
+    ];
 
     stack.relev = 1;
 
@@ -35,19 +25,11 @@ test('rebalance, no garbage', function(assert) {
 test('rebalance, with garbage', function(assert) {
     var query = ['100','main','st','12345','seattle','washington'];
 
-    var stack = [];
-
-    stack[0] = ['1##','main','st'];
-    stack[0].mask = 7;
-    stack[0].weight = 0.5;
-
-    stack[1] = ['12345'];
-    stack[1].mask = 8;
-    stack[1].weight = 0.16666666666666666;
-
-    stack[2] = ['washington'];
-    stack[2].mask = 32;
-    stack[2].weight = 0.16666666666666666;
+    var stack = [
+        new Phrasematch(['1##','main','st'], 0.5, 7, null, null, null, null),
+        new Phrasematch(['12345'], 0.16666666666666666, 8, null, null, null, null),
+        new Phrasematch(['washington'], 0.16666666666666666, 32, null, null, null, null),
+    ];
 
     stack.relev = 0.8333333333333333;
 
@@ -62,23 +44,12 @@ test('rebalance, with garbage', function(assert) {
 test('rebalance copies', function(assert) {
     var query = ['100','main','st','12345','seattle','washington'];
 
-    var stackA = [];
-
-    stackA[0] = ['1##','main','st'];
-    stackA[0].mask = 7;
-    stackA[0].weight = 0.5;
-
-    stackA[1] = ['12345'];
-    stackA[1].mask = 8;
-    stackA[1].weight = 0.16666666666666666;
-
-    stackA[2] = ['seattle'];
-    stackA[2].mask = 16;
-    stackA[2].weight = 0.16666666666666666;
-
-    stackA[3] = ['washington'];
-    stackA[3].mask = 32;
-    stackA[3].weight = 0.16666666666666666;
+    var stackA = [
+        new Phrasematch(['1##','main','st'], 0.5, 7, null, null, null, null),
+        new Phrasematch(['12345'], 0.16666666666666666, 8, null, null, null, null),
+        new Phrasematch(['seattle'], 0.16666666666666666, 16, null, null, null, null),
+        new Phrasematch(['washington'], 0.16666666666666666, 32, null, null, null, null),
+    ];
 
     stackA.relev = 1;
 

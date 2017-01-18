@@ -1,0 +1,283 @@
+{
+  "ar": null,
+  "az": [
+    "en",
+    "ru"
+  ],
+  "ba": [
+    "sr"
+  ],
+  "bg": [
+    "mk",
+    "sr",
+    "ru",
+    "en"
+  ],
+  "bn": [
+    "en"
+  ],
+  "bs": [
+    "hr",
+    "sr",
+    "ru"
+  ],
+  "ca": [
+    "es",
+    "pt",
+    "en"
+  ],
+  "cs": [
+    "sk",
+    "it",
+    "pt",
+    "en"
+  ],
+  "da": [
+    "no",
+    "nb",
+    "sv",
+    "nl",
+    "en"
+  ],
+  "de": [
+    "sk",
+    "ro",
+    "nl",
+    "en"
+  ],
+  "el": [
+    "en",
+    "de",
+    "fr",
+    "it"
+  ],
+  "en": [
+    "es",
+    "fr",
+    "de"
+  ],
+  "es": [
+    "pt",
+    "fr",
+    "nl",
+    "en"
+  ],
+  "et": [
+    "fi",
+    "en",
+    "ru"
+  ],
+  "fa": [
+    "az"
+  ],
+  "fi": [
+    "sv",
+    "nb",
+    "nl",
+    "en"
+  ],
+  "fr": [
+    "nl",
+    "ro",
+    "it",
+    "sk",
+    "pt",
+    "en"
+  ],
+  "gu": [
+    "hi",
+    "kn",
+    "en"
+  ],
+  "he": [
+    "en"
+  ],
+  "hi": [
+    "gu",
+    "kn",
+    "en"
+  ],
+  "hr": [
+    "bs",
+    "sr",
+    "it",
+    "es",
+    "en"
+  ],
+  "hu": [
+    "ro",
+    "en",
+    "de"
+  ],
+  "id": [
+    "ms",
+    "vi",
+    "sk",
+    "ro",
+    "en"
+  ],
+  "in": [
+    "en"
+  ],
+  "is": [
+    "en"
+  ],
+  "it": [
+    "ro",
+    "fr",
+    "en"
+  ],
+  "ja": null,
+  "ka": [
+    "ru",
+    "en"
+  ],
+  "kk": [
+    "ru"
+  ],
+  "kn": [
+    "en"
+  ],
+  "ko": null,
+  "lt": [
+    "lv",
+    "ru",
+    "pl"
+  ],
+  "lv": [
+    "en",
+    "ru"
+  ],
+  "mk": [
+    "bg",
+    "ru"
+  ],
+  "mn": [
+    "ru"
+  ],
+  "ms": [
+    "en",
+    "id",
+    "vi"
+  ],
+  "nb": [
+    "no",
+    "da",
+    "sv",
+    "nl"
+  ],
+  "nl": [
+    "fr",
+    "en"
+  ],
+  "no": [
+    "nb",
+    "da"
+  ],
+  "pl": [
+    "sk",
+    "nl",
+    "ro",
+    "en",
+    "hu"
+  ],
+  "pt": [
+    "es",
+    "it"
+  ],
+  "ro": [
+    "en"
+  ],
+  "ru": [
+    "kk"
+  ],
+  "si": [
+    "en"
+  ],
+  "sk": [
+    "cs",
+    "en"
+  ],
+  "sl": [
+    "en"
+  ],
+  "sq": [
+    "en"
+  ],
+  "sr": [
+    "bs",
+    "hr"
+  ],
+  "sr_Cyrl": [
+    "sr_Latn"
+  ],
+  "sr_Latn": [
+    "sr_Cyrl"
+  ],
+  "sv": [
+    "en"
+  ],
+  "ta": [
+    "en"
+  ],
+  "te": [
+    "en"
+  ],
+  "tg": [
+    "ru"
+  ],
+  "th": [
+    "en"
+  ],
+  "tl": [
+    "en"
+  ],
+  "tr": [
+    "pt",
+    "de",
+    "fr",
+    "en"
+  ],
+  "uk": [
+    "ru"
+  ],
+  "ur": [
+    "en"
+  ],
+  "uz": [
+    "ru"
+  ],
+  "vi": [
+    "ms",
+    "fr",
+    "en"
+  ],
+  "zh": [
+    "zh_Hans",
+    "zh_Hant"
+  ],
+  "zh_CN": [
+    "zh_Hans",
+    "zh",
+    "zh_Hant"
+  ],
+  "zh_Hans": [
+    "zh",
+    "zh_Hant"
+  ],
+  "zh_Hant": [
+    "zh",
+    "zh_Hans"
+  ],
+  "zh_HK": [
+    "zh_TW",
+    "zh_Hant",
+    "zh",
+    "zh_Hans"
+  ],
+  "zh_TW": [
+    "zh_Hant",
+    "zh",
+    "zh_Hans"
+  ]
+}

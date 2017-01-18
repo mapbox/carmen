@@ -76,59 +76,62 @@ tape('indexdocs.standardize', function(assert) {
     });
 
     assert.test('indexdocs.standardize - Must be MultiPoint or GeometryCollection', function(t) {
-        var res = indexdocs.standardize({
-            id: 1,
-            type: 'Feature',
-            properties: {
-                'carmen:text': 'main street',
-                'carmen:center': [0,0],
-                'carmen:addressnumber': [9]
-            },
-            geometry: {
-                type: 'Point',
-                coordinates: [0,0]
-            }
-        }, 6, {});
+        t.throws(function(t) {
+            indexdocs.standardize({
+                id: 1,
+                type: 'Feature',
+                properties: {
+                    'carmen:text': 'main street',
+                    'carmen:center': [0,0],
+                    'carmen:addressnumber': [9]
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [0,0]
+                }
+            }, 6, {});
+        }, /carmen:addressnumber must be MultiPoint or GeometryCollection/);
 
-        t.deepEquals(res, 'carmen:addressnumber must be MultiPoint or GeometryCollection');
         t.end();
     });
 
     assert.test('indexdocs.standardize - Must be MultiPoint or GeometryCollection', function(t) {
-        var res = indexdocs.standardize({
-            id: 1,
-            type: 'Feature',
-            properties: {
-                'carmen:text': 'main street',
-                'carmen:center': [0,0],
-                'carmen:addressnumber': [9]
-            },
-            geometry: {
-                type: 'Point',
-                coordinates: [0,0]
-            }
-        }, 6, {});
+        t.throws(function(t) {
+            indexdocs.standardize({
+                id: 1,
+                type: 'Feature',
+                properties: {
+                    'carmen:text': 'main street',
+                    'carmen:center': [0,0],
+                    'carmen:addressnumber': [9]
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [0,0]
+                }
+            }, 6, {});
+        }, /carmen:addressnumber must be MultiPoint or GeometryCollection/);
 
-        t.deepEquals(res, 'carmen:addressnumber must be MultiPoint or GeometryCollection');
         t.end();
     });
 
     assert.test('indexdocs.standardize - carmen:addressnumber parallel arrays must equal', function(t) {
-        var res = indexdocs.standardize({
-            id: 1,
-            type: 'Feature',
-            properties: {
-                'carmen:text': 'main street',
-                'carmen:center': [0,0],
-                'carmen:addressnumber': [9]
-            },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0], [0,0]]
-            }
-        }, 6, {});
+        t.throws(function() {
+            indexdocs.standardize({
+                id: 1,
+                type: 'Feature',
+                properties: {
+                    'carmen:text': 'main street',
+                    'carmen:center': [0,0],
+                    'carmen:addressnumber': [9]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[0,0], [0,0]]
+                }
+            }, 6, {});
+        }, /carmen:addressnumber\[i\] array must be equal to geometry.geometries\[i\] array/);
 
-        t.deepEquals(res, 'carmen:addressnumber[i] array must be equal to geometry.geometries[i] array');
         t.end();
     });
 
@@ -171,21 +174,22 @@ tape('indexdocs.standardize', function(assert) {
     });
 
     assert.test('indexdocs.standardize - carmen:rangetype invalid', function(t) {
-        var res = indexdocs.standardize({
-            id: 1,
-            type: 'Feature',
-            properties: {
-                'carmen:text': 'main street',
-                'carmen:center': [0,0],
-                'carmen:rangetype': 'tiger'
-            },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0]]
-            }
-        }, 6, {});
+        t.throws(function(t) {
+            indexdocs.standardize({
+                id: 1,
+                type: 'Feature',
+                properties: {
+                    'carmen:text': 'main street',
+                    'carmen:center': [0,0],
+                    'carmen:rangetype': 'tiger'
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[0,0]]
+                }
+            }, 6, {});
+        }, /ITP results must be a LineString, MultiLineString, or GeometryCollection/);
 
-        t.deepEquals(res, 'ITP results must be a LineString, MultiLineString, or GeometryCollection');
         t.end();
     });
 
@@ -239,6 +243,37 @@ tape('indexdocs.standardize', function(assert) {
         t.end();
     });
 
+    assert.test('indexdocs.standardize - carmen:zxy exceeds 10000 covers', function(t) {
+        // Build a zxy list with covers of varying distance from center.
+        var central = ['6/32/32','6/33/33','6/31/31','6/32/30','6/30/32'];
+        var covers = [];
+        var i;
+        for (i = 0; i < 10000; i++) { covers.push('6/40/40'); }
+        for (i = 0; i < 100; i++) central.forEach(function(central) {
+            covers.push(central);
+        });
+
+        var res = indexdocs.standardize({
+            id: 1,
+            type: 'Feature',
+            properties: {
+                'carmen:text': 'main street',
+                'carmen:center': [0,0],
+                'carmen:zxy': covers
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        }, 6, {});
+
+        assert.deepEqual(res.properties['carmen:zxy'].length, 10000, 'truncates carmen:zxy to 10000');
+        central.forEach(function(cover) {
+            assert.deepEqual(res.properties['carmen:zxy'].filter(function(zxy) { return zxy === cover; }).length, 100, 'sort preserves covers closest to center: ' + cover);
+        });
+        t.end();
+    });
+
     assert.end();
 });
 
@@ -249,67 +284,86 @@ tape('indexdocs.verifyCenter', function(assert) {
 });
 
 tape('indexdocs.runChecks', function(assert) {
-    assert.equal(indexdocs.runChecks({
-    }), 'doc has no id');
+    assert.throws(function(t) {
+        indexdocs.runChecks({});
+    }, /doc has no id/);
 
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {},
-        geometry: {
-            type: 'Point',
-            coordinates: [0,0]
-        }
-    }), 'doc has no carmen:text on id:1');
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Main Street'
-        }
-    }), '"geometry" property required on id:1');
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Main Street',
-            'carmen:center':[0,0]
-        },
-        geometry: { type: 'Polygon', coordinates: [new Array(60e3)] }
-    }, 12), 'a number was found where a coordinate array should have been found: this needs to be nested more deeply on id:1');
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Main Street',
-            'carmen:center':[0,0]
-        },
-        geometry: { type: 'Polygon', coordinates: [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})] }
-    }, 12), 'Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1');
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Main Street',
-            'carmen:center':[0,0]
-        },
-        geometry: { type: 'MultiPolygon', coordinates: [[new Array(30e3)],[new Array(30e3)]] }
-    }, 12), 'a number was found where a coordinate array should have been found: this needs to be nested more deeply on id:1');
-    assert.equal(indexdocs.runChecks({
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text':'Main Street',
-            'carmen:center':[0,0]
-        },
-        geometry: {
-            type: 'MultiPolygon',
-            coordinates: [
-                [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})],
-                [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})]
-            ]
-        }
-    }, 12), 'Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1');
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        }));
+    }, /doc has no carmen:text on id:1/);
+
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street'
+            }
+        }));
+    }, /"geometry" property required on id:1/);
+
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street',
+                'carmen:center':[0,0]
+            },
+            geometry: { type: 'Polygon', coordinates: [new Array(60e3)] }
+        }, 12));
+    }, /a number was found where a coordinate array should have been found: this needs to be nested more deeply on id:1/);
+
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street',
+                'carmen:center':[0,0]
+            },
+            geometry: { type: 'Polygon', coordinates: [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})] }
+        }, 12));
+    }, /Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1/);
+
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street',
+                'carmen:center':[0,0]
+            },
+            geometry: { type: 'MultiPolygon', coordinates: [[new Array(30e3)],[new Array(30e3)]] }
+        }, 12));
+    }, /a number was found where a coordinate array should have been found: this needs to be nested more deeply on id:1/);
+
+    assert.throws(function(t) {
+        assert.equal(indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street',
+                'carmen:center':[0,0]
+            },
+            geometry: {
+                type: 'MultiPolygon',
+                coordinates: [
+                    [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})],
+                    [Array.apply(null, Array(50001)).map(function() {return [1.1,1.1]})]
+                ]
+            }
+        }, 12));
+    }, /Polygons may not have more than 50k vertices. Simplify your polygons, or split the polygon into multiple parts on id:1/);
+
     assert.equal(indexdocs.runChecks({
         id:1,
         type: 'Feature',
@@ -318,7 +372,7 @@ tape('indexdocs.runChecks', function(assert) {
             'carmen:center':[0,0]
         },
         geometry: { type: 'Point', coordinates: [0,0] }
-    }, 12), '');
+    }, 12), undefined);
     assert.end();
 });
 

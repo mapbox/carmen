@@ -50,3 +50,9 @@ test('tokenize Japanese strings with numeric component', function(assert) {
     assert.deepEqual(termops.tokenize('123中津川市4571馬籠'), ['123中津川市4571馬籠'], 'does not split strings that begin with numbers');
     assert.end();
 });
+
+test('tokenize excludes un-unidecodable characters', function(assert) {
+    assert.deepEqual(termops.tokenize(decodeURIComponent('%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82')), [], '20 sobbies = 0 tokens');
+    assert.deepEqual(termops.tokenize(decodeURIComponent('new+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+%F0%9F%98%82+york')), ['new', 'york'], 'intermediate emojis removed');
+    assert.end();
+});

@@ -75,6 +75,17 @@ test('termops.getIndexableText', function(assert) {
     texts[1].indexDegens = false;
     assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'creates indexableText, sets indexDegens to false for translations');
 
+    // doesn't indexDegens for synonyms
+    replacer = token.createReplacer({});
+    doc = { properties: { 'carmen:text': 'Latveria,Republic of Latveria' } };
+    texts = [
+        [ 'latveria' ],
+        [ 'republic', 'of', 'latveria' ]
+    ];
+    texts[0].indexDegens = true;
+    texts[1].indexDegens = false;
+    assert.deepEqual(termops.getIndexableText(replacer, [], doc), texts, 'creates indexableText w/ synonyms, sets indexDegens to false for synonyms after first');
+
     assert.end();
 });
 

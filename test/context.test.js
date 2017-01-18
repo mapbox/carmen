@@ -39,7 +39,7 @@ test('contextVector deflate', function(t) {
                 'carmen:conflict': undefined,
                 'carmen:center': [ -99.693234, 37.245325 ],
                 'carmen:extid': 'test.5',
-                'carmen:dbidx': 1,
+                'carmen:index': 'testA',
                 'carmen:vtquerydist': 0,
                 'carmen:geomtype': 3,
                 'carmen:tmpid': Math.pow(2,25) + 5,
@@ -79,7 +79,7 @@ test('contextVector gzip', function(t) {
                 'carmen:stack': undefined,
                 'carmen:conflict': undefined,
                 'carmen:center': [ -99.693234, 37.245325 ],
-                'carmen:dbidx': 1,
+                'carmen:index': 'testA',
                 'carmen:extid': 'test.5',
                 'carmen:tmpid': Math.pow(2,25) + 5,
                 'carmen:vtquerydist': 0,
@@ -622,12 +622,12 @@ test('Context eliminates correct properties', function(assert) {
     q.defer(function(cb) { addFeature(conf.region, region, cb); });
     q.awaitAll(function() {
         c._open(function() {
-            context(c, 0, 0, { full: false }, function(err, contexts) {
+            context(c, [0, 0], { full: false }, function(err, contexts) {
                 assert.ifError(err);
                 var contextObj = contexts.pop();
-                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:dbidx', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:center', 'carmen:text', 'idaho_potatoes', 'short_code'], 'found expected keys on country object');
+                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:types', 'carmen:center', 'carmen:text', 'idaho_potatoes', 'short_code'], 'found expected keys on country object');
                 contextObj = contexts.pop();
-                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:dbidx', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:center', 'carmen:text'], 'found expected keys on region object');
+                assert.deepEqual(Object.keys(contextObj.properties), ['carmen:extid', 'carmen:tmpid', 'carmen:index', 'carmen:vtquerydist', 'carmen:geomtype', 'carmen:types', 'carmen:center', 'carmen:text'], 'found expected keys on region object');
                 assert.end();
             });
         });
