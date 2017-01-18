@@ -59,12 +59,10 @@ tape('russia => Russian Federation', function(t) {
     });
 });
 
-tape('Rossiyskaya => Russian Federation', function(t) {
+tape('Rossiyskaya =/=> Russian Federation (synonyms are not available in autoc)', function(t) {
     c.geocode('Rossiyskaya', { limit_verify:1 }, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features[0].place_name, 'Russian Federation');
-        t.deepEqual(res.features[0].id, 'country.2');
-        t.deepEqual(res.features[0].id, 'country.2');
+        t.deepEqual(res.features.length, 0, 'No results');
         t.end();
     });
 });

@@ -124,9 +124,9 @@ tape('west st, tonawanda, ny', function(t) {
         t.deepEqual(res.debug.spatialmatch.covers[0].id, 5);
         t.deepEqual(res.debug.spatialmatch.covers[0].text, 'west st');
         t.deepEqual(res.debug.spatialmatch.covers[0].relev, 0.3333333333333333);
-        t.deepEqual(res.debug.spatialmatch.covers[1].text, 'tonawanda');
+        t.deepEqual(res.debug.spatialmatch.covers[1].text, 'ny');
         t.deepEqual(res.debug.spatialmatch.covers[1].relev, 0.3333333333333333);
-        t.deepEqual(res.debug.spatialmatch.covers[2].text, 'ny');
+        t.deepEqual(res.debug.spatialmatch.covers[2].text, 'tonawanda');
         t.deepEqual(res.debug.spatialmatch.covers[2].relev, 0.3333333333333333);
         t.deepEqual(res.debug.spatialmatch_position, 0);
 

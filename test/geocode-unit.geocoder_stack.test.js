@@ -66,6 +66,14 @@ var addFeature = require('../lib/util/addfeature');
         });
     });
 
+    tape('query filter - will be lowercased', function(t) {
+        c.geocode('0,0', { stacks: ['CA'] }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, 'Canada');
+            t.end();
+        });
+    });
+
     tape('query filter', function(t) {
         c.geocode('United States', { stacks: ['ca'] }, function(err, res) {
             t.ifError(err);

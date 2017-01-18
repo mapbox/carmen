@@ -9,6 +9,9 @@
             "type": "Feature",
             "text": "Toronto",
             "place_name": "Toronto, Ontario, Canada",
+            "place_type": [
+                "place"
+            ],
             "relevance": 0.99,
             "properties": {
                 "wikidata": "Q172",
@@ -291,8 +294,8 @@
                     "relev": 1,
                     "covers": [
                         {
-                            "x": 24,
-                            "y": 24,
+                            "x": 25,
+                            "y": 25,
                             "relev": 1,
                             "id": 1,
                             "idx": 2,
@@ -329,12 +332,12 @@
             },
             "context": [
                 {
-                    "id": "region.1",
-                    "text": "Ontario"
+                    "text": "Ontario",
+                    "id": "region.1"
                 },
                 {
-                    "id": "country.1",
-                    "text": "Canada"
+                    "text": "Canada",
+                    "id": "country.1"
                 }
             ]
         }

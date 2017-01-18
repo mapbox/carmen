@@ -1,5 +1,73 @@
 # Changelog
 
+## 17.9.0
+
+- Refine multitype behavior and add `place_type` key to explicitly enumerate the types a feature can be.
+
+## 17.8.5
+
+- Fix indexer behavior for indexes where the max score is specified as 0
+
+## 17.8.4
+
+- Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties
+
+## 17.8.3
+
+- Change indexing behavior: don't generate degens (for autocomplete) for feature synonyms
+
+## 17.8.2
+
+- Filter results disallowed by the `types` filter before sorting and limiting potential matches
+- In spatialmatch, sort stacks by index from lowest to highest when zoom level is the same
+- Add alternate unicode apostrophes for punctuation normalization
+
+## 17.8.1
+
+- Use fallback language when the specified language key exists, but has a null value.
+
+## 17.8.0
+
+- Update to `carmen-cache@0.15.0`.
+
+## 17.7.3
+
+- Automatically lowercase all `stacks` values for a given query
+
+## 17.7.2
+
+- Move eslint to dev dependencies.
+- Update to `carmen-cache@0.14.1`.
+
+## 17.7.1
+
+- Trim whitespace from text values when outputting feature values.
+
+## 17.7.0
+
+- Update to `carmen-cache@0.14.0`.
+
+## 17.6.5
+
+- Robustify language fallback behavior for unmatched language suffixes.
+
+## 17.6.4
+
+- Modified language fallback behavior to reflect feedback collected from human translators.
+
+## 17.6.3
+
+- Fix multitype corner case where a feature promoted across levels would not always be properly promoted.
+
+## 17.6.2
+
+- Update several dependencies to `@mapbox` namespaced versions.
+- Performance optimizations for `phrasematch()` when dealing with tokens that resolve to empty strings/whitespace when unidecoded.
+
+## 17.6.1
+
+- Fixes bug where unencodable text like emojis wasn't being ignored.
+
 ## 17.6.0
 
 - Adds index-level option `geocoder_inherit_score` for promoting features that nest within other similar named parent features (e.g. promote New York (city) promoted above New York (state)).
