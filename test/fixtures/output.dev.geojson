@@ -9,6 +9,9 @@
             "type": "Feature",
             "text": "Toronto",
             "place_name": "Toronto, Ontario, Canada",
+            "place_type": [
+                "place"
+            ],
             "relevance": 0.99,
             "properties": {
                 "wikidata": "Q172",

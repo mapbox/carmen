@@ -1,5 +1,13 @@
 # Changelog
 
+## 17.9.0
+
+- Refine multitype behavior and add `place_type` key to explicitly enumerate the types a feature can be.
+
+## 17.8.5
+
+- Fix indexer behavior for indexes where the max score is specified as 0
+
 ## 17.8.4
 
 - Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties

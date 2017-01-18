@@ -100,9 +100,12 @@ tape('multitype reverse', function(assert) {
     assert.comment('note:   shifted reverse');
     c.geocode('0,0', {}, function(err, res) {
         assert.ifError(err);
-        assert.deepEqual(res.features[0].place_name, 'capital');
-        assert.deepEqual(res.features[0].id, 'place.1');
-        assert.deepEqual(res.features[0].context, undefined);
+        assert.deepEqual(res.features[0].place_name, 'smallplace, district 1, capital');
+        assert.deepEqual(res.features[0].id, 'place.2');
+        assert.deepEqual(res.features[0].context, [
+            { id: 'district.1', text: 'district 1' },
+            { id: 'region.1', text: 'capital' }
+        ]);
         assert.end();
     });
 });
