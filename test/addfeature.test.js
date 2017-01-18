@@ -20,8 +20,8 @@ for (var k=0; k<32; k++) {
         tiles.push(tile);
     }
 }
-tiles1 = tiles.slice(100);
-tiles2 = tiles.slice(0, -100);
+tiles1 = tiles.slice(200);
+tiles2 = tiles.slice(0, -200);
 
 tape('index country (batch)', function(t) {
     var docs = [];
@@ -168,7 +168,21 @@ tape('query batched features', function(t) {
     });
 });
 
+function resetLogs() {
+    context.getTile.cache.reset();
+    conf.country._geocoder.unloadall('grid');
+    conf.country._original.logs.getGeocoderData = [];
+    conf.country._original.logs.getTile = [];
+    conf.region._geocoder.unloadall('grid');
+    conf.region._original.logs.getGeocoderData = [];
+    conf.region._original.logs.getTile = [];
+    conf.place._geocoder.unloadall('grid');
+    conf.place._original.logs.getGeocoderData = [];
+    conf.place._original.logs.getTile = [];
+}
+
 tape('check relevance', function(t) {
+    resetLogs();
     c.geocode('midway united states', {allow_dupes: true, types:['place', 'region']}, function(err, res) {
         t.equals(res.features[0].id, 'region.1', 'finds region feature first');
         t.equals(res.features[0].relevance, 1, 'region has relevance of 1');
