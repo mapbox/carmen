@@ -55,17 +55,10 @@ var addFeature = require('../lib/util/addfeature');
             },
             geometry: {
                 type:'MultiLineString',
-                coordinates:
-                    [
-                        [
-                        [0,0],
-                        [0,10]
-                        ],
-                        [
-                        [0,11],
-                        [0,20]
-                        ],
-                    ]
+                coordinates: [
+                    [ [0,0], [0,10] ],
+                    [ [0,11], [0,20] ],
+                ]
             }
         };
         addFeature(conf.address, address, t.end);
