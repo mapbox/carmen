@@ -21,7 +21,7 @@
     "@turf/intersect": "^3.7.3",
     "@turf/line-distance": "^3.7.3",
     "@turf/point-on-surface": "^3.7.3",
-    "d3-queue": "2.0.x",
+    "d3-queue": "3.0.x",
     "dawg-cache": "0.3.1",
     "err-code": "1.1.1",
     "mapnik": "~3.5.12",
@@ -32,19 +32,19 @@
     "tile-cover": "3.0.x",
     "tilelive": "5.12.x",
     "unidecode-cxx": "0.0.2",
-    "xregexp": "3.0.0"
+    "xregexp": "3.1.1"
   },
   "devDependencies": {
-    "eslint": "^1.5.0",
-    "retire": "0.4.x",
-    "bytes": "^1.0.0",
-    "tape": "4.6.0",
+    "eslint": "3.14.0",
+    "retire": "1.2.11",
+    "bytes": "2.4.0",
+    "tape": "4.6.3",
     "mbtiles": "~0.9.0",
     "tilelive-s3": "~4.1.1",
     "istanbul": "^0.4.0",
     "coveralls": "^2.11.4",
-    "benchmark": "~1.0.0",
-    "deep-equal": "~0.2.0"
+    "benchmark": "2.1.3",
+    "deep-equal": "1.0.1"
   },
   "bin": {
     "carmen": "./scripts/carmen.js",
@@ -72,7 +72,7 @@
       ],
       "space-in-parens": 2,
       "space-before-blocks": 2,
-      "space-after-keywords": 2,
+      "keyword-spacing": 2,
       "comma-style": 2,
       "indent": 2,
       "no-lonely-if": 2,

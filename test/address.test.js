@@ -141,26 +141,26 @@ test('address.getReversePoint', function(assert) {
     //Patial route travelled
     assert.deepEqual(
         address.getReversePoint([-77.19932645559311,38.94770308373527], [[-77.19998091459274,38.9475549770314],[-77.19883829355238,38.94759461125006]], 'miles'),
-        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.06147950790879972, pt: { geometry: { coordinates: [ -77.19932038464033, 38.94757788890475 ], type: 'Point' }, properties: { dist: 0.008658996759104212, index: 0, travelled: 0.03554027081555206 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
+        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.061479507908799705, pt: { geometry: { coordinates: [ -77.19932038464033, 38.94757788890475 ], type: 'Point' }, properties: { dist: 0.008658996759104212, index: 0, travelled: 0.035540270815552055 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
         "left centre side of line"
     );
 
     //Partial route travelled
     assert.deepEqual(
         address.getReversePoint([-77.1995061635971,38.94741938611567], [[-77.19998091459274,38.9475549770314],[-77.19883829355238,38.94759461125006]], 'miles'),
-        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.06147950790879972, pt: { geometry: { coordinates: [ -77.1995173939109, 38.947571055223044 ], type: 'Point' }, properties: { dist: 0.010499982934844238, index: 0, travelled: 0.024940051989783316 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
+        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.061479507908799705, pt: { geometry: { coordinates: [ -77.1995173939109, 38.947571055223044 ], type: 'Point' }, properties: { dist: 0.010499982934844238, index: 0, travelled: 0.024940051989783316 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
         "right centre side of line");
 
     //No route Travelled
     assert.deepEqual(
         address.getReversePoint([-77.20057904720306,38.94761547135627], [[-77.19998091459274,38.9475549770314],[-77.19883829355238,38.94759461125006]], 'miles'),
-        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.06147950790879972, pt: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: { dist: 0.03242169132910228, index: 0, travelled: 0 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
+        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.061479507908799705, pt: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: { dist: 0.03242169132910228, index: 0, travelled: 0 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
         "before start of line");
 
     //Total route travelled
     assert.deepEqual(
         address.getReversePoint([-77.19858080148697,38.94759461125006], [[-77.19998091459274,38.9475549770314],[-77.19883829355238,38.94759461125006]], 'miles'),
-        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.06147950790879972, pt: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: { dist: 0.013840773622621594, index: 0, travelled: 0.06147950790879972 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
+        { endLine: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: {}, type: 'Feature' }, lineDist: 0.061479507908799705, pt: { geometry: { coordinates: [ -77.19883829355238, 38.94759461125006 ], type: 'Point' }, properties: { dist: 0.013840773622621594, index: 0, travelled: 0.061479507908799705 }, type: 'Feature' }, startLine: { geometry: { coordinates: [ -77.19998091459274, 38.9475549770314 ], type: 'Point' }, properties: {}, type: 'Feature' } },
         "after end of line");
 
     assert.end();
