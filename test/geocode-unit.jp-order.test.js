@@ -77,7 +77,7 @@ tape('Check order, 632 中黒 岩出市', function(t) {
     c.geocode('632 中黒 岩出市', { limit_verify: 1}, function(err, res) {
         t.ifError(err);
         t.equal(res.features[0].address, '632', "Gets correct address");
-        t.equal(res.features[0].relevance, 0.994, "Unexpected ascending lowers relevance")
+        t.equal(res.features[0].relevance, 0.99, "Unexpected ascending lowers relevance")
         t.end();
     });
 });
@@ -86,7 +86,7 @@ tape('Check order, 632 中黒 Japan 岩出市', function(t) {
     c.geocode('632 中黒 Japan 岩出市', { limit_verify: 1}, function(err, res) {
         t.ifError(err);
         t.equal(res.features[0].address, '632', "Gets correct address");
-        t.equal(res.features[0].relevance, 0.8263333333333333, "Mixed-up order lowers relevance")
+        t.equal(res.features[0].relevance, 0.8223333333333333, "Mixed-up order lowers relevance")
         t.end();
     });
 });

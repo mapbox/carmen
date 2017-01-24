@@ -220,7 +220,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('Search for an address without a number (multiple layers)', function(t) {
         c.geocode('fake street', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
-            t.deepEquals(res,  {"type":"FeatureCollection","query":["fake","street"],"features":[{"id":"address.1","type":"Feature","text":"fake street","place_name":"fake street springfield, maine 12345, united states","relevance":0.79,"properties":{},"center":[0,0],"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0],[0,0],[0,0]]}]},"context":[{"id":"place.1","text":"springfield"},{"id":"postcode.1","text":"12345"},{"id":"region.1","text":"maine"},{"id":"country.1","text":"united states"}]}]});
+            t.deepEquals(res,  {"type":"FeatureCollection","query":["fake","street"],"features":[{"id":"address.1","type":"Feature","text":"fake street","place_name":"fake street springfield, maine 12345, united states","relevance":0.79,"place_type": ['address'],"properties":{},"center":[0,0],"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0],[0,0],[0,0]]}]},"context":[{"id":"place.1","text":"springfield"},{"id":"postcode.1","text":"12345"},{"id":"region.1","text":"maine"},{"id":"country.1","text":"united states"}]}]});
             t.end();
         });
     });

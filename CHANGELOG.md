@@ -1,5 +1,33 @@
 # Changelog
 
+## 17.10.1
+
+- Use `Number` instead of `parseFloat` to detect reverse queries as `parseFloat` will silently drop non-numeric parts of a string leading to `9a,10b` being interpreted as a reverse query.
+
+## 17.10.0
+
+- Update to `@mapbox/carmen-cache` package namespace and use latest release (`0.16.2`) that addresses several performance and stability issues.
+
+## 17.9.1
+
+- Fix a spatialmatch bug where low relevance partial text matches would displace higher-relevance full text matches
+
+## 17.9.0
+
+- Refine multitype behavior and add `place_type` key to explicitly enumerate the types a feature can be.
+
+## 17.8.5
+
+- Fix indexer behavior for indexes where the max score is specified as 0
+
+## 17.8.4
+
+- Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties
+
+## 17.8.3
+
+- Change indexing behavior: don't generate degens (for autocomplete) for feature synonyms
+
 ## 17.8.2
 
 - Filter results disallowed by the `types` filter before sorting and limiting potential matches
