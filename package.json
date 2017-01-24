@@ -1,5 +1,5 @@
 {
-  "name": "carmen",
+  "name": "@mapbox/carmen",
   "description": "Mapnik vector-tile-based geocoder with support for swappable data sources.",
   "version": "17.10.1",
   "url": "http://github.com/mapbox/carmen",
