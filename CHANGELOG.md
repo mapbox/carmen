@@ -1,5 +1,13 @@
 # Changelog
 
+## 17.10.1
+
+- Use `Number` instead of `parseFloat` to detect reverse queries as `parseFloat` will silently drop non-numeric parts of a string leading to `9a,10b` being interpreted as a reverse query.
+
+## 17.10.0
+
+- Update to `@mapbox/carmen-cache` package namespace and use latest release (`0.16.2`) that addresses several performance and stability issues.
+
 ## 17.9.1
 
 - Fix a spatialmatch bug where low relevance partial text matches would displace higher-relevance full text matches
