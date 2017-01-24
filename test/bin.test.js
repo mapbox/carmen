@@ -127,9 +127,23 @@ tape('bin/carmen query', function(t) {
 tape('bin/carmen query w/ stats', function(t) {
     exec(bin + '/carmen.js ' + tmpindex + ' --query=brazil --stats', function(err, stdout, stderr) {
         t.ifError(err);
-        var re = new RegExp(/warmup\:\s+(\d+)ms/)
-        var match = re.exec(stdout);
-        t.ok(match[1] < 3600000, "ensure load stat is an elapsed delta of less than an hour");
+        var warmup_re = new RegExp(/warmup\:\s+(\d+)ms/)
+        var phrasematch_re = new RegExp(/phrasematch\:\s+(\d+)ms/)
+        var spatialmatch_re = new RegExp(/spatialmatch\:\s+(\d+)ms/)
+        var verifymatch_re = new RegExp(/verifymatch\:\s+(\d+)ms/)
+        var totaltime_re = new RegExp(/totaltime\:\s+(\d+)ms/)
+
+        var warmup_match = warmup_re.exec(stdout);
+        var phrasematch_match = phrasematch_re.exec(stdout);
+        var spatialmatch_match = spatialmatch_re.exec(stdout);
+        var verifymatch_match = verifymatch_re.exec(stdout);
+        var totaltime_match = totaltime_re.exec(stdout);
+
+        t.ok(warmup_match[1] < 3600000, "ensure load stat is an elapsed delta of less than an hour");
+        t.ok(phrasematch_match[1] < 3600000, "ensure phrasematch stat is an elapsed delta of less than an hour");
+        t.ok(spatialmatch_match[1] < 3600000, "ensure spatialmatch stat is an elapsed delta of less than an hour");
+        t.ok(verifymatch_match[1] < 3600000, "ensure verifymatch stat is an elapsed delta of less than an hour");
+        t.ok(totaltime_match[1] < 3600000, "ensure totaltime stat is an elapsed delta of less than an hour");
         t.end();
     });
 });
