@@ -124,6 +124,16 @@ tape('bin/carmen query', function(t) {
     });
 });
 
+tape('bin/carmen query w/ stats', function(t) {
+    exec(bin + '/carmen.js ' + tmpindex + ' --query=brazil --stats', function(err, stdout, stderr) {
+        t.ifError(err);
+        var re = new RegExp(/warmup\:\s+(\d+)ms/)
+        var match = re.exec(stdout);
+        t.ok(match[1] < 3600000, "ensure load stat is an elapsed delta of less than an hour");
+        t.end();
+    });
+});
+
 
 //Index was not indexed witht the brazil=canada token so this should produce Canada as a result
 tape('bin/carmen query w/ global tokens', function(t) {
