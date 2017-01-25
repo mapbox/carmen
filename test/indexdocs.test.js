@@ -46,7 +46,7 @@ tape('indexdocs.loadDoc', function(assert) {
     assert.deepEqual(grid.decode(patch.grid[Object.keys(patch.grid)[0]][0]), {
         id: 1,
         relev: 1,
-        score: 4, // scales score based on max score value (100)
+        score: 7, // log scales score of 100 based on max score value of 200
         x: 32,
         y: 32
     }, 'patch.grid[0][0]');

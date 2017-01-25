@@ -117,3 +117,57 @@ tape('filter.featureMatchesTypes', function(assert) {
     assert.end();
 });
 
+tape('filter.featureMatchesLanguage', function(assert) {
+    assert.ok(filter.featureMatchesLanguage({
+        properties: { 'carmen:text': 'New York' }
+    }, {
+        language: 'en'
+    }), 'allowed: languageMode !== strict');
+
+    assert.ok(filter.featureMatchesLanguage({
+        properties: { 'carmen:text': 'New York' }
+    }, {
+        languageMode: 'strict'
+    }), 'allowed: language is not defined');
+
+    assert.ok(filter.featureMatchesLanguage({
+        properties: { 'carmen:text_en': 'New York' }
+    }, {
+        language: 'en',
+        languageMode: 'strict'
+    }), 'allowed: matching language text');
+
+    assert.ok(filter.featureMatchesLanguage({
+        properties: { 'carmen:text_zh': '纽约州' }
+    }, {
+        language: 'zh_TW',
+        languageMode: 'strict'
+    }), 'allowed: matching language text');
+
+    assert.ok(filter.featureMatchesLanguage({
+        properties: {
+            'carmen:text_en': 'New York',
+            'carmen:text_es': 'Nueva York'
+        }
+    }, {
+        language: 'es',
+        languageMode: 'strict'
+    }), 'allowed: matching fallback language text');
+
+    assert.notOk(filter.featureMatchesLanguage({
+        properties: { 'carmen:text_en': 'New York' }
+    }, {
+        language: 'es',
+        languageMode: 'strict'
+    }), 'disallowed: matching fallback language text');
+
+    assert.notOk(filter.featureMatchesLanguage({
+        properties: { 'carmen:text': 'New York' }
+    }, {
+        language: 'en',
+        languageMode: 'strict'
+    }), 'disallowed: no matching text');
+
+    assert.end();
+});
+

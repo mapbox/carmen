@@ -101,6 +101,9 @@ as part of the `options` object:
 - `language` - ISO country code. If `carmen:text_{lc}` and/or `geocoder_format_{lc}`
   are available on a features, response will be returned in that language and
   appropriately formatted.
+- `languageMode` - string. If set to `"strict"` the returned features will be
+  filtered to only those with text matching the language specified by the
+  `language` option. Has no effect if `language` is not set.
 - `bbox` - a `[ w, s, e, n ]` bbox array to use for limiting search results.
   Only features inside the provided bbox will be included.
 
