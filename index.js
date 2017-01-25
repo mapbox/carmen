@@ -77,12 +77,15 @@ function Geocoder(indexes, options) {
                 source.shardlevel = info.geocoder_shardlevel || 0;
             }
 
-            var keys = Object.keys(info);
-            for (var ix = 0; ix < keys.length; ix ++) {
-                if (/geocoder_format_/.test(keys[ix])) source[keys[ix]] = info[keys[ix]]||false;
-            }
+            // Fold language templates into geocoder_format object
+            source.geocoder_format = { default: info.geocoder_format };
+            Object.keys(info).forEach(function(key) {
+                if (/^geocoder_format_/.exec(key)) {
+                    source.geocoder_format[key.replace(/^geocoder_format_/, '')] = info[key];
+                }
+            });
+
             source.geocoder_address_order = info.geocoder_address_order || 'ascending'; // get expected address order from index-level setting
-            source.geocoder_format = info.geocoder_format||false;
             source.geocoder_layer = (info.geocoder_layer||'').split('.').shift();
             source.geocoder_tokens = info.geocoder_tokens||{};
             source.geocoder_inherit_score = info.geocoder_inherit_score || false;
