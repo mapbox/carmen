@@ -2,10 +2,8 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 // limit_verify 1 implies that the correct result must be the very top
@@ -124,8 +122,7 @@ tape('new york ny', function(t) {
     });
 });
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

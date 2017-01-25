@@ -1,11 +1,10 @@
 var tape = require('tape');
 var zlib = require('zlib');
-var encodePhrase = require('../lib/util/termops').encodePhrase;
 var DawgCache = require('../lib/util/dawg');
 
 tape('create', function(assert) {
     var dict = new DawgCache();
-    assert.pass("dawg created")
+    assert.ok(dict, "dawg created")
     assert.end();
 });
 
@@ -23,12 +22,12 @@ tape('dump/load', function(assert) {
             assert.ifError(err);
             var loaded = new DawgCache(data);
             for (var i = 1; i <= 4; i++) {
-                assert.equal(loaded.hasPhrase({text: "a" + i, ender: false}), true, 'has a' + i);
+                assert.equal(loaded.hasPhrase("a" + i, false), true, 'has a' + i);
             }
-            assert.equal(loaded.hasPhrase({text: "a5", ender: false}), false, 'not a5');
+            assert.equal(loaded.hasPhrase("a5", false), false, 'not a5');
 
-            assert.equal(loaded.hasPhrase({text: "a", ender: false}), false, 'not a');
-            assert.equal(loaded.hasPhrase({text: "a", ender: true}), true, 'has a as degen');
+            assert.equal(loaded.hasPhrase("a", false), false, 'not a');
+            assert.equal(loaded.hasPhrase("a", true), true, 'has a as degen');
             assert.end();
         });
     });

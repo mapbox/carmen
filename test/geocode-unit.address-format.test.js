@@ -3,10 +3,8 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 // Test geocoder_address formatting + return place_name as germany style address (address number follows name)
@@ -222,7 +220,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('Search for an address without a number (multiple layers)', function(t) {
         c.geocode('fake street', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
-            t.deepEquals(res, { features: [ { center: [ 0, 0 ], context: [ { id: 'place.1', text: 'springfield' }, { id: 'postcode.1', text: '12345' }, { id: 'region.1', text: 'maine' }, { id: 'country.1', text: 'united states' } ], geometry: { coordinates: [[0,0],[0,0],[0,0]], type: 'MultiPoint' }, id: 'address.1', place_name: 'fake street springfield, maine 12345, united states', properties: {}, relevance: 0.79, text: 'fake street', type: 'Feature' } ], query: [ 'fake', 'street' ], type: 'FeatureCollection' });
+            t.deepEquals(res,  {"type":"FeatureCollection","query":["fake","street"],"features":[{"id":"address.1","type":"Feature","text":"fake street","place_name":"fake street springfield, maine 12345, united states","relevance":0.79,"place_type": ['address'],"properties":{},"center":[0,0],"geometry":{"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[0,0],[0,0],[0,0]]}]},"context":[{"id":"place.1","text":"springfield"},{"id":"postcode.1","text":"12345"},{"id":"region.1","text":"maine"},{"id":"country.1","text":"united states"}]}]});
             t.end();
         });
     });
@@ -315,7 +313,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('test address index for relev', function(t) {
         c.geocode('9 fake street', { limit_verify: 1 }, function(err, res) {
             t.ifError(err);
-            t.equals(res.features[0].relevance, 0.6566666666666666);
+            t.equals(res.features[0].relevance, 0.49);
             t.end();
         });
     });
@@ -376,8 +374,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

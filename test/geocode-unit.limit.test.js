@@ -2,10 +2,9 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
+var queue = require('d3-queue').queue;
 var addFeature = require('../lib/util/addfeature');
 
 (function() {
@@ -42,8 +41,8 @@ var addFeature = require('../lib/util/addfeature');
                     coordinates: [0,0]
                 }
             }, done);
-            q.awaitAll(t.end);
         }, i);
+        q.awaitAll(t.end);
     });
 
     tape('default response is 5 features (forward)', function(t) {
@@ -107,15 +106,16 @@ var addFeature = require('../lib/util/addfeature');
         place: new mem({
             maxzoom: 6
         }, function() {}),
+        address: new mem({
+            maxzoom: 12,
+            geocoder_name: 'address',
+            geocoder_type: 'address',
+            geocoder_address: true
+        }, function() {}),
         poi: new mem({
             maxzoom: 12,
             geocoder_name: 'poi',
             geocoder_type: 'poi'
-        }, function() {}),
-        address: new mem({
-            maxzoom: 12,
-            geocoder_name: 'poi',
-            geocoder_type: 'address'
         }, function() {})
     };
     var c = new Carmen(conf);
@@ -157,34 +157,32 @@ var addFeature = require('../lib/util/addfeature');
                     coordinates: coords[i-1]
                 }
             }, done);
-            q.awaitAll(t.end);
         }, i);
+        q.awaitAll(t.end);
     });
 
     tape('index address', function(t) {
-        var q = queue(1);
-        for (var i = 6; i < 11; i++) q.defer(function(i, done) {
-            addFeature(conf.address, {
-                id: i-5,
-                properties: {
-                    'carmen:text':'address ' + i,
-                    'carmen:center': coords[i-1],
-                },
-                geometry: {
-                    type: "Point",
-                    coordinates: coords[i-1]
-                }
-            }, done);
-            q.awaitAll(t.end);
-        }, i);
+        addFeature(conf.address, {
+            id: 1,
+            properties: {
+                'carmen:addressnumber': [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+                'carmen:text':'main road',
+                'carmen:center': coords[0],
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: coords
+            }
+        }, t.end);
     });
 
     tape('default response is 1 features (reverse)', function(t) {
-        c.geocode('-79.37745451927184,38.83420867393712', {  }, function(err, res) {
+        c.geocode('-79.37745451927184,38.83420867393712', { }, function(err, res) {
             t.ifError(err);
-            t.equal(res.features.length, 2, 'returns 1 result of 2 context');
-            t.equal(res.features[0].place_name, 'seneca rocks 5, west virginia');
-            t.equal(res.features[1].place_name, 'west virginia');
+            t.equal(res.features.length, 3, 'returns 1 result of 3 context');
+            t.equal(res.features[0].place_name, 'seneca rocks 5, main road, west virginia');
+            t.equal(res.features[1].place_name, '5 main road, west virginia');
+            t.equal(res.features[2].place_name, 'west virginia');
             t.end();
         });
     });
@@ -204,11 +202,11 @@ var addFeature = require('../lib/util/addfeature');
     tape('limit 5 results (reverse)', function(t) {
         c.geocode('-79.37745451927184,38.83420867393712', { limit: 5, types: ['poi'] }, function(err, res) {
             t.ifError(err);
-            t.equal(res.features[0].place_name, 'seneca rocks 5, west virginia');
-            t.equal(res.features[1].place_name, 'seneca rocks 2, west virginia');
-            t.equal(res.features[2].place_name, 'seneca rocks 3, west virginia');
-            t.equal(res.features[3].place_name, 'seneca rocks 4, west virginia');
-            t.equal(res.features[4].place_name, 'seneca rocks 1, west virginia');
+            t.equal(res.features[0].place_name, 'seneca rocks 5, main road, west virginia');
+            t.equal(res.features[1].place_name, 'seneca rocks 2, main road, west virginia');
+            t.equal(res.features[2].place_name, 'seneca rocks 3, main road, west virginia');
+            t.equal(res.features[3].place_name, 'seneca rocks 4, main road, west virginia');
+            t.equal(res.features[4].place_name, 'seneca rocks 1, main road, west virginia');
             t.equal(res.features.length, 5, 'returns 5 results');
             t.end();
         });
@@ -216,19 +214,30 @@ var addFeature = require('../lib/util/addfeature');
     tape('limit 6 results (reverse)', function(t) {
         c.geocode('-79.37745451927184,38.83420867393712', { limit: 6, types: ['poi'] }, function(err, res) {
             t.ifError(err);
-            t.equal(res.features[0].place_name, 'seneca rocks 5, west virginia');
-            t.equal(res.features[1].place_name, 'seneca rocks 2, west virginia');
-            t.equal(res.features[2].place_name, 'seneca rocks 3, west virginia');
-            t.equal(res.features[3].place_name, 'seneca rocks 4, west virginia');
-            t.equal(res.features[4].place_name, 'seneca rocks 1, west virginia');
+            t.equal(res.features[0].place_name, 'seneca rocks 5, main road, west virginia');
+            t.equal(res.features[1].place_name, 'seneca rocks 2, main road, west virginia');
+            t.equal(res.features[2].place_name, 'seneca rocks 3, main road, west virginia');
+            t.equal(res.features[3].place_name, 'seneca rocks 4, main road, west virginia');
+            t.equal(res.features[4].place_name, 'seneca rocks 1, main road, west virginia');
+            t.equal(res.features.length, 5, 'returns 5 results - hard limit');
+            t.end();
+        });
+    });
+    tape('limit 5 results (address)', function(t) {
+        c.geocode('-79.37745451927184,38.83420867393712', { limit: 5, types: ['address'] }, function(err, res) {
+            t.ifError(err);
+            t.equal(res.features[0].place_name, '5 main road, west virginia');
+            t.equal(res.features[1].place_name, '6 main road, west virginia');
+            t.equal(res.features[2].place_name, '2 main road, west virginia');
+            t.equal(res.features[3].place_name, '3 main road, west virginia');
+            t.equal(res.features[4].place_name, '8 main road, west virginia');
             t.equal(res.features.length, 5, 'returns 5 results - hard limit');
             t.end();
         });
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
@@ -298,13 +307,12 @@ tape('index.teardown', function(assert) {
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
 
-//Handle ITP lines 
+//Handle ITP lines
 (function() {
     var conf = {
         place: new mem({
@@ -365,8 +373,7 @@ tape('index.teardown', function(assert) {
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

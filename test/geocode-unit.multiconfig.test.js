@@ -1,9 +1,7 @@
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 var country =new mem(null, function() {});
@@ -21,6 +19,7 @@ var confB = {
 var pre = new Carmen(confA);
 
 tape('index province', function(t) {
+    t.ok(pre);
     addFeature(confA.country, {
         id:1,
         properties: {
@@ -59,8 +58,7 @@ tape('chicago (conf b)', function(t) {
     });
 });
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

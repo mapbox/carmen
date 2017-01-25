@@ -1,6 +1,5 @@
 var termops = require('../lib/util/termops');
 var test = require('tape');
-var clone = function(d) { return JSON.parse(JSON.stringify(d)); }
 
 test('termops.uniqPermutations', function(assert) {
     var a = termops.permutations(['a','b','c'], [0.2, 0.2, 0.6]);

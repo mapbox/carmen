@@ -3,10 +3,8 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 var conf = {
@@ -32,7 +30,7 @@ tape('index city', function(t) {
         id:1,
         properties: {
             'carmen:text':'windsor',
-            'carmen:zxy':['6/32/32','6/33/32'],
+            'carmen:zxy':['6/32/32','6/34/32'],
             'carmen:center':[0,0]
         }
     };
@@ -43,8 +41,8 @@ tape('index street', function(t) {
         id:1,
         properties: {
             'carmen:text':'windsor ct',
-            'carmen:zxy':['6/33/32'],
-            'carmen:center':[360/64,0]
+            'carmen:zxy':['6/34/32'],
+            'carmen:center':[360/32,0]
         }
     };
     addFeature(conf.street, street, t.end);
@@ -69,8 +67,7 @@ tape('windsor ct windsor', function(t) {
     });
 });
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

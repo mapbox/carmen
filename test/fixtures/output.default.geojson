@@ -1,0 +1,48 @@
+{
+    "type": "FeatureCollection",
+    "query": [
+        "toronto"
+    ],
+    "features": [
+        {
+            "id": "place.1",
+            "type": "Feature",
+            "text": "Toronto",
+            "place_name": "Toronto, Ontario, Canada",
+            "place_type": [
+                "place"
+            ],
+            "relevance": 0.99,
+            "properties": {
+                "wikidata": "Q172"
+            },
+            "bbox": [
+                -40,
+                -40,
+                40,
+                40
+            ],
+            "center": [
+                0,
+                0
+            ],
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    0,
+                    0
+                ]
+            },
+            "context": [
+                {
+                    "text": "Ontario",
+                    "id": "region.1"
+                },
+                {
+                    "text": "Canada",
+                    "id": "country.1"
+                }
+            ]
+        }
+    ]
+}

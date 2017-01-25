@@ -65,8 +65,11 @@ geocoder_group          | Optional + advanced. For indexes that share the exact 
 geocoder_tokens         | Optional + advanced. An object with a 1:1 from => to mapping of token strings to replace in input queries. e.g. 'Streets' => 'St'.
 geocoder_name           | Optional + advanced. A string to use instead of the provided config index id/key allowing multiple indexes to be treated as a single "logical" index.
 geocoder_type           | Optional + advanced. A string to be used instead the config index id/key. Omission of this falls back to geocoder_name and then to the id.
+geocoder_types          | Optional + advanced. An array of type strings. Only necessary for indexes that include multitype features.
 geocoder_version        | Required. Should be set to **6** for carmen@v11.x. Index versions <= 1 can be used for reverse geocoding but not forward.
 geocoder_cachesize      | Optional + advanced. Maximum number of shards to allow in the `carmen-cache` message cache. Defaults uptream to 65536 (maximum number of possible shards).
+geocoder_address_order  | Optional + advanced. A string that can be set to `ascending` or `descending` to indicate the expected ordering of address components for an index. Defaults to `ascending`.
+geocoder_inherit_score  | Optional + advanced. Set to `true` if features from this index should appear above other identically (ish) named parent features that are part of its context (e.g. promote New York (city) promoted above New York (state)). Defaults to `false`.
 
 *Note: The sum of maxzoom + geocoder_resolution must be no greater than 14.*
 
@@ -91,12 +94,15 @@ as part of the `options` object:
 - `allow_dupes` - boolean. If true, carmen will allow features with identical
   place names to be returned. Defaults to false.
 - `debug` - boolean. If true, the carmen debug object will be returned as part
-  of the results.
+  of the results and internal carmen properties will be preserved on feature
+  output. Defaults to false.
 - `stats` - boolean. If true, the carmen stats object will be returned as part
   of the results.
 - `language` - ISO country code. If `carmen:text_{lc}` and/or `geocoder_format_{lc}`
   are available on a features, response will be returned in that language and
   appropriately formatted.
+- `bbox` - a `[ w, s, e, n ]` bbox array to use for limiting search results.
+  Only features inside the provided bbox will be included.
 
 ### index(from, to, pointer, callback)
 
@@ -165,6 +171,7 @@ attribute         | description
 `carmen:center`   | Optional. An array in the form [lon,lat]. center must be on the geometry surface, or the center will be recalculated.
 `carmen:score`    | Optional. A float or integer to sort equally relevant results by. Higher values appear first. Docs with negative scores can contribute to a final result but are only returned if included in matches of a forward search query.
 `carmen:addressnumber`  | Optional. Used with `geocoder_address`. An array of addresses corresponding to the order of their geometries in the `GeometryCollection`
+`carmen:types`    | Optional. An array of types associating this feature with one or more feature classes defined by the source-level `geocoder_type` key. By setting multiple types a feature can move between various feature levels depending on the query and results. If omitted, defaults to the `geocoder_type` set by the feature's index.
 
 ### TIGER address interpolation
 
@@ -531,3 +538,50 @@ However, transliteration increases the potential for collisions between queries.
 For this reason, termops examines whether a given piece of text contains characters from the CJK (Chinese/Japanese/Korean) unicode blocks. If the text consists exclusively of such characters, a `z` is prepended to it. If there are any non-CJK characters, an `x` is prepended. This effectively isolates all-CJK tokens from everything else (including tokens that contain CJK characters alongside non-CJK characters).
 
 For clarity and simplicity, the above examples do not include these prepended chars. But in practice a query for `seattle washington` will be tokenized to `xseattle`, `xwashington` and `xseattle washington`.
+
+### geocoder_name, geocoder_type and combining indexes
+
+It is often useful to use multiple indexes to represent a single class of feature. For instance, you might have indexes named `usa-address` and `canada-address`. Such indexes can be grouped together into a combined class of indexes (e.g. `address`) by setting those indexes' `geocoder_name` value to `address`.
+
+It can be desirable to combine indexes using `geocoder_name` but still make them distinguishable by type filtering. For instance, the above `address` grouped index might be accompanied by a point of interest (POI) index, in which case it would be desirable to avoid returning both a POI (e.g. "White House") and a duplicative address feature (e.g. "1600 Pennsylvania Avenue"). This can be achieved by grouping the indexes together using `geocode_name`, as already described.
+
+However, it might _also_ be desirable to distinguish results from these indexes for purposes of filtering and identifying the class of feature in results' `id` field. This distinction can be accomplished by setting `geocoder_type` value of individual indexes that have been grouped with `geocoder_name`. In the above example, the POI and address indexes might share a `geocoder_name` of `address`, but the POI index could have a `geocoder_type` of `poi`.
+
+### type and subtype filtering
+
+The `types` parameter allows query results to be limited to specific classes of features as defined with `geocoder_name`. Using the above example, `address` and `poi` would be valid type filter values.
+
+Subtype filtering allows results from an index to be limited to its highest-scoring members. This can be a useful way of ensuring that queries highlight features of highest importance. For instance, a carsharing company might assign `city` features scores that are assigned in two numeric ranges: cities where the company operates (`current`), and where it has no presence (in descending order). Within each range, features could then be scored by city population, car ownership rates or some other metric. Given a situation like this, and assuming the numeric score ranges are of equal size, a `scoreranges` value on the index tileJSON's `metadata` object could be specified like:
+
+```js
+"geocoder_name": "city",
+"scoreranges": {
+  "operational": [
+    0.5,
+    1.0
+  ]
+}
+```
+
+With a configuration like this, valid type filters will include `city` and `city.operational`. Specifying both will return the union of features (i.e. it will operate the same way as simply specifying `city`).
+
+The ability to specify more than one score range per index has not yet been implemented.
+
+### multitype features
+
+The `carmen:types` property of a feature allows it to shift between different types while being stored in one source.
+
+```js
+{
+  "type": "Feature",
+  "properties": {
+    "carmen:text": "Sparta",
+    "carmen:types": [ "country", "city" ]
+  }
+}
+```
+
+In this example the feature Sparta can be returned as either a `country` feature or a `city` feature. Types should be listed in order of ascending preference (last is most preferred).
+
+To use multitype features properly, make sure to set the `geocoder_types` key of the source so that the source is not prematurely excluded from queries when the `types` filter is used.
+

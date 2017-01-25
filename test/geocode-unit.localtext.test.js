@@ -3,9 +3,7 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 var conf = {
@@ -61,18 +59,24 @@ tape('russia => Russian Federation', function(t) {
     });
 });
 
-tape('Rossiyskaya => Russian Federation', function(t) {
+tape('Rossiyskaya =/=> Russian Federation (synonyms are not available in autoc)', function(t) {
     c.geocode('Rossiyskaya', { limit_verify:1 }, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features[0].place_name, 'Russian Federation');
-        t.deepEqual(res.features[0].id, 'country.2');
-        t.deepEqual(res.features[0].id, 'country.2');
+        t.deepEqual(res.features.length, 0, 'No results');
         t.end();
     });
 });
 
-tape('Российская => Russian Federation', function(t) {
+tape('Российская => x (no autocomplete)', function(t) {
     c.geocode('Российская', { limit_verify:1 }, function(err, res) {
+        t.ifError(err);
+        t.deepEqual(res.features.length, 0, 'No results');
+        t.end();
+    });
+});
+
+tape('Российская Федерация => Russian Federation', function(t) {
+    c.geocode('Российская Федерация', { limit_verify:1 }, function(err, res) {
         t.ifError(err);
         t.deepEqual(res.features[0].place_name, 'Russian Federation');
         t.deepEqual(res.features[0].id, 'country.2');
@@ -110,10 +114,5 @@ tape('fake blah blah => [fail]', function(t) {
         t.notOk(res.features[0]);
         t.end();
     });
-});
-
-tape('index.teardown', function(assert) {
-    index.teardown();
-    assert.end();
 });
 

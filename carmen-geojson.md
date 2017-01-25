@@ -11,6 +11,7 @@ Carmen returns results as a [GeoJSON](http://geojson.org/) `FeatureCollection`:
                 "id": "place.4201",
                 "text": "Austin",
                 "place_name": "Austin, Texas, United States",
+                "place_type": [ "place" ],
                 "bbox": [-97.9383829999999, 30.098659, -97.5614889999999, 30.516863],
                 "center": [-97.7559964, 30.3071816],
                 "geometry": {
@@ -51,6 +52,7 @@ key | description
 id | Id of the feature of the form `{index}.{id}` where index is the id/handle of the datasource that contributed the result.
 text | Text representing the feature (e.g. "Austin").
 place_name | Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
+place_type | An array of index types that this feature may be returned as. Most features have only one type matching its id.
 bbox | Optional. Array bounding box of the form [minx,miny,maxx,maxy].
 address | Where applicable. Contains the housenumber for the returned feature
 center | Array of the form [lon,lat].

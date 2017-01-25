@@ -1,6 +1,56 @@
 var dedupe = require('../lib/util/dedupe');
 var tape = require('tape');
 
+tape('dedup lowercase vs caps', function(assert) {
+    var features = [
+        {
+            place_name: '20 main st',
+            text: 'main st',
+            address: 20,
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        },
+        {
+            place_name: '20 MAIN ST',
+            text: 'MAIN ST',
+            address: 20,
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        }
+    ];
+    assert.deepEqual(dedupe(features), [
+        features[0]
+    ], 'dedupes by lowercase vs caps');
+
+    assert.end();
+});
+
+tape('dedup - change relev order', function(assert) {
+    var dedup = dedupe(require('./fixtures/relev.json'));
+
+
+    assert.equals(dedup.length, 9)
+
+    assert.equals(dedup[0].relevance, 0.7969999999999999);
+    assert.equals(dedup[1].relevance, 0.574);
+    assert.equals(dedup[2].relevance, 0.495);
+    assert.equals(dedup[3].relevance, 0.43233333333333335);
+    assert.equals(dedup[4].relevance, 0.3233333333333333);
+    assert.equals(dedup[5].relevance, 0.3233333333333333);
+    assert.equals(dedup[6].relevance, 0.3233333333333333);
+    assert.equals(dedup[7].relevance, 0.25666666666666665);
+    assert.equals(dedup[8].relevance, 0.25666666666666665);
+
+    assert.end();
+
+}); 
+
 tape('dedupe', function(assert) {
     var features;
 

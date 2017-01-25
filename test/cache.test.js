@@ -1,5 +1,4 @@
 var Cache = require('../lib/util/cxxcache');
-var fs = require('fs');
 var test = require('tape');
 
 test('.shard', function(s) {
@@ -55,8 +54,8 @@ test('#pack', function(s) {
     // set should replace data
     cache.set('grid', 5, [0,1,2,4]);
     s.deepEqual(10, cache.pack('grid', 0).length);
-    cache.set('grid', 5, []);
-    s.deepEqual(4, cache.pack('grid', 0).length);
+    // throw on invalid grid
+    s.throws(cache.set.bind(null, 'grid', 5, []), 'cache.set throws on empty grid value');
     // now test packing data created via load
     var packer = new Cache('a');
     var array = [];

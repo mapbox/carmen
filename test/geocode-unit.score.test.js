@@ -2,10 +2,8 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 // Confirms that you can forward search a ghost feature and that a scored featre will always win
@@ -133,8 +131,8 @@ var addFeature = require('../lib/util/addfeature');
             id:1,
             properties: {
                 'carmen:text':'china',
-                'carmen:zxy':['6/33/32'],
-                'carmen:center':[360/64,0]
+                'carmen:zxy':['6/34/32'],
+                'carmen:center':[360/64*2,0]
             }
         };
         addFeature(conf.province, province, t.end);
@@ -144,8 +142,8 @@ var addFeature = require('../lib/util/addfeature');
             id:1,
             properties: {
                 'carmen:text':'china',
-                'carmen:zxy':['6/34/32'],
-                'carmen:center':[360/64*2,0]
+                'carmen:zxy':['6/36/32'],
+                'carmen:center':[360/64*4,0]
             }
         };
         addFeature(conf.city, city, t.end);
@@ -187,8 +185,8 @@ var addFeature = require('../lib/util/addfeature');
             properties: {
                 'carmen:score': 10,
                 'carmen:text':'china',
-                'carmen:zxy':['6/33/32'],
-                'carmen:center':[360/64,0]
+                'carmen:zxy':['6/34/32'],
+                'carmen:center':[360/64 * 2,0]
             }
         };
         addFeature(conf.province, province, t.end);
@@ -199,8 +197,8 @@ var addFeature = require('../lib/util/addfeature');
             properties: {
                 'carmen:score': 6,
                 'carmen:text':'china',
-                'carmen:zxy':['6/34/32'],
-                'carmen:center':[360/64*2,0]
+                'carmen:zxy':['6/36/32'],
+                'carmen:center':[360/64 * 4,0]
             }
         };
         addFeature(conf.city, city, t.end);
@@ -225,8 +223,36 @@ var addFeature = require('../lib/util/addfeature');
     });
 })();
 
-tape('index.teardown', function(assert) {
-    index.teardown();
+// confirm that a feature queried by id has a relevance set to 1
+(function() {
+    var conf = {
+        country: new mem(null, function() {}),
+    };
+    var c = new Carmen(conf);
+    tape('index country', function(t) {
+        var country = {
+            id:1,
+            properties: {
+                'carmen:score': 5,
+                'carmen:text':'usa',
+                'carmen:zxy':['6/32/32'],
+                'carmen:center':[0,0]
+            }
+        };
+        addFeature(conf.country, country, t.end);
+    });
+    
+    tape('query by id', function(t) {
+        c.geocode('country.1', null, function(err, res) {
+            t.ifError(err);
+            t.deepEqual(res.features[0].relevance, 1, "relevance is 1");
+            t.deepEqual(res.features.length, 1);
+            t.end();
+        });
+    });
+})();
+
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

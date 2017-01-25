@@ -10,7 +10,7 @@ var path = require('path');
 var Carmen = require('../index');
 var settings = require('../package.json');
 var argv = require('minimist')(process.argv, {
-    string: [ 'config', 'proximity', 'query', 'debug', 'types' ],
+    string: [ 'config', 'proximity', 'query', 'debug', 'types', 'tokens'],
     boolean: [ 'geojson', 'stats', 'help', 'version' ]
 });
 
@@ -18,6 +18,7 @@ if (argv.help) {
     console.log('carmen.js --query="<query>" [options]');
     console.log('[options]:');
     console.log('  --version               Print the carmen version');
+    console.log('  --tokens=<tokens.json>  Load global token file');
     console.log('  --config=<file.js>      Load index config from js (module)');
     console.log('  --limit="{limit}"       Customize the number of results returned');
     console.log('  --proximity="lat,lng"   Favour results by proximity');
@@ -53,7 +54,14 @@ if (argv.config) {
     opts = Carmen.autodir(path.resolve(__dirname + '/../tiles'));
 }
 
-var carmen = new Carmen(opts);
+var tokens = {};
+if (argv.tokens) {
+    tokens = require(path.resolve(argv.tokens));
+}
+
+var carmen = new Carmen(opts, {
+    tokens: tokens
+});
 
 if (argv.proximity) {
     if (argv.proximity.indexOf(',') === -1)
@@ -86,6 +94,7 @@ carmen.geocode(argv.query, {
     'indexes': true
 }, function(err, data) {
     if (err) throw err;
+    load = +new Date() - load;
     if (data.features.length && !argv.geojson) {
         console.log('Tokens');
         console.log('------');
@@ -108,11 +117,34 @@ carmen.geocode(argv.query, {
         console.log(JSON.stringify(data, null, 2));
     }
 
-    if (argv.debug) {
-        console.log('Debug\n-----');
-        console.log(data.debug);
+    if (argv.debug && data.debug) {
+        console.log('Debug');
+        console.log('=====');
+        console.log('id:', data.debug.id);
+        console.log('extid:', data.debug.extid);
+        console.log();
+
+        console.log('PhraseMatch');
+        console.log('-----------');
+        Object.keys(data.debug.phrasematch).forEach(function(idx) {
+            console.log('  ', idx, JSON.stringify(data.debug.phrasematch[idx]));
+        });
+        console.log()
+
+        console.log('SpatialMatch');
+        console.log('------------');
+        console.log('spatialmatch position:', data.debug.spatialmatch_position);
+        console.log(JSON.stringify(data.debug.spatialmatch, null, 2));
+        console.log();
+
+        console.log('VerifyMatch');
+        console.log('-----------');
+        console.log('verifymatch position:', data.debug.verifymatch_position);
+        console.log(JSON.stringify(data.debug.verifymatch, null, 2));
         console.log();
     }
+    else if (!data.debug)
+        console.log('No debug information collected (is this a reverse query?)');
 
     if (!argv.stats) process.exit(0);
     console.log('Stats');

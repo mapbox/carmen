@@ -2,10 +2,8 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var queue = require('queue-async');
 var addFeature = require('../lib/util/addfeature');
 
 //Tests string value for index level geocoder_stack
@@ -62,6 +60,14 @@ var addFeature = require('../lib/util/addfeature');
 
     tape('query filter', function(t) {
         c.geocode('0,0', { stacks: ['ca'] }, function(err, res) {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, 'Canada');
+            t.end();
+        });
+    });
+
+    tape('query filter - will be lowercased', function(t) {
+        c.geocode('0,0', { stacks: ['CA'] }, function(err, res) {
             t.ifError(err);
             t.equals(res.features[0].place_name, 'Canada');
             t.end();
@@ -365,8 +371,7 @@ var addFeature = require('../lib/util/addfeature');
         });
     });
 })();
-tape('index.teardown', function(assert) {
-    index.teardown();
+tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });

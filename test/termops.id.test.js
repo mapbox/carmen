@@ -1,5 +1,4 @@
 var termops = require('../lib/util/termops');
-var token = require('../lib/util/token');
 var test = require('tape');
 
 test('id - tests if searching by id', function(q) {

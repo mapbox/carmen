@@ -1,5 +1,287 @@
 # Changelog
 
+## 18.0.0
+
+- Breaking change: a log scale distribution is now used for the 3-bit grid cache simplified score
+- Move project to `@mapbox` namespace on npm
+- Fix the timing calculation reported with the `--stats` flag
+- Update outdated dependencies. In particular, use namesapced `@turf` modules
+
+## 17.10.1
+
+- Use `Number` instead of `parseFloat` to detect reverse queries as `parseFloat` will silently drop non-numeric parts of a string leading to `9a,10b` being interpreted as a reverse query.
+
+## 17.10.0
+
+- Update to `@mapbox/carmen-cache` package namespace and use latest release (`0.16.2`) that addresses several performance and stability issues.
+
+## 17.9.1
+
+- Fix a spatialmatch bug where low relevance partial text matches would displace higher-relevance full text matches
+
+## 17.9.0
+
+- Refine multitype behavior and add `place_type` key to explicitly enumerate the types a feature can be.
+
+## 17.8.5
+
+- Fix indexer behavior for indexes where the max score is specified as 0
+
+## 17.8.4
+
+- Change penalty from 0.006 => 0.01 to put it on the same %10 scale as other penalties
+
+## 17.8.3
+
+- Change indexing behavior: don't generate degens (for autocomplete) for feature synonyms
+
+## 17.8.2
+
+- Filter results disallowed by the `types` filter before sorting and limiting potential matches
+- In spatialmatch, sort stacks by index from lowest to highest when zoom level is the same
+- Add alternate unicode apostrophes for punctuation normalization
+
+## 17.8.1
+
+- Use fallback language when the specified language key exists, but has a null value.
+
+## 17.8.0
+
+- Update to `carmen-cache@0.15.0`.
+
+## 17.7.3
+
+- Automatically lowercase all `stacks` values for a given query
+
+## 17.7.2
+
+- Move eslint to dev dependencies.
+- Update to `carmen-cache@0.14.1`.
+
+## 17.7.1
+
+- Trim whitespace from text values when outputting feature values.
+
+## 17.7.0
+
+- Update to `carmen-cache@0.14.0`.
+
+## 17.6.5
+
+- Robustify language fallback behavior for unmatched language suffixes.
+
+## 17.6.4
+
+- Modified language fallback behavior to reflect feedback collected from human translators.
+
+## 17.6.3
+
+- Fix multitype corner case where a feature promoted across levels would not always be properly promoted.
+
+## 17.6.2
+
+- Update several dependencies to `@mapbox` namespaced versions.
+- Performance optimizations for `phrasematch()` when dealing with tokens that resolve to empty strings/whitespace when unidecoded.
+
+## 17.6.1
+
+- Fixes bug where unencodable text like emojis wasn't being ignored.
+
+## 17.6.0
+
+- Adds index-level option `geocoder_inherit_score` for promoting features that nest within other similar named parent features (e.g. promote New York (city) promoted above New York (state)).
+
+## 17.5.2
+
+- Add stopgap measure to indexer to partially handle features with > 10k zxy covers. (https://github.com/mapbox/carmen/pull/545)
+
+## 17.5.1
+
+- More consistent behavior for nested feature promotion when used with the `language` option.
+- Code and style improvements.
+
+## 17.5.0
+
+- Modifies verifyContext to better handle identically-named nested features e.g. "New York, New York". Preferentially returns the smaller feature in such cases.
+
+## 17.4.0
+
+- Introduce mechanisms for approximate guessing of requested language, both using heuristics and hard-coded fallbacks.
+
+## 17.3.0
+
+- Include private `carmen:` properties in feature output when in debug mode.
+- Switch `carmen:dbidx` to `carmen:index` to track feature to index relationship more easily.
+
+## 17.2.3
+
+- Performance improvements to `spatialmatch.stackable()`
+
+## 17.2.2
+
+- Fix bug where type filters would not always work correctly with forward geocodes and multitype indexes.
+
+## 17.2.1
+
+- Fix bug around feature loading in verifymatch.
+
+## 17.2.0
+
+- Adds support for individual multitype features in indexes determined by the `carmen:types` attribute. See README for more details.
+
+## 17.1.5
+
+- Fix typo in `lib/verifymatch.js`
+
+## 17.1.4
+
+- Performance optimizations for `spatialmatch.stackable()`.
+
+## 17.1.3
+
+- Fix for several calls that could lead to max call stack exceeded errors.
+
+## 17.1.2
+
+- During indexing, ensure all work in `process.stdout` finishes before exiting the process
+
+## 17.1.1
+
+- Fixes formatting of error message when an invalid `types` value is specified.
+
+## 17.1.0
+
+- Allows for filtering by subtypes (e.g. `poi.landmark`) which are defined by score range.
+
+## 17.0.0
+
+- Allow more flexible regexes in global tokens and refactor how they are applied.
+
+## 16.2.4
+
+- types + limit reverse query mode is now only a concept handled by reverseGeocode().
+- context() always returns a single context.
+- Adds context.nearest() for playing the role that the proximity context mode played before -- returns a flat array of [ lon, lat ] points that can then be context() queried for full features.
+- Adds additional unit test to demonstrate that in types/limits mode reverse geocodes do indeed load full features/derive address points properly.
+- More verbosity in --debug output
+
+## 16.2.3
+
+- Optimize vector geojson output at indexing time for ligther vector tiles.
+
+## 16.2.2
+
+- Bump carmen-cache for better error handling on index merges.
+
+## 16.2.1
+
+- Use stricter eslint rules.
+
+## 16.2.0
+
+- Add support for addresses that are ordered from largest feature to smallest
+- Fix a bug in ID queries when `geocoder_name` != `geocoder_type`.
+
+## 16.1.0
+
+- Fix an issue with too-strict filtering of indexes that use a combined stack range
+
+## 16.0.0
+
+- All addresses are now standardized to GeometryCollections internally
+- Allows for mixed type (pt/itp) features as well as reducing complexity at runtime (at the cost of index time)
+
+## 15.2.4
+
+- Bump due to npm strangeness
+
+## 15.2.3
+
+- Fix global token bug that prevented global tokens being used by indexer
+- Added ability for carmen cli to specify global token file
+
+## 15.2.2
+
+- Moves limit constants into `lib/constants.js` for easier tracking and updates.
+
+## 15.2.1
+
+- Set the relevance score to 1 when a feature is queried by ID
+
+## 15.2.0
+
+- Ensures that tokens which contain whitespaces are a part of the global tokens
+
+## 15.1.9
+
+- Fix bug where dedup could put less relevant results infront of higher ones
+
+## 15.1.8
+
+- Fix broken phrasematch bench
+- Use normalized ranges ITP instead of default feature - fixes bug where null lf/lt/rf/rt would hard error if null instead of empty array
+
+## 15.1.7
+
+- Ensure address clusters are all lowercase to ensure no case disparity between input query and cluster
+
+## 15.1.6
+
+- Dedup identical addresses with different cases ie MAIN ST = Main St
+
+## 15.1.5
+
+- Remove unneccesary check for carmen:center at indexing time
+
+## 15.1.4
+
+- Fix bug where non-clustered address ranges (LineString) of a numeric type would fail
+
+## 15.1.3
+
+- Fix bug where copy, merge streams would be considered done prematurely
+
+## 15.1.2
+
+- Moved merge operations to cpp threadpool for better performance
+- carmen-cache@0.13.0
+
+## 15.1.1
+
+- carmen-cache@0.12.1
+
+## 15.1.0
+
+- Add `bbox` query option
+- save memory in addresscluster by calculating minimum without unnecessary array
+- 30% more efficient string traversal in getPhraseDegens
+
+## 15.0.1
+
+- Removes parallel process capability in carmen-indexer
+
+## 15.0.0
+
+- Disables generation of autocomplete degens in the grid cache at indexing time for translated text
+
+## 14.2.0
+
+- Upgrades mapnik to version 3.5
+
+## 14.1.0
+
+ - Add infrastructure for merging multiple indexes together, to facilitate
+   parallel indexing.
+
+## 14.0.2
+
+- Improve query fallback logic by scoring queries per number of matching
+  indexes as well, instead of just per number of matching tokens.
+
+## 14.0.1
+
+- Segment exclusively Chinese/Japanese/Korean (CJK) terms from everthing else in the index in order to avoid collisions introduced by unidecoding (e.g. 'Aruba' / 'Arubatazhou').
+
 ## 13.1.0
 
 - Add a flag to disable autocomplete in forward geocoding

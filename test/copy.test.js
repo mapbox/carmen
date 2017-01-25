@@ -1,10 +1,6 @@
-var fs = require('fs');
-var util = require('util');
 var Carmen = require('..');
-var MBTiles = require('mbtiles');
 var mem = require('../lib/api-mem');
 var index = require('../lib/index');
-var mem = require('../lib/api-mem');
 var docs = require('./fixtures/mem-docs.json');
 var test = require('tape');
 
@@ -54,11 +50,6 @@ test('copy', function(t) {
             q.deepEqual(require('./fixtures/mem-analyze.json'), stats);
             q.end();
         });
-    });
-
-    t.test('index.teardown', function(assert) {
-        index.teardown();
-        assert.end();
     });
 
     t.end();

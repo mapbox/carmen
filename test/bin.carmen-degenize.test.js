@@ -1,15 +1,5 @@
-var fs = require('fs');
-var path = require('path');
 var tape = require('tape');
 var spawn = require('child_process').spawn;
-var tmpdir = require('os').tmpdir();
-var bin = path.resolve(path.join(__dirname, '..', 'scripts'));
-
-var Carmen = require('../index.js');
-var MBTiles = require('mbtiles');
-var Memsource = require('../lib/api-mem');
-var tmpindex = path.join(tmpdir, 'test-carmen-index.mbtiles');
-var addFeature = require('../lib/util/addfeature');
 
 tape('carmen-degenize', function(assert) {
     var child = spawn(__dirname + '/../scripts/carmen-degenize.js', []);

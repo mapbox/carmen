@@ -1,0 +1,166 @@
+[
+    {
+        "id": "address.159465331380780",
+        "type": "Feature",
+        "text": "Willoughby Rd",
+        "place_name": "5041 Willoughby Rd, Holt, Michigan 48842, United States",
+        "relevance": 0.822,
+        "properties": {},
+        "center": [ -84.553104, 42.654827 ],
+        "geometry": { "type": "Point", "coordinates": [ -84.553104, 42.654827 ], "interpolated": true, "omitted": true },
+        "address": "5041",
+        "context": [
+            { "id": "place.283508", "text": "Holt" },
+            { "id": "postcode.7632766181359600", "text": "48842" },
+            { "id": "region.4136402180101000", "text": "Michigan" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "address.7175519811969760",
+        "type": "Feature",
+        "text": "E Willoughby Rd",
+        "place_name": "5041 E Willoughby Rd, Holt, Michigan 48842, United States",
+        "relevance": 0.7969999999999999,
+        "properties": {},
+        "center": [ -84.544327, 42.654026 ],
+        "geometry": { "type": "Point", "coordinates": [ -84.544327, 42.654026 ] },
+        "address": "5041",
+        "context": [
+            { "id": "place.283508", "text": "Holt" },
+            { "id": "postcode.7632766181359600", "text": "48842" },
+            { "id": "region.4136402180101000", "text": "Michigan" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "place.283508",
+        "type": "Feature",
+        "text": "Holt",
+        "place_name": "Holt, Michigan, United States",
+        "relevance": 0.574,
+        "properties": { },
+        "bbox": [ -84.602949007201, 42.5968119947627, -84.4733769900055, 42.6693690099354 ],
+        "center": [ -84.5152, 42.6406 ],
+        "geometry": { },
+        "context": [
+            { "id": "postcode.7632766181359600", "text": "48842" },
+            { "id": "region.4136402180101000", "text": "Michigan" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "address.48182937040449",
+        "type": "Feature",
+        "text": "Willoughby Rd",
+        "place_name": "5041 Willoughby Rd, Lansing, Michigan 48911, United States",
+        "relevance": 0.495,
+        "properties": {},
+        "center": [ -84.544764, 42.654819 ],
+        "geometry": { "type": "Point", "coordinates": [ -84.544764, 42.654819 ], "interpolated": true },
+        "address": "5041",
+        "context": [
+            { "id": "place.335035", "text": "Lansing" },
+            { "id": "postcode.14777061636247970", "text": "48911" },
+            { "id": "region.4136402180101000", "text": "Michigan" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "postcode.7632766181359600",
+        "type": "Feature",
+        "text": "48842",
+        "place_name": "48842, Michigan, United States",
+        "relevance": 0.43233333333333335,
+        "properties": {},
+        "bbox": [ -84.602949, 42.596812, -84.473377, 42.669369 ],
+        "center": [ -84.543309, 42.633501 ],
+        "geometry": { },
+        "context": [
+            { "id": "region.4136402180101000", "text": "Michigan" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "region.4136402180101000",
+        "type": "Feature",
+        "text": "Michigan",
+        "place_name": "Michigan, United States",
+        "relevance": 0.3233333333333333,
+        "properties": { },
+        "bbox": [ -90.418392, 41.696118, -82.122971, 48.306063 ],
+        "center": [ -84.515887, 44.978718 ],
+        "geometry": { },
+        "context": [
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "address.177167496361964",
+        "type": "Feature",
+        "text": "Willoughby Rd",
+        "place_name": "5041 Willoughby Rd, Villa Rica, Georgia 30180, United States",
+        "relevance": 0.3233333333333333,
+        "properties": {},
+        "center": [ -84.890351, 33.759405 ],
+        "geometry": { "type": "Point", "coordinates": [ -84.890351, 33.759405 ], "interpolated": true },
+        "address": "5041",
+        "context": [
+            { "id": "place.648855", "text": "Villa Rica" },
+            { "id": "postcode.12827915150206510", "text": "30180" },
+            { "id": "region.11141557633212140", "text": "Georgia" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "address.41965263874844",
+        "type": "Feature",
+        "text": "Willoughby Rd",
+        "place_name": "5041 Willoughby Rd, Lumberton, North Carolina 28358, United States",
+        "relevance": 0.3233333333333333,
+        "properties": {},
+        "center": [ -78.917953, 34.539088 ],
+        "geometry": { "type": "Point", "coordinates": [ -78.917953, 34.539088 ], "interpolated": true },
+        "address": "5041",
+        "context": [
+            { "id": "place.372501", "text": "Lumberton" },
+            { "id": "postcode.5700398125496470", "text": "28358" },
+            { "id": "region.3482268365338340", "text": "North Carolina" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "neighborhood.7429434239716170",
+        "type": "Feature",
+        "text": "West Holt",
+        "place_name": "West Holt, Pomona, 91768, California, United States",
+        "relevance": 0.25666666666666665,
+        "properties": {},
+        "bbox": [ -117.815363103835, 34.0497242409855, -117.75970459, 34.0754124384 ],
+        "center": [ -117.78, 34.06 ],
+        "geometry": {},
+        "context": [
+            { "id": "place.486176", "text": "Pomona" },
+            { "id": "postcode.10931826756807150", "text": "91768" },
+            { "id": "region.6020809690311220", "text": "California" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    },
+    {
+        "id": "address.260878531970510",
+        "type": "Feature",
+        "text": "Willoughby Lake Rd",
+        "place_name": "5041 Willoughby Lake Rd, Barton, Vermont 05822, United States",
+        "relevance": 0.25666666666666665,
+        "properties": {},
+        "center": [ -72.092821, 44.78252 ],
+        "geometry": { "type": "Point", "coordinates": [ -72.092821, 44.78252 ], "interpolated": true },
+        "address": "5041",
+        "context": [
+            { "id": "place.27848", "text": "Barton" },
+            { "id": "postcode.9411289248180520", "text": "05822" },
+            { "id": "region.10294489344042160", "text": "Vermont" },
+            { "id": "country.12862386939497690", "text": "United States" }
+        ]
+    }
+]

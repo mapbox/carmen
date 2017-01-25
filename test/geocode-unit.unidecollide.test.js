@@ -3,7 +3,6 @@
 
 var tape = require('tape');
 var Carmen = require('..');
-var index = require('../lib/index');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
 var addFeature = require('../lib/util/addfeature');
@@ -53,8 +52,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
 
-    tape('index.teardown', function(assert) {
-        index.teardown();
+    tape('teardown', function(assert) {
         context.getTile.cache.reset();
         assert.end();
     });
@@ -94,8 +92,7 @@ var addFeature = require('../lib/util/addfeature');
         });
     });
 
-    tape('index.teardown', function(assert) {
-        index.teardown();
+    tape('teardown', function(assert) {
         context.getTile.cache.reset();
         assert.end();
     });

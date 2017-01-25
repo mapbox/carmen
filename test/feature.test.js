@@ -39,7 +39,7 @@ tape('transform', function(assert) {
                 coordinates: [[ -97, 37 ], [ -97.2, 37 ]]
             }
         });
-        t.deepEquals(feat, { 
+        t.deepEquals(feat, {
             id: 7654,
             type: 'Feature',
             properties: {
@@ -74,7 +74,7 @@ tape('transform', function(assert) {
         });
         t.end();
     });
-    
+
     assert.test('transform - cluster', function(t) {
         var feat = feature.transform({
             _id: 7654,
@@ -85,17 +85,20 @@ tape('transform', function(assert) {
             id: 7654,
             type: "Feature",
             properties: {
-                'carmen:addressnumber': [ '2' ],
+                'carmen:addressnumber': [[ '2' ]],
                 'carmen:text': 'Main Street'
             },
             geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0]]
+                type: 'GeometryCollection',
+                geometries: [{
+                    type: 'MultiPoint',
+                    coordinates: [[0,0]]
+                }]
             }
         });
         t.end();
     });
-    
+
     assert.test('transform - range', function(t) {
         var feat = feature.transform({
             _id: "7654",
@@ -117,25 +120,74 @@ tape('transform', function(assert) {
                 ]
             }
         });
-        t.deepEquals(feat,  { 
+        t.deepEquals(feat, {
             geometry: {
-                coordinates: [ [ [ -97, 37 ], [ -97.2, 37 ], [ -97.2, 37.2 ] ], [ [ -97.2, 37.2 ], [ -97.4, 37.2 ], [ -97.4, 37.4 ] ] ], 
-                type: 'MultiLineString'
+                type: 'GeometryCollection',
+                geometries: [{
+                    coordinates: [ [ [ -97, 37 ], [ -97.2, 37 ], [ -97.2, 37.2 ] ], [ [ -97.2, 37.2 ], [ -97.4, 37.2 ], [ -97.4, 37.4 ] ] ],
+                    type: 'MultiLineString'
+                }]
             },
             id: '7654',
             properties: {
                 'carmen:center': [ -97.1, 37 ],
-                'carmen:lfromhn': [ '100', '200' ],
-                'carmen:ltohn': [ '198', '298' ],
-                'carmen:parityl': [ 'E', 'E' ],
-                'carmen:parityr': [ 'O', 'B' ],
+                'carmen:lfromhn': [[ '100', '200' ]],
+                'carmen:ltohn': [[ '198', '298' ]],
+                'carmen:parityl': [[ 'E', 'E' ]],
+                'carmen:parityr': [[ 'O', 'B' ]],
                 'carmen:rangetype': 'tiger',
-                'carmen:rfromhn': [ '101', '201' ],
-                'carmen:rtohn': [ '199', '299' ],
+                'carmen:rfromhn': [[ '101', '201' ]],
+                'carmen:rtohn': [[ '199', '299' ]],
                 'carmen:score': 99,
                 'carmen:text': 'Main Street'
-            }, 
+            },
             type: 'Feature' });
         t.end();
     });
+
+    assert.test('transform - range2', function(t) {
+        var feat = feature.transform({
+            _id: "7654",
+            _text: "Main Street",
+            _center: [ -97.1, 37 ],
+            _score: 99,
+            _rangetype: "tiger",
+            _lfromhn: "100",
+            _ltohn: "198",
+            _rfromhn: "201",
+            _rtohn: "299",
+            _parityl: "E",
+            _parityr: "B",
+            _geometry: {
+                type: "LineString",
+                coordinates: [[ -97.2, 37.2 ],[ -97.4, 37.2 ],[ -97.4, 37.4 ]]
+            }
+        });
+
+        t.deepEquals(feat, {
+            geometry: {
+                type: 'GeometryCollection',
+                geometries: [{
+                    coordinates: [ [ [ -97.2, 37.2 ], [ -97.4, 37.2 ], [ -97.4, 37.4 ] ] ],
+                    type: 'MultiLineString'
+                }]
+            },
+            id: '7654',
+            properties: {
+                'carmen:center': [ -97.1, 37 ],
+                'carmen:lfromhn': [[ '100' ]],
+                'carmen:ltohn': [[ '198' ]],
+                'carmen:parityl': [[ 'E' ]],
+                'carmen:parityr': [[ 'B' ]],
+                'carmen:rangetype': 'tiger',
+                'carmen:rfromhn': [[ '201' ]],
+                'carmen:rtohn': [[ '299' ]],
+                'carmen:score': 99,
+                'carmen:text': 'Main Street'
+            },
+            type: 'Feature' });
+        t.end();
+    });
+
+    assert.end();
 });

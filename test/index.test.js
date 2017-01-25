@@ -1,16 +1,13 @@
 var fs = require('fs');
 var path = require('path');
 var Stream = require('stream');
-var util = require('util');
 var Carmen = require('..');
 var index = require('../lib/index');
-var MBTiles = require('mbtiles');
 var mem = require('../lib/api-mem');
 
 var UPDATE = process.env.UPDATE;
 var test = require('tape');
 var termops = require('../lib/util/termops');
-var token = require('../lib/util/token');
 
 test('index - streaming interface', function(assert) {
     var inputStream = fs.createReadStream(path.resolve(__dirname, './fixtures/small-docs.jsonl'), { encoding: 'utf8' });
@@ -50,45 +47,11 @@ test('index - streaming interface', function(assert) {
     assert.end();
 });
 
-test('index.generateStats', function(assert) {
-    var docs = [{
-        type: "Feature",
-        properties: {
-            "carmen:text": 'main street',
-            "carmen:score": 2
-        },
-        geometry: {}
-    },{
-        type: "Feature",
-        properties: {
-            "carmen:text": 'Main Road',
-            "carmen:score": 1
-        },
-        geometry: {}
-    }];
-    var geocoder_tokens = token.createReplacer({'street':'st','road':'rd'});
-    assert.deepEqual(index.generateFrequency(docs, {}), {
-        0: [ 4 ],           // 4 total
-        1: [ 2 ],           // 2 maxscore
-        1247264641460936: [ 1 ],  // 1 road
-        1804046053253033:  [ 1 ],  // 1 street
-        609659059851264: [ 2 ]   // 2 main
-    });
-    // @TODO should 'main' in this case collapse down to 2?
-    assert.deepEqual(index.generateFrequency(docs, geocoder_tokens), {
-        0: [ 4 ],           // 4 total
-        1: [ 2 ],           // 2 maxscore
-        3363289958149993: [ 1 ],  // 1 road
-        441841902895320: [ 1 ],  // 1 street
-        609659059851264: [ 2 ]   // 2 main
-    });
-    assert.end();
-});
-
 test('index.update -- error', function(t) {
     var memdocs = require('./fixtures/mem-docs.json');
     var conf = { to: new mem(memdocs, null, function() {}) };
     var carmen = new Carmen(conf);
+    t.ok(carmen);
     t.test('update 1', function(q) {
         index.update(conf.to, [{
             id: 1,
@@ -135,6 +98,7 @@ test('index.update -- error', function(t) {
 test('index.update freq', function(t) {
     var conf = { to: new mem(null, function() {}) };
     var carmen = new Carmen(conf);
+    t.ok(carmen);
     t.test('error no id', function(q) {
         index.update(conf.to, [{ properties: { 'carmen:text': 'main st' } }], { zoom: 6 }, function(err) {
             q.equal('Error: doc has no id', err.toString());
@@ -154,8 +118,9 @@ test('index.update freq', function(t) {
         });
     });
     t.test('indexes doc with geometry and no carmen:center', function(q) {
-        index.update(conf.to, [{ id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}}], { zoom: 6 }, function(err) {
-            q.equal('Error: doc has no carmen:center on id:1', err.toString());
+        var doc = { id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}};
+        index.update(conf.to, [doc], { zoom: 6 }, function(err, res, too) {
+            q.ok(doc.properties['carmen:center'], 'carmen:center has been set');
             q.end();
         });
     });
@@ -176,7 +141,7 @@ test('index', function(t) {
         var doc = JSON.parse(chunk.toString());
 
         //Only print on error or else the logs are super long
-        if (!doc.id) assert.ok(doc.id, 'has id: ' + doc.id);
+        if (!doc.id) t.ok(doc.id, 'has id: ' + doc.id);
         done();
     };
 
@@ -234,13 +199,25 @@ test('index', function(t) {
             q.end();
         });
     });
-    t.test('loadall stat ignores Dict', function(q) {
-        q.ok(!conf.to._geocoder.hasDict('stat', 0));
-        carmen.loadall(conf.to, 'stat', 1, function(err) {
+    t.test('confirm that iterator works', function(q) {
+        var monotonic = true;
+        var output = [];
+        var iterator = conf.to.geocoderDataIterator('freq');
+        var next = function(err, n) {
             q.ifError(err);
-            q.ok(!conf.to._geocoder.hasDict('stat', 0));
-            q.end();
-        });
+            if (!n.done) {
+                output.push(n.value.shard);
+                if (output.length > 1) {
+                    monotonic = monotonic && (output[output.length - 1] > output[output.length - 2])
+                }
+                iterator.asyncNext(next);
+            } else {
+                q.ok(monotonic, 'shard iterator produces sorted output');
+                q.equal(output.length, 184, "index has 184 shards");
+                q.end();
+            }
+        };
+        iterator.asyncNext(next);
     });
     t.test('unloadall index', function(q) {
         carmen.unloadall(conf.to, 'freq', function(err) {
@@ -260,7 +237,7 @@ test('error -- zoom too high', function(t) {
         var doc = JSON.parse(chunk.toString());
 
         //Only print on error or else the logs are super long
-        if (!doc.id) assert.ok(doc.id, 'has id: ' + doc.id);
+        if (!doc.id) t.ok(doc.id, 'has id: ' + doc.id);
         done();
     };
 
@@ -270,8 +247,8 @@ test('error -- zoom too high', function(t) {
     };
 
     var carmen = new Carmen(conf);
-    carmen.index(inputStream, conf.to, { 
-        zoom: 15, 
+    carmen.index(inputStream, conf.to, {
+        zoom: 15,
         output: outputStream
     }, function(err) {
         t.equal('Error: zoom must be less than 15 --- zoom was 15', err.toString());
@@ -287,7 +264,7 @@ test('error -- zoom too low', function(t) {
         var doc = JSON.parse(chunk.toString());
 
         //Only print on error or else the logs are super long
-        if (!doc.id) assert.ok(doc.id, 'has id: ' + doc.id);
+        if (!doc.id) t.ok(doc.id, 'has id: ' + doc.id);
         done();
     };
 
@@ -307,6 +284,7 @@ test('error -- zoom too low', function(t) {
 test('index phrase collection', function(assert) {
     var conf = { test:new mem(null, {maxzoom:6}, function() {}) };
     var c = new Carmen(conf);
+    assert.ok(c);
     var docs = [{
         id:1,
         type: 'Feature',
@@ -355,7 +333,7 @@ test('error -- _geometry too high resolution', function(t) {
         var doc = JSON.parse(chunk.toString());
 
         //Only print on error or else the logs are super long
-        if (!doc.id) assert.ok(doc.id, 'has id: ' + doc.id);
+        if (!doc.id) t.ok(doc.id, 'has id: ' + doc.id);
         done();
     };
 
@@ -373,77 +351,13 @@ test('error -- _geometry too high resolution', function(t) {
     });
 });
 
-test('error -- carmen:zxy too large tile-cover', function(t) {
-    var tiles = [];
-    for (var i = 0; i < 10002; i++) { tiles.push('6/32/32'); }
-
-    var docs = [{
-        id: 1,
-        type: 'Feature',
-        properties: {
-            'carmen:text': 'fake street',
-            'carmen:center': [0,0],
-            'carmen:zxy': ['6/32/32']
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [0,0]
-        }
-    }, {
-        id:1,
-        type: 'Feature',
-        properties: {
-            'carmen:text': 'fake street',
-            'carmen:center': [0,0],
-            'carmen:zxy': tiles
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [0,0]
-        }
-    }];
-
-    var s = new Stream.Readable();
-    s._read = function noop() {}; // redundant? see update below
-    s.push(JSON.stringify(docs[0]) + '\n');
-    s.push(JSON.stringify(docs[1]) + '\n');
-    s.push(null);
-
-    var outputStream = new Stream.Writable();
-    outputStream._write = function(chunk, encoding, done) {
-        var doc = JSON.parse(chunk.toString());
-
-        //Only print on error or else the logs are super long
-        if (!doc.id) assert.ok(doc.id, 'has id: ' + doc.id);
-        done();
-    };
-
-    var conf = {
-        to: new mem(docs, null, function() {})
-    };
-    var carmen = new Carmen(conf);
-    carmen.index(s, conf.to, { 
-        zoom: 6,
-        output: outputStream
-    }, function(err) {
-        t.equal('Error: zxy exceeded 10000, doc id:1', err.toString());
-        t.end();
-    });
-});
-
 test('index.cleanDocs', function(assert) {
-    var docs;
     var sourceWithAddress = {geocoder_address:true};
     var sourceWithoutAddress = {geocoder_address:false};
 
     assert.equal(typeof index.cleanDocs(sourceWithAddress, [{ geometry:{}} ])[0].geometry, 'object', 'with address: preserves geometry');
     assert.equal(typeof index.cleanDocs(sourceWithoutAddress, [{geometry:{}}])[0].geometry, 'undefined', 'without address: removes geometry');
     assert.equal(typeof index.cleanDocs(sourceWithAddress, [{geometry:{},properties: { 'carmen:addressnumber':{}} }])[0]._geometry, 'undefined', 'with carmen:addressnumber: preserves geometry');
-    assert.end();
-});
-
-test('index.teardown', function(assert) {
-    index.teardown();
     assert.end();
 });
 
