@@ -1,5 +1,23 @@
 # Changelog
 
+## 18.1.4
+
+- Update to carmen-cache@0.16.4.
+
+## 18.1.3
+
+- Add support for IL style addresses: `43N134 Woodward Ave.`
+- Revert spatialmatch stack truncation from 18.1.2
+- Update to carmen-cache@0.16.3 with additional `coalesce()` performance optimizations
+
+## 18.1.2
+
+- Spatialmatch the top 4 most specific features of each subquery stack as a performance optimization/safeguard against massive `coalesce()` jobs
+
+## 18.1.1
+
+- Optimizations to runtime query and indexing operations
+
 ## 18.1.0
 
 - Adds new querytime option languageMode which can be set to `strict` to limit returned features to only those that fully match the language specified in the language option
