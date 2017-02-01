@@ -170,7 +170,7 @@ tape('query batched features', function(t) {
 
 tape('check relevance', function(t) {
     context.getTile.cache.reset();
-    addFeature.resetLogs();
+    addFeature.resetLogs(conf);
     c.geocode('midway united states', {allow_dupes: true, types:['place', 'region']}, function(err, res) {
         t.equals(res.features[0].id, 'region.1', 'finds region feature first');
         t.equals(res.features[0].relevance, 1, 'region has relevance of 1');
