@@ -88,3 +88,16 @@ test('scoredist', function(t) {
 
     t.end();
 });
+
+// The radius of effect extends further at lower zooms
+test('zoom weighting', function(t) {
+    var score = 1000;
+    var distance = 100; //miles
+
+    t.deepEqual(scoredist(score, distance, 6), 3600, 'zoom 6');
+    t.deepEqual(scoredist(score, distance, 8), 2800, 'zoom 8');
+    t.deepEqual(scoredist(score, distance, 10), 2000, 'zoom 10');
+    t.deepEqual(scoredist(score, distance, 12), 1200, 'zoom 12');
+    t.deepEqual(scoredist(score, distance, 14), 400, 'zoom 14');
+    t.end();
+});
