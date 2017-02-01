@@ -311,6 +311,7 @@
                     ]
                 },
                 "carmen:geocoder_address_order": "ascending",
+                "carmen:zoom": 6,
                 "carmen:scoredist": 1
             },
             "bbox": [
