@@ -19,7 +19,6 @@ for (var k=2048; k<2080; k++) {
         tiles.push(tile);
     }
 }
-
 tiles1 = tiles.slice(0, 341);
 tiles2 = tiles.slice(341,682);
 tiles3 = tiles.slice(682);
@@ -70,8 +69,11 @@ tape('index place', function(t) {
 tape('query', function(t) {
     context.getTile.cache.reset();
     addFeature.resetLogs(conf);
-    c.geocode('san', {debug: 1, proximity: [3, -3]}, function(err, res) {
-        console.log("Res", res.features)
+    c.geocode('san', {debug: true, proximity: [3, -3]}, function(err, res) {
+        t.equal(res.features[1].id, 'place.3', 'proximity boosts lower-scored place');
+        t.equal(res.features[1].properties['carmen:score'] < res.features[2].properties['carmen:score'], true, 'place.3 has a lower score than place.2');
+        t.equal(res.features[1].properties['carmen:distance'] < res.features[2].properties['carmen:distance'], true, 'place.3 is closer than place.2 to proximity point');
+        t.equal(res.features[1].properties['carmen:scoredist'] > res.features[2].properties['carmen:scoredist'], true, 'place.2 has a higher scoredist than place.3');
         t.end();
     });
 });
