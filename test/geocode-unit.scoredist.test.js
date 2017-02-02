@@ -14,14 +14,13 @@ var queue = require('d3-queue').queue;
     };
     var c = new Carmen(conf);
     tape('index address (signal 1)', function(t) {
-        // TODO make the center more extreme again once log scoring is merged
         addFeature(conf.address, {
             id:200,
             properties: {
                 'carmen:text':'main st',
-                'carmen:zxy':['6/32/16'],
-                'carmen:score':10000,
-                'carmen:center':[0,40]
+                'carmen:zxy':['6/0/0'],
+                'carmen:score':1000,
+                'carmen:center':[-179.99,85]
             }
         }, t.end);
     });
@@ -44,7 +43,7 @@ var queue = require('d3-queue').queue;
                 properties: {
                     'carmen:text':'main st',
                     'carmen:zxy':['6/32/32'],
-                    'carmen:score':0,
+                    'carmen:scorei':50,
                     'carmen:center':[0,0]
                 }
             }, done);
