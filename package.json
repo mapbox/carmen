@@ -6,7 +6,7 @@
   "author": "Mapbox (https://www.mapbox.com)",
   "license": "BSD",
   "dependencies": {
-    "@mapbox/carmen-cache": "mapbox/carmen-cache#proximity-more-accurate",
+    "@mapbox/carmen-cache": "0.16.5",
     "@mapbox/geojsonhint": "^1.2.0",
     "@mapbox/locking": "^3.0.0",
     "@mapbox/sphericalmercator": "~1.0.1",
