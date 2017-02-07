@@ -78,3 +78,13 @@ tape('getText', function(assert) {
     assert.end();
 });
 
+tape('sr_RS', function(assert) {
+
+    var sr = 'sr';
+    var sr_Latn = 'sr_Latn';
+    var sr_Cyrl = 'sr_Cyrl';
+
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
+
+    assert.end();
+});
