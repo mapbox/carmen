@@ -214,6 +214,15 @@
   "sr_Latn": [
     "sr_Cyrl"
   ],
+  "sr_BA": [
+    "sr_Latn"
+  ],
+  "sr_CS": [
+    "sr_Latn"
+  ],
+  "sr_ME": [
+    "sr_Latn"
+  ],
   "sr_RS": [
     "sr_Latn"
   ],
