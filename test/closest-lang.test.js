@@ -78,13 +78,18 @@ tape('getText', function(assert) {
     assert.end();
 });
 
+// sr_BA, sr_CS, sr_ME, and sr_RS (regions where serbian is spoken) fall back to `sr_Latn`. Other (non-serbian-speaking) regions fall back to `sr`
 tape('sr_RS', function(assert) {
 
     var sr = 'sr';
     var sr_Latn = 'sr_Latn';
     var sr_Cyrl = 'sr_Cyrl';
 
+    assert.equal(closestLangLabel('sr-BA', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
+    assert.equal(closestLangLabel('sr-CS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
+    assert.equal(closestLangLabel('sr-ME', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
     assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
+    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr);
 
     assert.end();
 });
