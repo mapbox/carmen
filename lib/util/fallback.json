@@ -206,25 +206,49 @@
   ],
   "sr": [
     "bs",
-    "hr"
+    "hr",
+    "ru"
   ],
   "sr_Cyrl": [
-    "sr_Latn"
+    "sr",
+    "ru",
+    "sr_Latn",
+    "bs",
+    "hr"
   ],
   "sr_Latn": [
+    "hr",
+    "bs",
+    "sr",
     "sr_Cyrl"
   ],
   "sr_BA": [
-    "sr_Latn"
+    "sr_Latn",
+    "hr",
+    "bs",
+    "sr",
+    "sr_Cyrl"
   ],
   "sr_CS": [
-    "sr_Latn"
+    "sr_Latn",
+    "hr",
+    "bs",
+    "sr",
+    "sr_Cyrl"
   ],
   "sr_ME": [
-    "sr_Latn"
+    "sr_Latn",
+    "hr",
+    "bs",
+    "sr",
+    "sr_Cyrl"
   ],
   "sr_RS": [
-    "sr_Latn"
+    "sr_Latn",
+    "hr",
+    "bs",
+    "sr",
+    "sr_Cyrl"
   ],
   "sv": [
     "en"

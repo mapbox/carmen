@@ -78,18 +78,23 @@ tape('getText', function(assert) {
     assert.end();
 });
 
-// sr_BA, sr_CS, sr_ME, and sr_RS (regions where serbian is spoken) fall back to `sr_Latn`. Other (non-serbian-speaking) regions fall back to `sr`
-tape('sr_RS', function(assert) {
+// sr_BA, sr_CS, sr_ME, and sr_RS (regions where serbian is spoken) fall back to `sr_Latn`, then `hr` and `bs`. Other (non-serbian-speaking) regions fall back to `sr`
+tape('serbian fallbacks', function(assert) {
 
     var sr = 'sr';
     var sr_Latn = 'sr_Latn';
     var sr_Cyrl = 'sr_Cyrl';
+    var hr = 'hr';
+    var bs = 'bs';
 
-    assert.equal(closestLangLabel('sr-BA', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
-    assert.equal(closestLangLabel('sr-CS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
-    assert.equal(closestLangLabel('sr-ME', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
-    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn);
-    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr);
+    assert.equal(closestLangLabel('sr-BA', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-BA falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-CS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-CS falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-ME', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-ME falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-RS falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr, 'sr-XX falls back to sr');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, hr: hr, bs: bs }), hr, 'use hr if sr_Latn not present');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, bs: bs }), bs, 'use bs if sr_Latn and hr not present');
+
 
     assert.end();
 });
