@@ -197,3 +197,46 @@ tape('filter.equivalentLanguages', function(assert) {
     assert.end();
 });
 
+tape('filter.noMixedScripts', function(assert) {
+    assert.ok(filter.noMixedScripts({
+        place_name: 'Парис, Teksas, Sjedinjene Američke Države'
+    }, {
+        languageMode: 'strict'
+    }), 'allowed: language is not defined');
+
+    assert.ok(filter.noMixedScripts({
+        place_name: 'Парис, Teksas, Sjedinjene Američke Države'
+    }, {
+        language: 'sr'
+    }), 'allowed: languageMode is not defined');
+
+    assert.ok(filter.noMixedScripts({
+        place_name: 'Парис, Teksas, Sjedinjene Američke Države'
+    }, {
+        language: 'sr',
+        languageMode: 'stirct'
+    }), 'allowed: languageMode !== "strict"');
+
+    assert.ok(filter.noMixedScripts({
+        place_name: '20001'
+    }, {
+        language: 'sr',
+        languageMode: 'strict'
+    }), 'allowed: numeric result');
+
+    assert.ok(filter.noMixedScripts({
+        place_name: '20001 Washington DC'
+    }, {
+        language: 'sr',
+        languageMode: 'strict'
+    }), 'allowed: mixed numeric & text result');
+
+    assert.notOk(filter.noMixedScripts({
+        place_name: 'Парис, Teksas, Sjedinjene Američke Države'
+    }, {
+        language: 'sr',
+        languageMode: 'strict'
+    }), 'disallowed: mixed Cyrillic and Latin text');
+
+    assert.end();
+});

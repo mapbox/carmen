@@ -9,6 +9,7 @@
     "@mapbox/carmen-cache": "0.16.5",
     "@mapbox/geojsonhint": "^1.2.0",
     "@mapbox/locking": "^3.0.0",
+    "@mapbox/scriptsniff": "0.0.1",
     "@mapbox/sphericalmercator": "~1.0.1",
     "@mapbox/tilebelt": "1.0.x",
     "@turf/bbox": "^3.7.3",
