@@ -86,15 +86,18 @@ tape('serbian fallbacks', function(assert) {
     var sr_Cyrl = 'sr_Cyrl';
     var hr = 'hr';
     var bs = 'bs';
+    var languageMode = 'strict';
 
-    assert.equal(closestLangLabel('sr-BA', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-BA falls back to sr_Latn');
-    assert.equal(closestLangLabel('sr-CS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-CS falls back to sr_Latn');
-    assert.equal(closestLangLabel('sr-ME', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-ME falls back to sr_Latn');
-    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr_Latn, 'sr-RS falls back to sr_Latn');
-    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }), sr, 'sr-XX falls back to sr');
-    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, hr: hr, bs: bs }), hr, 'use hr if sr_Latn not present');
-    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, bs: bs }), bs, 'use bs if sr_Latn and hr not present');
+    assert.equal(closestLangLabel('sr-BA', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }, null, languageMode), sr_Latn, 'sr-BA falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-CS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }, null, languageMode), sr_Latn, 'sr-CS falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-ME', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }, null, languageMode), sr_Latn, 'sr-ME falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }, null, languageMode), sr_Latn, 'sr-RS falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Latn: sr_Latn, sr_Cyrl: sr_Cyrl }, null, languageMode), sr_Latn, 'sr-XX falls back to sr_Latn');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, hr: hr, bs: bs }, null, languageMode), hr, 'use hr if sr_Latn not present');
+    assert.equal(closestLangLabel('sr-RS', { sr: sr, sr_Cyrl: sr_Cyrl, bs: bs }, null, languageMode), bs, 'use bs if sr_Latn and hr not present');
 
+    assert.equal(closestLangLabel('sr-XX', { sr: sr, sr_Cyrl: sr_Cyrl, hr: hr, bs: bs }, null, languageMode), undefined, 'no equivalent language matching unless explicitly set');
+    assert.equal(closestLangLabel('sr-Latn', { sr: sr }, null, languageMode), undefined, 'no mixed scripts in strict mode');
 
     assert.end();
 });

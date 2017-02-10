@@ -1,13 +1,13 @@
 {
     "hr": [
         "bs",
-        "sr"
+        "sr_Latn"
     ],
     "bs": [
         "hr",
-        "sr"
+        "sr_Latn"
     ],
-    "sr": [
+    "sr_Latn": [
         "bs",
         "hr"
     ]
