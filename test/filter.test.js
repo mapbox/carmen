@@ -192,7 +192,7 @@ tape('filter.featureMatchesLanguage', function(assert) {
 });
 
 tape('filter.equivalentLanguages', function(assert) {
-    assert.ok(filter.equivalentLanguages("sr", "hr"));
+    assert.ok(filter.equivalentLanguages("sr_Latn", "hr"));
 
     assert.end();
 });
