@@ -43,12 +43,44 @@ tape('add POIs', function(assert) {
     }
     docs.push(poi);
 
+    poi = {
+        id: 3,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'c',
+            'carmen:score':'10000',
+            'carmen:zxy':['6/32/31'],
+            'carmen:center':[1.005,1.005]
+        },
+        geometry: {
+            type: 'Point',
+            coordinates: [1.005,1.005]
+        }
+    }
+    docs.push(poi);
+
+    poi = {
+        id: 4,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'d',
+            'carmen:score':'10',
+            'carmen:zxy':['6/32/31'],
+            'carmen:center':[1.006,1.006]
+        },
+        geometry: {
+            type: 'Point',
+            coordinates: [1.006,1.006]
+        }
+    }
+    docs.push(poi);
+
     addFeature(conf.poi, docs, assert.end);
 
 });
 
 tape('reverse distance threshold - close enough', function(assert) {
-    c.geocode('0.106,-0.106', null, function(err, res) {
+    c.geocode('0.106,-0.106', {}, function(err, res) {
         assert.deepEqual(res.features.length, 1, 'finds a feature when coords are off by .006');
     });
 
@@ -56,8 +88,16 @@ tape('reverse distance threshold - close enough', function(assert) {
 });
 
 tape('reverse distance threshold - too far', function(assert) {
-    c.geocode('0.107,-0.107', null, function(err, res) {
+    c.geocode('0.107,-0.107', {}, function(err, res) {
         assert.deepEqual(res.features.length, 0, 'does not find a feature when coords are off by .007');
+    });
+
+    assert.end();
+});
+
+tape('get the higher-scored, more distant feature first', function(assert) {
+    c.geocode('1.007, 1.007', {}, function(err, res) {
+        assert.deepEqual(res.features[0].id, 'poi.3', 'higher-scored feature comes back first');
     });
 
     assert.end();
