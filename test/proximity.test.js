@@ -18,3 +18,10 @@ test('proximity.distance', function(assert) {
     assert.equal(proximity.distance([-170, 0], [10, 0], { x: 0, y: 1, zoom: 2 }), 5946.081666100757);
     assert.end();
 });
+
+test('proximity.distscore', function(assert) {
+    assert.deepEqual(proximity.distscore(50, 10), 200, '20x score bump when 50 meters away');
+    assert.deepEqual(proximity.distscore(500, 10000), 20000, '2x score bump when 500 meters away');
+
+    assert.end();
+});
