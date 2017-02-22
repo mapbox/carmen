@@ -91,7 +91,6 @@ function Geocoder(indexes, options) {
             source.geocoder_inherit_score = info.geocoder_inherit_score || false;
             source.geocoder_universal_text = info.geocoder_universal_text || false;
             source.token_replacer = token.createReplacer(info.geocoder_tokens||{});
-            source.geocoder_type = info.geocoder_type || '';
 
             if (tokenValidator(source.token_replacer)) {
                 throw new Error('Using global tokens');
