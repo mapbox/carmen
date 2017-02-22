@@ -129,7 +129,7 @@ tape('reverse distance threshold - too far', function(assert) {
 });
 
 tape('get the higher-scored, more distant feature first', function(assert) {
-    c.geocode('1.007, 1.007', {}, function(err, res) {
+    c.geocode('1.007, 1.007', {reverseMode: 'score'}, function(err, res) {
         assert.deepEqual(res.features[0].id, 'poi.3', 'higher-scored feature comes back first');
     });
 
