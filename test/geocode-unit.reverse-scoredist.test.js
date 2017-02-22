@@ -5,7 +5,16 @@ var mem = require('../lib/api-mem');
 var addFeature = require('../lib/util/addfeature');
 
 var conf = {
-    poi: new mem({ maxzoom:6 }, function() {})
+    address: new mem({
+        maxzoom:6,
+        geocoder_type: 'address',
+        geocoder_name: 'address'
+    }, function() {}),
+    poi: new mem({
+        maxzoom:6,
+        geocoder_type: 'poi',
+        geocoder_name: 'address'
+    }, function() {})
 };
 var c = new Carmen(conf);
 
@@ -76,6 +85,30 @@ tape('add POIs', function(assert) {
     docs.push(poi);
 
     addFeature(conf.poi, docs, assert.end);
+
+});
+
+tape('add address', function(assert) {
+    var docs = [];
+    var address;
+
+    address = {
+        id: 1,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'e',
+            'carmen:score':'1',
+            'carmen:zxy':['6/32/31'],
+            'carmen:center':[1.0071,1.0071]
+        },
+        geometry: {
+            type: 'Point',
+            coordinates: [1.006,1.006]
+        }
+    }
+    docs.push(address);
+
+    addFeature(conf.address, docs, assert.end);
 
 });
 
