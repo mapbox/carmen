@@ -13,7 +13,8 @@ var conf = {
     poi: new mem({
         maxzoom:6,
         geocoder_type: 'poi',
-        geocoder_name: 'address'
+        geocoder_name: 'address',
+        geocoder_reverse_mode: true
     }, function() {})
 };
 var c = new Carmen(conf);
