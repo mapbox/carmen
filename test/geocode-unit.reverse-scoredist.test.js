@@ -2,7 +2,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     address: new mem({
@@ -20,10 +22,7 @@ var conf = {
 var c = new Carmen(conf);
 
 tape('add POIs', function(assert) {
-    var docs = [];
-    var poi;
-
-    poi = {
+    var poi = {
         id: 1,
         type: 'Feature',
         properties: {
@@ -36,9 +35,11 @@ tape('add POIs', function(assert) {
             coordinates: [0,0]
         }
     }
-    docs.push(poi);
+    queueFeature(conf.poi, poi, assert.end);
+});
 
-    poi = {
+tape('add POIs', function(assert) {
+    var poi = {
         id: 2,
         type: 'Feature',
         properties: {
@@ -51,9 +52,11 @@ tape('add POIs', function(assert) {
             coordinates: [0.1,-0.1]
         }
     }
-    docs.push(poi);
+    queueFeature(conf.poi, poi, assert.end);
+});
 
-    poi = {
+tape('add POIs', function(assert) {
+    var poi = {
         id: 3,
         type: 'Feature',
         properties: {
@@ -67,9 +70,11 @@ tape('add POIs', function(assert) {
             coordinates: [1.005,1.005]
         }
     }
-    docs.push(poi);
+    queueFeature(conf.poi, poi, assert.end);
+});
 
-    poi = {
+tape('add POIs', function(assert) {
+    var poi = {
         id: 4,
         type: 'Feature',
         properties: {
@@ -83,17 +88,11 @@ tape('add POIs', function(assert) {
             coordinates: [1.006,1.006]
         }
     }
-    docs.push(poi);
-
-    addFeature(conf.poi, docs, assert.end);
-
+    queueFeature(conf.poi, poi, function() { buildQueued(conf.poi, assert.end) });
 });
 
 tape('add address', function(assert) {
-    var docs = [];
-    var address;
-
-    address = {
+    var address = {
         id: 1,
         type: 'Feature',
         properties: {
@@ -107,9 +106,8 @@ tape('add address', function(assert) {
             coordinates: [1.006,1.006]
         }
     }
-    docs.push(address);
 
-    addFeature(conf.address, docs, assert.end);
+    queueFeature(conf.address, address, function() { buildQueued(conf.address, assert.end) });
 
 });
 
