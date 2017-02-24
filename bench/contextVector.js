@@ -34,7 +34,7 @@ var source = {
 suite.add('context vector', {
 	'defer': true,
 	'fn': function(deferred) {
-        context.contextVector(source, -97.4707, 39.4362, false, {}, null, false, function(err, data) {
+        context.contextVector(source, -97.4707, 39.4362, false, {}, null, false, false, function(err, data) {
     	    deferred.resolve();
         });
 	}
