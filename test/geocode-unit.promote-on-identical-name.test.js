@@ -6,7 +6,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     country: new mem({ maxzoom: 6 }, function() {}),
@@ -19,7 +22,7 @@ var conf = {
 var c = new Carmen(conf);
 
 tape('index country', function(t) {
-    addFeature(conf.country, {
+    queueFeature(conf.country, {
         id:1,
         properties: {
             'carmen:score': 5,
@@ -57,7 +60,7 @@ tape('index country', function(t) {
 });
 
 tape('index region', function(t) {
-    addFeature(conf.region, {
+    queueFeature(conf.region, {
         id: 2,
         properties: {
             'carmen:score':3,
@@ -96,7 +99,7 @@ tape('index region', function(t) {
 
 
 tape('index place', function(t) {
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id: 3,
         properties: {
             'carmen:score':1,
@@ -134,7 +137,7 @@ tape('index place', function(t) {
 });
 
 tape('index poi', function(t) {
-    addFeature(conf.poi, {
+    queueFeature(conf.poi, {
         id:4,
         properties: {
             'carmen:score': null,
@@ -147,6 +150,16 @@ tape('index poi', function(t) {
             coordinates: [-73.9666, 40.7811]
         }
     }, t.end);
+});
+
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('let\'s find new york', function(t) {
@@ -181,7 +194,7 @@ var conf2 = {
 var c2 = new Carmen(conf2);
 
 tape('index country', function(t) {
-    addFeature(conf2.country, {
+    queueFeature(conf2.country, {
         id: 10,
         properties: {
             'carmen:score': 10,
@@ -220,7 +233,7 @@ tape('index country', function(t) {
 
 ['region', 'district', 'place'].forEach(function(f, i) {
     tape('index ' + f, function(t) {
-        addFeature(conf2[f], {
+        queueFeature(conf2[f], {
             id: i + 1,
             properties: {
                 'carmen:score': 5 - i,
@@ -256,6 +269,15 @@ tape('index country', function(t) {
             }
         }, t.end);
     });
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf2).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf2[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('nonthaburi', function(t) {

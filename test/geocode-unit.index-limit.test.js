@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {};
 for (var i = 0; i < 127; i++) {
@@ -15,7 +18,7 @@ conf['place'] = new mem({maxzoom: 6, geocoder_name:'place'}, function() {});
 var c = new Carmen(conf);
 tape('index place', function(assert) {
     assert.deepEqual(Object.keys(conf).length, 128, '128 indexes configured');
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id:1,
         properties: {
             'carmen:text':'Chicago',
@@ -23,6 +26,15 @@ tape('index place', function(assert) {
             'carmen:center':[0,0]
         }
     }, assert.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 tape('query place', function(t) {
     c.geocode('Chicago', { limit_verify: 1 }, function(err, res) {
@@ -45,4 +57,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     country: new mem(null, function() {}),
@@ -14,7 +17,7 @@ var conf = {
 };
 var c = new Carmen(conf);
 tape('index country', function(t) {
-    addFeature(conf.country, {
+    queueFeature(conf.country, {
         id:1,
         properties: {
             'carmen:text':'australia',
@@ -24,7 +27,7 @@ tape('index country', function(t) {
     }, t.end);
 });
 tape('index province', function(t) {
-    addFeature(conf.province, {
+    queueFeature(conf.province, {
         id:2,
         properties: {
             'carmen:text':'western australia',
@@ -34,7 +37,7 @@ tape('index province', function(t) {
     }, t.end);
 });
 tape('index place', function(t) {
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id:3,
         properties: {
             'carmen:text':'albany',
@@ -43,6 +46,16 @@ tape('index place', function(t) {
         }
     }, t.end);
 });
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
+});
+
 // should reflect relevance of albany + australia (relev ~ 1), not albany + western australia (relev ~ 0.8)
 tape('albany australia', function(t) {
     c.geocode('albany australia', {}, function(err, res) {

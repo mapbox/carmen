@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     country: new mem({ maxzoom: 6 }, function() {}),
@@ -17,7 +20,7 @@ var conf = {
 
 var c = new Carmen(conf);
 tape('index country', function(t) {
-    addFeature(conf.country, {
+    queueFeature(conf.country, {
         id:1,
         properties: {
             'carmen:score':25000,
@@ -29,7 +32,7 @@ tape('index country', function(t) {
     }, t.end);
 });
 tape('index region', function(t) {
-    addFeature(conf.region, {
+    queueFeature(conf.region, {
         id:1,
         properties: {
             'carmen:score':3500,
@@ -41,7 +44,7 @@ tape('index region', function(t) {
     }, t.end);
 });
 tape('index place', function(t) {
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id:1,
         properties: {
             'carmen:score':2500,
@@ -53,7 +56,7 @@ tape('index place', function(t) {
     }, t.end);
 });
 tape('index poi landmark', function(t) {
-    addFeature(conf.poi_cn, {
+    queueFeature(conf.poi_cn, {
         id:1,
         properties: {
             'carmen:score':500,
@@ -68,7 +71,7 @@ tape('index poi landmark', function(t) {
     }, t.end);
 });
 tape('index poi', function(t) {
-    addFeature(conf.poi_cn, {
+    queueFeature(conf.poi_cn, {
         id:2,
         properties: {
             'carmen:score':5,
@@ -83,7 +86,7 @@ tape('index poi', function(t) {
     }, t.end);
 });
 tape('index offset poi', function(t) {
-    addFeature(conf.poi_cn, {
+    queueFeature(conf.poi_cn, {
         id:3,
         properties: {
             'carmen:score':5,
@@ -96,6 +99,52 @@ tape('index offset poi', function(t) {
             coordinates: [113.651, 34.75]
         }
     }, t.end);
+});
+
+tape('index second poi (nonlandmark)', function(t) {
+    queueFeature(conf.poi_au, {
+        id:3,
+        properties: {
+            'carmen:score':50,
+            'carmen:text':'australia nonlandmark',
+            'carmen:zxy':['14/15152/9491'],
+            'carmen:center':[152.94, -27.44]
+        }
+    }, t.end);
+});
+
+tape('index second poi (landmark)', function(t) {
+    queueFeature(conf.poi_au, {
+        id:4,
+        properties: {
+            'carmen:score':51,
+            'carmen:text':'australia landmark',
+            'carmen:zxy':['14/15152/9491'],
+            'carmen:center':[152.94, -27.44]
+        }
+    }, t.end);
+});
+
+tape('index third poi (ambiguous landmark)', function(t) {
+    queueFeature(conf.poi_au, {
+        id:5,
+        properties: {
+            'carmen:score':51,
+            'carmen:text':'china lm',
+            'carmen:zxy':['14/15152/9491'],
+            'carmen:center':[152.94, -27.44]
+        }
+    }, t.end);
+});
+
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 // invalid options.types type
@@ -127,7 +176,7 @@ tape('china types: ["asdf"]', function(t) {
 tape('china types: ["poi.landmark"]', function(t) {
     c.geocode('china', { types:['poi.landmark'] }, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features.length, 1, '1 result');
+        t.deepEqual(res.features.length, 2, '2 results');
         t.deepEqual(res.features[0].text, 'china lm', 'landmarks beat pois');
         t.end();
     });
@@ -137,7 +186,7 @@ tape('china types: ["poi.landmark"]', function(t) {
 tape('china types:[poi.landmark, poi]', function(t) {
     c.geocode('china', { types:['poi.landmark', 'poi'] }, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features.length, 3, '3 results');
+        t.deepEqual(res.features.length, 4, '4 results');
         t.deepEqual(res.features[0].text, 'china lm', 'subtypes work');
         t.end();
     });
@@ -147,7 +196,7 @@ tape('china types:[poi.landmark, poi]', function(t) {
 tape('china poi returns poi.landmark also', function(t) {
     c.geocode('china', { types:['poi'] }, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features.length, 3, '2 results');
+        t.deepEqual(res.features.length, 4, '4 results');
         t.deepEqual(res.features[0].text, 'china lm', 'landmark ranks higher than poi.');
         t.end();
     });
@@ -311,42 +360,6 @@ tape('reverse: poi.landmark (limit 5, expect 1)', function(t) {
         ], 'preserves full context of place result (including place, region, country)');
         t.end();
     });
-});
-
-tape('index second poi (nonlandmark)', function(t) {
-    addFeature(conf.poi_au, {
-        id:3,
-        properties: {
-            'carmen:score':50,
-            'carmen:text':'australia nonlandmark',
-            'carmen:zxy':['14/15152/9491'],
-            'carmen:center':[152.94, -27.44]
-        }
-    }, t.end);
-});
-
-tape('index second poi (landmark)', function(t) {
-    addFeature(conf.poi_au, {
-        id:4,
-        properties: {
-            'carmen:score':51,
-            'carmen:text':'australia landmark',
-            'carmen:zxy':['14/15152/9491'],
-            'carmen:center':[152.94, -27.44]
-        }
-    }, t.end);
-});
-
-tape('index third poi (ambiguous landmark)', function(t) {
-    addFeature(conf.poi_au, {
-        id:5,
-        properties: {
-            'carmen:score':51,
-            'carmen:text':'china lm',
-            'carmen:zxy':['14/15152/9491'],
-            'carmen:center':[152.94, -27.44]
-        }
-    }, t.end);
 });
 
 tape('fwd: landmark filtering works w/ diff score ranges', function(t) {

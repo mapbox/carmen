@@ -4,7 +4,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     test: new mem({maxzoom:14}, function() {})
@@ -20,7 +22,7 @@ tape('index test', function(t) {
             'carmen:center':[-2.17405858745506,53.4619151830114]
         }
     };
-    addFeature(conf.test, feature, t.end);
+    queueFeature(conf.test, feature, function() { buildQueued(conf.test, t.end) });
 });
 
 tape('forward between tiles', function(t) {

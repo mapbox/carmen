@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Test that geocoder returns index names for context
 (function() {
@@ -27,7 +30,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
     });
 
     tape('index region', function(t) {
@@ -43,7 +46,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.region, region, t.end);
+        queueFeature(conf.region, region, t.end);
     });
 
     tape('index place', function(t) {
@@ -59,7 +62,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
 
     tape('index postcode', function(t) {
@@ -75,7 +78,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.postcode, postcode, t.end);
+        queueFeature(conf.postcode, postcode, t.end);
     });
 
     tape('index address', function(t) {
@@ -91,7 +94,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[0,0],[0,0],[0,0]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Search for an address & check indexes', function(t) {

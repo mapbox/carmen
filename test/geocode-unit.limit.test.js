@@ -5,7 +5,9 @@ var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
 var queue = require('d3-queue').queue;
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -18,7 +20,7 @@ var addFeature = require('../lib/util/addfeature');
     };
     var c = new Carmen(conf);
     tape('index country', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id: 1,
             properties: {
                 'carmen:text':'United States',
@@ -30,7 +32,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('index place', function(t) {
         var q = queue(1);
         for (var i = 1; i < 21; i++) q.defer(function(i, done) {
-            addFeature(conf.place, {
+            queueFeature(conf.place, {
                 id:i,
                 properties: {
                     'carmen:text':'place ' + i,
@@ -42,6 +44,16 @@ var addFeature = require('../lib/util/addfeature');
                 }
             }, done);
         }, i);
+        q.awaitAll(t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
         q.awaitAll(t.end);
     });
 
@@ -120,7 +132,7 @@ var addFeature = require('../lib/util/addfeature');
     };
     var c = new Carmen(conf);
     tape('index place', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id: 1,
             properties: {
                 'carmen:text':'west virginia',
@@ -146,7 +158,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('index poi', function(t) {
         var q = queue(1);
         for (var i = 1; i < 6; i++) q.defer(function(i, done) {
-            addFeature(conf.poi, {
+            queueFeature(conf.poi, {
                 id:i,
                 properties: {
                     'carmen:text':'seneca rocks ' + i,
@@ -162,7 +174,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index address', function(t) {
-        addFeature(conf.address, {
+        queueFeature(conf.address, {
             id: 1,
             properties: {
                 'carmen:addressnumber': [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
@@ -174,6 +186,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: coords
             }
         }, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('default response is 1 features (reverse)', function(t) {
@@ -255,7 +277,7 @@ tape('teardown', function(assert) {
     };
     var c = new Carmen(conf);
     tape('index place', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id: 1,
             properties: {
                 'carmen:text':'west virginia',
@@ -266,7 +288,7 @@ tape('teardown', function(assert) {
     });
 
     tape('index address', function(t) {
-        addFeature(conf.address, {
+        queueFeature(conf.address, {
             id:1,
             properties: {
                 'carmen:text':'main street',
@@ -291,6 +313,16 @@ tape('teardown', function(assert) {
                 ]
             }
         }, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Reverse Cluster', function(t) {
@@ -325,7 +357,7 @@ tape('teardown', function(assert) {
     };
     var c = new Carmen(conf);
     tape('index place', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id: 1,
             properties: {
                 'carmen:text':'west virginia',
@@ -336,7 +368,7 @@ tape('teardown', function(assert) {
     });
 
     tape('index address', function(t) {
-        addFeature(conf.address, {
+        queueFeature(conf.address, {
             id:1,
             properties: {
                 'carmen:text':'main street',
@@ -359,6 +391,16 @@ tape('teardown', function(assert) {
                 ]
             }
         }, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Reverse ITP', function(t) {

@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     region: new mem({maxzoom:6, geocoder_types:['region','place']}, function() {}),
@@ -14,7 +17,7 @@ var conf = {
 var c = new Carmen(conf);
 
 tape('index region', function(t) {
-    addFeature(conf.region, {
+    queueFeature(conf.region, {
         id:1,
         geometry: {
             type: 'Polygon',
@@ -35,7 +38,7 @@ tape('index region', function(t) {
 });
 
 tape('index place', function(t) {
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id:1,
         geometry: {
             type: 'Polygon',
@@ -55,7 +58,7 @@ tape('index place', function(t) {
 });
 
 tape('index poi', function(t) {
-    addFeature(conf.poi, {
+    queueFeature(conf.poi, {
         id:1,
         geometry: {
             type: 'Point',
@@ -66,6 +69,15 @@ tape('index poi', function(t) {
             'carmen:center': [0,0]
         }
     }, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('multitype reverse', function(assert) {
@@ -205,4 +217,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

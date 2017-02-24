@@ -1,13 +1,13 @@
 var EventEmitter = require('events').EventEmitter,
-    queue = require('d3-queue').queue;
+    queue = require('d3-queue').queue,
+    fs = require('fs');
 
 var dawgcache = require('./lib/util/dawg');
-var Cache = require('./lib/util/cxxcache'),
+var cxxcache = require('./lib/util/cxxcache'),
     getContext = require('./lib/context'),
     loader = require('./lib/loader'),
     geocode = require('./lib/geocode'),
     analyze = require('./lib/analyze'),
-    loadall = require('./lib/loadall'),
     token = require('./lib/util/token'),
     copy = require('./lib/copy'),
     index = require('./lib/index'),
@@ -52,8 +52,20 @@ function Geocoder(indexes, options) {
 
             if (names.indexOf(name) === -1) names.push(name);
 
-            source._geocoder = source._original._geocoder || new Cache(name, info.geocoder_cachesize);
             source._dictcache = source._original._dictcache || dictcache;
+
+            if (!(source._original._geocoder && Object.keys(source._original._geocoder).length)) {
+                source._geocoder = {
+                    freq: (data.freq && fs.existsSync(data.freq)) ?
+                        new cxxcache.RocksDBCache(name + ".freq", data.freq) :
+                        new cxxcache.MemoryCache(name + ".freq"),
+                    grid: (data.grid && fs.existsSync(data.grid)) ?
+                        new cxxcache.RocksDBCache(name + ".grid", data.grid) :
+                        new cxxcache.MemoryCache(name + ".grid")
+                }
+            } else {
+                source._geocoder = source._original._geocoder;
+            }
 
             // Set references to _geocoder, _dictcache on original source to
             // avoid duplication if it's loaded again.
@@ -68,8 +80,8 @@ function Geocoder(indexes, options) {
 
             if (info.geocoder_version) {
                 source.version = parseInt(info.geocoder_version, 10);
-                if (source.version !== 6) {
-                    err = new Error('geocoder version is not 6, index: ' + id);
+                if (source.version !== 7) {
+                    err = new Error('geocoder version is not 7, index: ' + id);
                     return;
                 }
             } else {
@@ -170,38 +182,63 @@ function Geocoder(indexes, options) {
 
         this._error = err;
         this._opened = true;
-        this.emit('open', err);
+
+        // emit the open event in a setImmediate -- circumstances exist
+        // where no async ops may be necessary to construct a carmen,
+        // in which case callers may not have a chance to register a callback handler
+        // before open is emitted if we don't protect it this way
+        var _this = this;
+        setImmediate(function() {
+            _this.emit('open', err);
+        });
     }.bind(this));
 
     function loadIndex(id, source, callback) {
         source.open(function opened(err) {
             if (err) return callback(err);
+
+            source.getBaseFilename = function() {
+                var filename = source._original.cacheSource ? source._original.cacheSource.filename : source._original.filename;
+                if (filename) {
+                    return filename.replace('.mbtiles', '');
+                } else {
+                    return require('os').tmpdir() + "/temp." + Math.random().toString(36).substr(2, 5);
+                }
+            }
+
             var q = queue();
             q.defer(function(done) { source.getInfo(done); });
             q.defer(function(done) {
-                if (source._original._dictcache || !source.getGeocoderData) {
+                var dawgFile = source.getBaseFilename() + '.dawg';
+                if (source._original._dictcache || !fs.existsSync(dawgFile)) {
                     done();
                 } else {
-                    source.getGeocoderData('stat', 0, done);
+                    fs.readFile(dawgFile, done);
                 }
             });
             q.awaitAll(function(err, loaded) {
                 if (err) return callback(err);
 
+                var props;
                 // if dictcache is already initialized don't recreate
                 if (source._original._dictcache) {
-                    callback(null, {
+                    props = {
                         id: id,
                         info: loaded[0]
-                    });
+                    };
                 // create dictcache at load time to allow incremental gc
                 } else {
-                    callback(null, {
+                    props = {
                         id: id,
                         info: loaded[0],
                         dictcache: new dawgcache(loaded[1])
-                    });
+                    };
                 }
+
+                var filename = source.getBaseFilename();
+                props.freq = filename + '.freq.rocksdb';
+                props.grid = filename + '.grid.rocksdb';
+                callback(null, props);
             });
         });
     }
@@ -223,6 +260,7 @@ function clone(source) {
         'putTile',
         'getGeocoderData',
         'putGeocoderData',
+        'getBaseFilename',
         'geocoderDataIterator',
         'startWriting',
         'stopWriting',
@@ -300,21 +338,6 @@ Geocoder.prototype.analyze = function(source, callback) {
     this._open(function(err) {
         if (err) return callback(err);
         analyze(source, callback);
-    });
-};
-
-// Load all shards for a source.
-Geocoder.prototype.loadall = function(source, type, concurrency, callback) {
-    this._open(function(err) {
-        if (err) return callback(err);
-        loadall.loadall(source, type, concurrency, callback);
-    });
-};
-
-Geocoder.prototype.unloadall = function(source, type, callback) {
-    this._open(function(err) {
-        if (err) return callback(err);
-        loadall.unloadall(source, type, callback);
     });
 };
 

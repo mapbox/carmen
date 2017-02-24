@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     country: new mem({maxzoom: 1}, function() {}),
@@ -21,7 +24,7 @@ tape('index country', function(t) {
             'carmen:center':[-100,60]
         }
     };
-    addFeature(conf.country, country, t.end);
+    queueFeature(conf.country, country, t.end);
 });
 tape('index country', function(t) {
     var country = {
@@ -32,7 +35,7 @@ tape('index country', function(t) {
             'carmen:center':[-60,-20]
         }
     };
-    addFeature(conf.country, country, t.end);
+    queueFeature(conf.country, country, t.end);
 });
 
 //Across layers
@@ -45,7 +48,7 @@ tape('index province', function(t) {
             'carmen:center':[-80,40]
         }
     };
-    addFeature(conf.province, province, t.end);
+    queueFeature(conf.province, province, t.end);
 });
 tape('index province', function(t) {
     var country = {
@@ -56,7 +59,7 @@ tape('index province', function(t) {
             'carmen:center':[145,70]
         }
     };
-    addFeature(conf.country, country, t.end);
+    queueFeature(conf.country, country, t.end);
 });
 tape('index province', function(t) {
     var province = {
@@ -67,7 +70,7 @@ tape('index province', function(t) {
             'carmen:center':[-100,60]
         }
     };
-    addFeature(conf.province, province, t.end);
+    queueFeature(conf.province, province, t.end);
 });
 tape('index province', function(t) {
     var province = {
@@ -78,7 +81,16 @@ tape('index province', function(t) {
             'carmen:center':[-60,-20]
         }
     };
-    addFeature(conf.province, province, t.end);
+    queueFeature(conf.province, province, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('error: invalid options.proximity type', function(t) {

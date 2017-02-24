@@ -2,11 +2,11 @@ var termops = require('../lib/util/termops');
 var test = require('tape');
 
 test('termops.encodeTerm', function(assert) {
-    assert.deepEqual(termops.encodeTerm('main'), 609659059851264, 'encodes term');
-    assert.deepEqual(termops.encodeTerm('1234'), 2249210822822873, 'encodes numeric term');
-    assert.deepEqual(termops.encodeTerm('2345b'), 2198583730836376, 'encodes seminumeric term');
-    assert.deepEqual(termops.encodeTerm('2345'), 2605743183338078, 'encodes seminumeric differently from numeric term');
-    assert.deepEqual(termops.encodeTerm('LS24'), 75998676524143, 'encodes non-address numeric term with fnv1a');
+    assert.deepEqual(termops.encodeTerm('main'), 'main', 'encodes term');
+    assert.deepEqual(termops.encodeTerm('1234'), '1234', 'encodes numeric term');
+    assert.deepEqual(termops.encodeTerm('2345b'), '2345b', 'encodes seminumeric term');
+    assert.deepEqual(termops.encodeTerm('2345'), '2345', 'encodes seminumeric differently from numeric term');
+    assert.deepEqual(termops.encodeTerm('LS24'), 'LS24', 'encodes non-address numeric term with fnv1a');
     assert.end();
 });
 

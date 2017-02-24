@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 var fs = require('fs');
 
 var conf = {
@@ -31,7 +34,7 @@ tape('index country', function(assert) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.country, country, assert.end);
+    queueFeature(conf.country, country, assert.end);
 });
 
 tape('index region', function(assert) {
@@ -53,7 +56,7 @@ tape('index region', function(assert) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.region, region, assert.end);
+    queueFeature(conf.region, region, assert.end);
 });
 
 tape('index place', function(assert) {
@@ -81,7 +84,16 @@ tape('index place', function(assert) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.place, place, assert.end);
+    queueFeature(conf.place, place, assert.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('Toronto', function(assert) {
@@ -118,4 +130,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

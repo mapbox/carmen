@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var country =new mem(null, function() {});
 var region = new mem(null, function() {});
@@ -20,7 +23,7 @@ var pre = new Carmen(confA);
 
 tape('index province', function(t) {
     t.ok(pre);
-    addFeature(confA.country, {
+    queueFeature(confA.country, {
         id:1,
         properties: {
             'carmen:text':'america',
@@ -30,7 +33,7 @@ tape('index province', function(t) {
     }, t.end);
 });
 tape('index place', function(t) {
-    addFeature(confA.place, {
+    queueFeature(confA.place, {
         id:1,
         properties: {
             'carmen:text':'chicago',
@@ -38,6 +41,20 @@ tape('index place', function(t) {
             'carmen:center':[0,0]
         }
     }, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(confA).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(confA[c], cb);
+        });
+    });
+    Object.keys(confB).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(confB[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 tape('chicago (conf a)', function(t) {
     var a = new Carmen(confA);
@@ -62,4 +79,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

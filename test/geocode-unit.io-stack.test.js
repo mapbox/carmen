@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Setup includes the api-mem `timeout` option to simulate asynchronous I/O.
 var conf = {
@@ -24,7 +27,7 @@ tape('ready', function(assert) {
 
 [1,2,3].forEach(function(i) {
     tape('index place ' + i, function(t) {
-        addFeature(conf['place'+i], {
+        queueFeature(conf['place'+i], {
             id:1,
             properties: {
                 'carmen:text':'springfield',
@@ -34,7 +37,7 @@ tape('ready', function(assert) {
         }, t.end);
     });
     tape('index street ' + i, function(t) {
-        addFeature(conf['street'+i], {
+        queueFeature(conf['street'+i], {
             id:1,
             properties: {
                 'carmen:text':'winding river rd',
@@ -44,7 +47,7 @@ tape('ready', function(assert) {
         }, t.end);
     });
     tape('index street ' + i, function(t) {
-        addFeature(conf['street'+i], {
+        queueFeature(conf['street'+i], {
             id:2,
             properties: {
                 'carmen:text':'river rd',
@@ -54,7 +57,7 @@ tape('ready', function(assert) {
         }, t.end);
     });
     tape('index street ' + i, function(t) {
-        addFeature(conf['street'+i], {
+        queueFeature(conf['street'+i], {
             id:3,
             properties: {
                 'carmen:text':'springfield st',
@@ -63,15 +66,22 @@ tape('ready', function(assert) {
             }
         }, t.end);
     });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
+    });
 });
 
 function reset() {
     context.getTile.cache.reset();
     [1,2,3].forEach(function(i) {
-        conf['place'+i]._geocoder.unloadall('grid');
         conf['place'+i]._original.logs.getGeocoderData = [];
         conf['place'+i]._original.logs.getTile = [];
-        conf['street'+i]._geocoder.unloadall('grid');
         conf['street'+i]._original.logs.getGeocoderData = [];
         conf['street'+i]._original.logs.getTile = [];
     });
@@ -82,10 +92,10 @@ tape('winding river rd springfield', function(t) {
     c.geocode('winding river rd  springfield', {}, function(err, res) {
         t.ifError(err);
         t.deepEqual(res.features[0].place_name, 'winding river rd, springfield');
-        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData, ['grid,29750'], 'place1: loads 1 grid');
+        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData, [], 'place1: loads nothing');
         t.deepEqual(c.indexes.place1._original.logs.getTile, ['6,32,32'], 'place1: loads 1 tile');
 
-        t.deepEqual(c.indexes.street1._original.logs.getGeocoderData.sort(), ['feature,1', 'feature,2', 'grid,12737', 'grid,29789'], 'street1: loads 1 grid, 1 feature per result');
+        t.deepEqual(c.indexes.street1._original.logs.getGeocoderData.sort(), ['feature,1', 'feature,2'], 'street1: loads 1 feature per result');
         t.deepEqual(c.indexes.street1._original.logs.getTile, [], 'street1: loads no tiles (most specific index)');
         t.end();
     });
@@ -102,10 +112,10 @@ tape('springfield', function(t) {
         t.deepEqual(res.features[1].place_name, 'springfield st, springfield');
         t.deepEqual(res.features[1].id, 'street.3');
 
-        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData.sort(), ['feature,1','grid,29750'], 'place1: loads 1 grid');
+        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData.sort(), ['feature,1'], 'place1: loads 1 feature');
         t.deepEqual(c.indexes.place1._original.logs.getTile, ['6,32,32'], 'place1: loads 1 tile');
 
-        t.deepEqual(c.indexes.street1._original.logs.getGeocoderData.sort(), ['feature,3','grid,29750'], 'street1: loads 1 grid, 1 feature per result');
+        t.deepEqual(c.indexes.street1._original.logs.getGeocoderData.sort(), ['feature,3'], 'street1: loads 1 feature per result');
         t.deepEqual(c.indexes.street1._original.logs.getTile, [], 'street1: loads no tiles (most specific index)');
         t.end();
     });
@@ -120,7 +130,7 @@ tape('springfield, types=place', function(t) {
         t.deepEqual(res.features[0].place_name, 'springfield');
         t.deepEqual(res.features[0].id, 'place.1');
 
-        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData.sort(), ['feature,1','grid,29750'], 'place1: loads 1 grid');
+        t.deepEqual(c.indexes.place1._original.logs.getGeocoderData.sort(), ['feature,1'], 'place1: loads 1 feature');
         t.deepEqual(c.indexes.place1._original.logs.getTile, [], 'place1: loads 0 tiles');
 
         t.deepEqual(c.indexes.street1._original.logs.getGeocoderData.sort(), [], 'street1: no io');
@@ -133,4 +143,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

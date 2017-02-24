@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var tape = require('tape');
 var exec = require('child_process').exec;
@@ -7,14 +7,22 @@ var bin = path.resolve(path.join(__dirname, '..', 'scripts'));
 
 var Carmen = require('../index.js');
 var MBTiles = require('mbtiles');
-var tmpindex = path.join(tmpdir, 'test-carmen-index.mbtiles');
-var tmpindex2 = path.join(tmpdir, 'test-carmen-index2.mbtiles');
-var addFeature = require('../lib/util/addfeature');
+var rand = Math.random().toString(36).substr(2, 5);
+var tmpindex = path.join(tmpdir, 'test-carmen-index-' + rand + '.mbtiles');
+var tmpindex2 = path.join(tmpdir, 'test-carmen-index2-' + rand + '.mbtiles');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 tape('clean tmp index', function(assert) {
     try {
         fs.unlinkSync(tmpindex)
+        fs.removeSync(tmpindex.replace(".mbtiles", ".freq.rocksdb"));
+        fs.removeSync(tmpindex.replace(".mbtiles", ".grid.rocksdb"));
+
         fs.unlinkSync(tmpindex2)
+        fs.removeSync(tmpindex2.replace(".mbtiles", ".freq.rocksdb"));
+        fs.removeSync(tmpindex2.replace(".mbtiles", ".grid.rocksdb"));
     } catch (err) {
         //File does not exist
     } finally {
@@ -25,6 +33,8 @@ tape('clean tmp index', function(assert) {
 tape('index', function(assert) {
     try {
         fs.unlinkSync(tmpindex);
+        fs.removeSync(tmpindex.replace(".mbtiles", ".freq.rocksdb"));
+        fs.removeSync(tmpindex.replace(".mbtiles", ".grid.rocksdb"));
     } catch (err) {
         //'file not found'
     }
@@ -37,7 +47,7 @@ tape('index', function(assert) {
     }
     function write1(err) {
         assert.ifError(err);
-        addFeature(conf.index, {
+        queueFeature(conf.index, {
             id:38,
             properties: {
                 'carmen:text':'Canada',
@@ -48,7 +58,7 @@ tape('index', function(assert) {
     }
     function write2(err) {
         assert.ifError(err);
-        addFeature(conf.index, {
+        queueFeature(conf.index, {
             id:39,
             properties: {
                 'carmen:text':'Brazil',
@@ -59,7 +69,7 @@ tape('index', function(assert) {
     }
     function store(err) {
         assert.ifError(err);
-        require('../lib/index.js').store(conf.index, stop);
+        buildQueued(conf.index, stop);
     }
     function stop(err) {
         assert.ifError(err);
@@ -159,7 +169,7 @@ tape('bin/carmen query w/ global tokens', function(t) {
 });
 
 tape('bin/carmen query types', function(t) {
-    exec(bin + '/carmen.js ' + tmpindex + ' --query=brazil --types="test-carmen-index"', function(err, stdout, stderr) {
+    exec(bin + '/carmen.js ' + tmpindex + ' --query=brazil --types="test-carmen-index-' + rand + '"', function(err, stdout, stderr) {
         t.ifError(err);
         t.equal(/0\.99 Brazil/.test(stdout), true, 'finds brazil');
         t.end();
@@ -192,7 +202,7 @@ tape('bin/carmen-copy 1arg', function(t) {
     });
 });
 tape('bin/carmen-copy', function(t) {
-    var dst = tmpdir + '/carmen-copy-test.mbtiles';
+    var dst = tmpdir + '/carmen-copy-test-' + rand + '.mbtiles';
     exec(bin + '/carmen-copy.js ' + tmpindex + ' ' + dst, function(err, stdout, stderr) {
         t.ifError(err);
         t.equal(/Copying/.test(stdout), true);

@@ -2,7 +2,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     place: new mem({maxzoom: 12}, function() {})
@@ -63,7 +65,7 @@ tape('index place', function(t) {
     };
     docs.push(place);
 
-    addFeature(conf.place, docs, t.end);
+    queueFeature(conf.place, docs, function() { buildQueued(conf.place, t.end) });
 });
 
 tape('query', function(t) {

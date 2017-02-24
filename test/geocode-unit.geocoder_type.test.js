@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require("d3-queue").queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -24,7 +27,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[-77.04312264919281,38.91041215085371]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
     });
     tape('index poi', function(t) {
         var poi = {
@@ -39,7 +42,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [-77.04441547393799,38.909427030614665]
             }
         };
-        addFeature(conf.poi, poi, t.end);
+        queueFeature(conf.poi, poi, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('query on address but still returns poi due to index order', function(t) {
@@ -89,7 +101,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[-77.04312264919281,38.91041215085371]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
     });
     tape('index poi', function(t) {
         var poi = {
@@ -104,7 +116,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [-77.04441547393799,38.909427030614665]
             }
         };
-        addFeature(conf.poi, poi, t.end);
+        queueFeature(conf.poi, poi, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('address query returns address', function(t) {
         c.geocode('-77.04312264919281,38.91041215085371', {}, function(err, res) {
@@ -160,7 +181,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[-77.04312264919281,38.91041215085371]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
     });
     tape('index poi', function(t) {
         var poi = {
@@ -175,7 +196,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [-77.04320579767227,38.910435109001334]
             }
         };
-        addFeature(conf.poi, poi, t.end);
+        queueFeature(conf.poi, poi, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('return poi if type filtering removes address', function(t) {
         c.geocode('-77.04320579767227,38.910435109001334', { types: ['poi'] }, function(err, res) {
@@ -223,7 +253,7 @@ var addFeature = require('../lib/util/addfeature');
                 ]]]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index place', function(t) {
         var place = {
@@ -248,7 +278,16 @@ var addFeature = require('../lib/util/addfeature');
                 ]]]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('Overlapping places return closest centroid', function(t) {
         c.geocode('-77.0378065109253,38.909836107628074', {}, function(err, res) {

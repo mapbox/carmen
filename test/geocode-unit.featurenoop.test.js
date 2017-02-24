@@ -6,21 +6,23 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueVT = addFeature.queueVT,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     a: new mem(null, function() {}),
 };
 var c = new Carmen(conf);
 tape('index', function(t) {
-    addFeature.vt(conf.a, {
+    queueVT(conf.a, {
         id:1,
         properties: {
             'carmen:text':'\n',
             'carmen:zxy':['6/32/32'],
             'carmen:center':[0,0]
         }
-    }, t.end);
+    }, function() { buildQueued(conf.a, t.end) });
 });
 tape('reverse geocode', function(t) {
     c.geocode('0,0', { limit_verify:1 }, function(err, res) {

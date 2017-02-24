@@ -6,7 +6,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     place: new mem({maxzoom: 6}, function() {}),
@@ -22,7 +25,7 @@ tape('index place', function(t) {
             'carmen:center':[0,0],
         }
     };
-    addFeature(conf.place, feature, t.end);
+    queueFeature(conf.place, feature, t.end);
 });
 tape('index matching address', function(t) {
     var feature = {
@@ -38,7 +41,7 @@ tape('index matching address', function(t) {
             coordinates: [[0,0]]
         }
     };
-    addFeature(conf.address, feature, t.end);
+    queueFeature(conf.address, feature, t.end);
 });
 tape('index other address', function(t) {
     var feature = {
@@ -54,7 +57,16 @@ tape('index other address', function(t) {
             coordinates: [[0,0]]
         }
     };
-    addFeature(conf.address, feature, t.end);
+    queueFeature(conf.address, feature, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 tape('test spatialmatch relev', function(t) {
     c.geocode('1 fake street fakecity', { limit_verify: 1 }, function(err, res) {

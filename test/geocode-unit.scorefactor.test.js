@@ -6,7 +6,9 @@ var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
 var queue = require('d3-queue').queue;
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -17,7 +19,7 @@ var addFeature = require('../lib/util/addfeature');
     tape('index small score (noise)', function(t) {
         var q = queue(1);
         for (var i = 1; i < 41; i++) q.defer(function(i, done) {
-            addFeature(conf.place, {
+            queueFeature(conf.place, {
                 id:i,
                 properties: {
                     'carmen:score':10,
@@ -30,7 +32,7 @@ var addFeature = require('../lib/util/addfeature');
         q.awaitAll(t.end);
     });
     tape('index big score (noise)', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:1,
             properties: {
                 'carmen:score': 1e9,
@@ -41,7 +43,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index big score (signal)', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:2,
             properties: {
                 'carmen:score': 1e6,
@@ -50,6 +52,15 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center': [360/64+0.001,0]
             }
         }, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('query', function(t) {
         c.geocode('testplace', { limit_verify:1 }, function(err, res) {

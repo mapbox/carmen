@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Confirms that you can forward search a ghost feature and that a scored featre will always win
 (function() {
@@ -20,7 +23,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index ghost place', function(t) {
         var place = {
@@ -32,7 +35,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index zip+4', function(t) {
         var place = {
@@ -44,7 +47,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index zip', function(t) {
         var place = {
@@ -56,7 +59,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index ghost zip', function(t) {
         var place = {
@@ -68,7 +71,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, function() { buildQueued(conf.place, t.end) });
     });
     tape('fairfax', function(t) {
         c.geocode('fairfax', { limit_verify:1 }, function(err, res) {
@@ -124,7 +127,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
     });
     tape('index province', function(t) {
         var province = {
@@ -135,7 +138,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[360/64*2,0]
             }
         };
-        addFeature(conf.province, province, t.end);
+        queueFeature(conf.province, province, t.end);
     });
     tape('index city', function(t) {
         var city = {
@@ -146,7 +149,16 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[360/64*4,0]
             }
         };
-        addFeature(conf.city, city, t.end);
+        queueFeature(conf.city, city, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('china', function(t) {
         c.geocode('china', { limit_verify:1 }, function(err, res) {
@@ -177,7 +189,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
     });
     tape('index province', function(t) {
         var province = {
@@ -189,7 +201,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[360/64 * 2,0]
             }
         };
-        addFeature(conf.province, province, t.end);
+        queueFeature(conf.province, province, t.end);
     });
     tape('index city', function(t) {
         var city = {
@@ -201,7 +213,16 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[360/64 * 4,0]
             }
         };
-        addFeature(conf.city, city, t.end);
+        queueFeature(conf.city, city, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('china', function(t) {
         c.geocode('china', { limit_verify:3, allow_dupes: true }, function(err, res) {
@@ -239,9 +260,9 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, function() { buildQueued(conf.country, t.end) });
     });
-    
+
     tape('query by id', function(t) {
         c.geocode('country.1', null, function(err, res) {
             t.ifError(err);

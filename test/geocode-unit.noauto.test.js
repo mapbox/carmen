@@ -4,7 +4,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Confirm that disabling autocomplete works, and that in situations where an autocomplete
 // result scores highest, the winner changes depending on whether or not autocomplete is enabled
@@ -21,7 +23,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index second place', function(t) {
         var place = {
@@ -33,7 +35,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, function() { buildQueued(conf.place, t.end) });
     });
     tape('abc - with autocomplete', function(t) {
         c.geocode('abc', { limit_verify:1 }, function(err, res) {
@@ -98,7 +100,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, function() { buildQueued(conf.place, t.end) });
     });
     tape('place - with autocomplete', function(t) {
         c.geocode('place', { limit_verify:1 }, function(err, res) {

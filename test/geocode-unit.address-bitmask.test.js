@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     address: new mem({maxzoom: 6, geocoder_address: 1, geocoder_name:'address'}, function() {})
@@ -23,7 +26,7 @@ tape('index address', function(t) {
             coordinates: [[0,0]]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
 });
 tape('index address', function(t) {
     var address = {
@@ -38,7 +41,7 @@ tape('index address', function(t) {
             coordinates: [[0,0], [0,0]]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
 });
 tape('index address', function(t) {
     var address = {
@@ -53,7 +56,16 @@ tape('index address', function(t) {
             coordinates: [[0,0],[0,0]]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('full address', function(t) {
@@ -75,7 +87,9 @@ tape('no address', function(t) {
 tape('only number', function(t) {
     c.geocode('500', { limit_verify: 2 }, function(err, res) {
         t.ifError(err);
-        t.notok(res.features.length);
+        t.equal(res.features.length, 2);
+        t.equals(res.features[0].place_name, '500 baker street', '500 baker street');
+        t.equals(res.features[1].place_name, '500 15th street', '500 15th street');
         t.end();
     });
 });
@@ -96,6 +110,13 @@ tape('lettered address', function(t) {
     });
 });
 
+tape('numbered street address', function(t) {
+    c.geocode('15th street 500b', { limit_verify: 2 }, function(err, res) {
+        t.ifError(err);
+        t.equals(res.features[0].address, '500b');
+        t.end();
+    });
+});
 tape('numbered street address', function(t) {
     c.geocode('15th street 500b', { limit_verify: 2 }, function(err, res) {
         t.ifError(err);
@@ -127,4 +148,3 @@ tape('teardown', function(assert) {
     context.getTile.cache.reset();
     assert.end();
 });
-

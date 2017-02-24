@@ -4,7 +4,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 //Tests string value for index level geocoder_stack
 (function() {
@@ -23,7 +26,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country ca', function(t) {
-        addFeature(conf.ca, {
+        queueFeature(conf.ca, {
             id:1,
             properties: {
                 'carmen:text':'Canada',
@@ -34,7 +37,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index country us', function(t) {
-        addFeature(conf.us, {
+        queueFeature(conf.us, {
             id:1,
             properties: {
                 'carmen:text': 'United States',
@@ -42,6 +45,16 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center': [0,0]
             }
         }, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Invalid stack - not a stack name', function(t) {
@@ -115,7 +128,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country ca', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:1,
             properties: {
                 'carmen:text':'Canada',
@@ -126,7 +139,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index country us', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:2,
             properties: {
                 'carmen:text':'United States',
@@ -137,7 +150,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index place us', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:1,
             properties: {
                 'carmen:text':'Place',
@@ -148,7 +161,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index place ca', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:2,
             properties: {
                 'carmen:text':'Place',
@@ -157,6 +170,15 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:geocoder_stack': 'ca'
             }
         }, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     //Features are first filtered by the index level geocoder_stack
@@ -196,7 +218,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country ca', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:1,
             properties: {
                 'carmen:text':'Canada',
@@ -206,7 +228,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index country us', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:2,
             properties: {
                 'carmen:text':'United States',
@@ -216,7 +238,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index place ca', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:1,
             properties: {
                 'carmen:text':'Tess',
@@ -225,6 +247,15 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:geocoder_stack': 'ca'
             }
         }, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Canada', function(t) {
@@ -268,7 +299,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country high score (us)', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:1,
             properties: {
                 'carmen:text': 'XXX',
@@ -280,7 +311,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index place low score (ca)', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:2,
             properties: {
                 'carmen:text':'XXX',
@@ -290,6 +321,15 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:geocoder_stack': 'ca'
             }
         }, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('check stack/idx agreement', function(t) {
@@ -316,7 +356,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country ca', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:1,
             properties: {
                 'carmen:text':'Canada',
@@ -326,7 +366,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index country us', function(t) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id:2,
             properties: {
                 'carmen:text':'United States',
@@ -336,7 +376,7 @@ var addFeature = require('../lib/util/addfeature');
         }, t.end);
     });
     tape('index place ca', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:1,
             properties: {
                 'carmen:text':'Tess',
@@ -344,6 +384,15 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:center':[0,0]
             }
         }, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Canada', function(t) {

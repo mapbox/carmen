@@ -15,7 +15,6 @@ var randomMBtiles = function() {
 }
 
 test('index - streaming interface', function(assert) {
-
     function getIndex(start, end) {
 
         var count = 0;

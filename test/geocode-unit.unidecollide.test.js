@@ -5,7 +5,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
 
@@ -14,7 +16,7 @@ var addFeature = require('../lib/util/addfeature');
     };
     var c = new Carmen(conf);
     tape('index Alberta', function(t) {
-        addFeature(conf.place_a, {
+        queueFeature(conf.place_a, {
             id:1,
             properties: {
                 'carmen:text':'Alberta',
@@ -22,7 +24,7 @@ var addFeature = require('../lib/util/addfeature');
                 'carmen:zxy':['6/32/32'],
                 'carmen:center':[0,0]
             }
-        }, t.end);
+        }, function() { buildQueued(conf.place_a, t.end) });
     });
 
     tape('heading to Aruba, I hope you packed warm clothes', function(t) {
@@ -66,14 +68,14 @@ var addFeature = require('../lib/util/addfeature');
     };
     var c = new Carmen(conf);
     tape('index abc xyz', function(t) {
-        addFeature(conf.place_a, {
+        queueFeature(conf.place_a, {
             id:1,
             properties: {
                 'carmen:text':'abc Xyz',
                 'carmen:zxy':['6/32/32'],
                 'carmen:center':[0,0]
             }
-        }, t.end);
+        }, function() { buildQueued(conf.place_a, t.end) });
     });
 
     tape('check for collisions based on char prefixing', function(t) {

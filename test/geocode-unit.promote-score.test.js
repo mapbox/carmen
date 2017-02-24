@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Tests New York (place), New York (region), USA (country)
 // identically-named features should reverse the gappy penalty and
@@ -16,7 +19,7 @@ var conf = {
 var c = new Carmen(conf);
 
 tape('index country', function(t) {
-    addFeature(conf.country, {
+    queueFeature(conf.country, {
         id: 1,
         properties: {
             'carmen:center': [0,0],
@@ -38,7 +41,7 @@ tape('index country', function(t) {
 });
 
 tape('index country', function(t) {
-    addFeature(conf.country, {
+    queueFeature(conf.country, {
         id: 2,
         properties: {
             'carmen:center': [45,45],
@@ -59,7 +62,7 @@ tape('index country', function(t) {
 });
 
 tape('index region', function(t) {
-    addFeature(conf.region, {
+    queueFeature(conf.region, {
         id: 1,
         properties: {
             'carmen:center': [0,0],
@@ -80,7 +83,7 @@ tape('index region', function(t) {
 });
 
 tape('index place', function(t) {
-    addFeature(conf.place, {
+    queueFeature(conf.place, {
         id: 1,
         properties: {
             'carmen:center': [45,45],
@@ -98,6 +101,16 @@ tape('index place', function(t) {
             ]]
         }
     }, t.end);
+});
+
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('find georgia', function(t) {

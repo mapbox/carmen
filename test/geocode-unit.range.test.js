@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     region: new mem({
@@ -32,7 +35,7 @@ tape('index region', function(t) {
             'carmen:geocoder_name': 'region'
         }
     };
-    addFeature(conf.region, region, t.end);
+    queueFeature(conf.region, region, t.end);
 });
 
 tape('index mx region', function(t) {
@@ -46,7 +49,7 @@ tape('index mx region', function(t) {
             'carmen:geocoder_name': 'region'
         }
     };
-    addFeature(conf.region, region, t.end);
+    queueFeature(conf.region, region, t.end);
 });
 
 tape('index us place', function(t) {
@@ -59,7 +62,7 @@ tape('index us place', function(t) {
             'carmen:geocoder_name': 'place'
         }
     };
-    addFeature(conf.place, place, t.end);
+    queueFeature(conf.place, place, t.end);
 });
 
 tape('index ca place', function(t) {
@@ -73,7 +76,7 @@ tape('index ca place', function(t) {
             'carmen:geocoder_name': 'place'
         }
     };
-    addFeature(conf.place, place, t.end);
+    queueFeature(conf.place, place, t.end);
 });
 
 tape('index us address', function(t) {
@@ -92,7 +95,17 @@ tape('index us address', function(t) {
             coordinates: [[0,0]]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
+});
+
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('reverse - good stack, good type', function(t) {

@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var mem = require('../lib/api-mem');
 var context = require('../lib/context');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -39,7 +42,7 @@ var addFeature = require('../lib/util/addfeature');
             },
             bbox: [0,-5.615985819155337,5.625,0]
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
     });
 
     tape('index city', function(t) {
@@ -60,7 +63,62 @@ var addFeature = require('../lib/util/addfeature');
             },
             bbox: [0,-5.615985819155337,5.625,0]
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
+    });
+
+    tape('index region', function(t) {
+        var region = {
+            type: 'Feature',
+            properties: {
+                'carmen:center': [0,0],
+                'carmen:zxy': ['6/32/32'],
+                'carmen:text_zh': '西北部联邦管区',
+                'carmen:text_zh_Hant': '西北部聯邦管區',
+                'carmen:text_ru': 'Северо-Западный федеральный округ',
+                'carmen:text': 'Northwestern Federal District,  Severo-Zapadny federalny okrug',
+                'carmen:text_eo': '!!!!'
+            },
+            id: 1,
+            geometry: {
+                type: 'MultiPolygon',
+                coordinates: [
+                    [[[0,-5.615985819155337],[0,0],[5.625,0],[5.625,-5.615985819155337],[0,-5.615985819155337]]]
+                ]
+            },
+            bbox: [0,-5.615985819155337,5.625,0]
+        };
+        queueFeature(conf.region, region, t.end);
+    });
+
+    tape('index place2', function(t) {
+        var place = {
+            type: 'Feature',
+            properties: {
+                'carmen:center': [0,0],
+                'carmen:zxy': ['6/31/31'],
+                'carmen:text': 'Shenzhen',
+                'carmen:text_zh': '深圳市'
+            },
+            id: 2,
+            geometry: {
+                type: 'MultiPolygon',
+                coordinates: [
+                    [[[-5.625,0],[-5.625,5.615985819155337],[0,5.615985819155337],[0,0],[-5.625,0]]]
+                ]
+            },
+            bbox: [-5.625,0,0,5.615985819155337]
+        };
+        queueFeature(conf.place2, place, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('russia => Russian Federation', function(t) {
@@ -167,13 +225,15 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     // also 'translate' the context when available
-    tape('St Petersburg => Санкт-Петербу́рг, Российская Федерация - {language: "ru"}', function(t) {
+    tape('St Petersburg => Санкт-Петербу́рг, Северо-Западный федеральный округ, Российская Федерация - {language: "ru"}', function(t) {
         c.geocode('St Petersburg', { language: 'ru'}, function(err, res) {
             t.ifError(err);
-            t.equal(res.features[0].place_name, 'Санкт-Петербу́рг, Российская Федерация');
+            t.equal(res.features[0].place_name, 'Санкт-Петербу́рг, Северо-Западный федеральный округ, Российская Федерация');
             t.equal(res.features[0].id, 'place.1');
-            t.equal(res.features[0].context[0].text, 'Российская Федерация');
+            t.equal(res.features[0].context[0].text, 'Северо-Западный федеральный округ');
+            t.equal(res.features[0].context[1].text, 'Российская Федерация');
             t.equal(res.features[0].context[0].language, 'ru');
+            t.equal(res.features[0].context[1].language, 'ru');
             t.end();
         });
     });
@@ -182,36 +242,14 @@ var addFeature = require('../lib/util/addfeature');
     tape('St Petersberg => Saint Petersburg - {language: "fr"}', function(t) {
         c.geocode('St Petersburg', { limit_verify:1, language: 'fr' }, function(err, res) {
             t.ifError(err);
-            t.equal(res.features[0].place_name, 'Saint Petersburg, Russian Federation');
+            t.equal(res.features[0].place_name, 'Saint Petersburg, Northwestern Federal District, Russian Federation');
             t.equal(res.features[0].id, 'place.1');
-            t.equal(res.features[0].context[0].text, 'Russian Federation');
+            t.equal(res.features[0].context[0].text, 'Northwestern Federal District');
+            t.equal(res.features[0].context[1].text, 'Russian Federation');
             t.equal(res.features[0].context[0].language, undefined);
+            t.equal(res.features[0].context[1].language, undefined);
             t.end();
         });
-    });
-
-    tape('index region', function(t) {
-        var region = {
-            type: 'Feature',
-            properties: {
-                'carmen:center': [0,0],
-                'carmen:zxy': ['6/32/32'],
-                'carmen:text_zh': '西北部联邦管区',
-                'carmen:text_zh_Hant': '西北部聯邦管區',
-                'carmen:text_ru': 'Северо-Западный федеральный округ',
-                'carmen:text': 'Northwestern Federal District,  Severo-Zapadny federalny okrug',
-                'carmen:text_eo': '!!!!'
-            },
-            id: 1,
-            geometry: {
-                type: 'MultiPolygon',
-                coordinates: [
-                    [[[0,-5.615985819155337],[0,0],[5.625,0],[5.625,-5.615985819155337],[0,-5.615985819155337]]]
-                ]
-            },
-            bbox: [0,-5.615985819155337,5.625,0]
-        };
-        addFeature(conf.region, region, t.end);
     });
 
     // custom response format template
@@ -259,27 +297,6 @@ var addFeature = require('../lib/util/addfeature');
             t.deepEqual(res.features[0].context[0].text, '!!!!');
             t.end();
         });
-    });
-
-    tape('index place2', function(t) {
-        var place = {
-            type: 'Feature',
-            properties: {
-                'carmen:center': [0,0],
-                'carmen:zxy': ['6/31/31'],
-                'carmen:text': 'Shenzhen',
-                'carmen:text_zh': '深圳市'
-            },
-            id: 2,
-            geometry: {
-                type: 'MultiPolygon',
-                coordinates: [
-                    [[[-5.625,0],[-5.625,5.615985819155337],[0,5.615985819155337],[0,0],[-5.625,0]]]
-                ]
-            },
-            bbox: [-5.625,0,0,5.615985819155337]
-        };
-        addFeature(conf.place2, place, t.end);
     });
 
     tape('西北部联邦管区 => Russian Federation西北部联邦管区', function(t) {

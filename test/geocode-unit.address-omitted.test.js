@@ -4,7 +4,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -26,7 +28,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates:[[0,0],[0,100]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test address query with address range', function(t) {
         c.geocode('9 fake street', { limit_verify: 1 }, function(err, res) {
@@ -61,7 +63,7 @@ var addFeature = require('../lib/util/addfeature');
                 ]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
 
     tape('test tiger interpolation house number', function(t) {

@@ -2,7 +2,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 var queue = require('d3-queue').queue;
 
 var conf = {
@@ -34,7 +36,7 @@ tape('index country', function(t) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.country, country, t.end);
+    queueFeature(conf.country, country, t.end);
 });
 
 tape('index region', function(t) {
@@ -46,7 +48,7 @@ tape('index region', function(t) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.region, region, t.end);
+    queueFeature(conf.region, region, t.end);
 });
 
 tape('index postcode', function(t) {
@@ -58,7 +60,7 @@ tape('index postcode', function(t) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.postcode, postcode, t.end);
+    queueFeature(conf.postcode, postcode, t.end);
 });
 
 tape('index place', function(t) {
@@ -70,7 +72,7 @@ tape('index place', function(t) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.place, place, t.end);
+    queueFeature(conf.place, place, t.end);
 });
 
 tape('index neighborhood', function(t) {
@@ -82,13 +84,13 @@ tape('index neighborhood', function(t) {
             'carmen:center':[0,0]
         }
     };
-    addFeature(conf.neighborhood, neighborhood, t.end);
+    queueFeature(conf.neighborhood, neighborhood, t.end);
 });
 
 tape('index poi', function(t) {
     var q = queue(1);
     for (var i = 1; i < 20; i++) q.defer(function(i, done) {
-        addFeature(conf.poi, {
+        queueFeature(conf.poi, {
             id:i,
             properties: {
                 'carmen:text':'Canada Post ' + i + 'a',
@@ -97,6 +99,15 @@ tape('index poi', function(t) {
             }
         }, done);
     }, i);
+    q.awaitAll(t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
     q.awaitAll(t.end);
 });
 

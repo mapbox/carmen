@@ -5,12 +5,10 @@ var split = require('split');
 var Carmen = require('..');
 var mem = require('../lib/api-mem');
 var de = require('deep-equal');
-var dawgcache = require('../lib/util/dawg');
 
 var test = require('tape');
 
 test('index - streaming interface', function(assert) {
-
     function getIndex(start, end) {
 
         var count = 0;
@@ -124,13 +122,9 @@ test('index - streaming interface', function(assert) {
     assert.test('merged indexes', function(q) {
         carmenC.merge(memObjectA, memObjectB, memObjectC, {}, function(err) {
             if (err) throw err;
-
-            // reload the dawg cache based on the results of the merge
-            memObjectC.getGeocoderData('stat', 0, function(err, data) {
-                memObjectC._dictcache = new dawgcache(data);
-                carmenC.indexes.country._dictcache = memObjectC._dictcache;
-                q.end();
-            });
+            // the dictcache has been reloaded, so copy it over to the carmen object
+            carmenC.indexes.country._dictcache = memObjectC._dictcache;
+            q.end();
         });
     });
     assert.test('ensure index was successful for index A after merging', function(q) {
@@ -184,27 +178,13 @@ test('index - streaming interface', function(assert) {
     });
 
     ["freq", "grid"].forEach(function(type) {
-        assert.test('ensure merged index ' + type + ' and original ' + type + ' are 99 percent similar', function(q) {
-            var combined = {};
-            [carmenC, carmenD].forEach(function(c) {
-                c.indexes.country._geocoder.unloadall(type);
-                Object.keys(c.indexes.country._original._shards[type]).forEach(function(s) {
-                    combined[s] = true;
-                    c.indexes.country._geocoder.loadSync(c.indexes.country._original._shards[type][s], type, +s);
-                });
-            })
-            var match = 0,
-                noMatch = 0;
-            Object.keys(combined).sort().forEach(function(s) {
-                var same = de(
-                    carmenC.indexes.country._geocoder.list(type, +s).sort(),
-                    carmenD.indexes.country._geocoder.list(type, +s).sort()
-                );
-                if (same) match += 1;
-                else noMatch += 1;
-            });
-            var percentage = 100 * match / (match + noMatch);
-            assert.ok(percentage >= 99, type + ' matches > 99%: ' + percentage);
+        assert.test('ensure merged index ' + type + ' and original ' + type + ' are 98 percent similar', function(q) {
+            var cSet = new Set(carmenC.indexes.country._geocoder[type].list());
+            var dSet = new Set(carmenD.indexes.country._geocoder[type].list());
+            var intersection = new Set(Array.from(cSet).filter(function(x) { return dSet.has(x) }));
+            var union = new Set(Array.from(cSet).concat(Array.from(dSet)));
+            var percentage = 100 * intersection.size / (union.size);
+            assert.ok(percentage >= 97, type + ' matches > 97%: ' + percentage);
 
             q.end();
         });

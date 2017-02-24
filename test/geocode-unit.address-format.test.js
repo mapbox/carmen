@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 // Test geocoder_address formatting + return place_name as germany style address (address number follows name)
 (function() {
@@ -26,7 +29,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[0,0],[0,0],[0,0]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
 
     tape('Search for germany style address', function(t) {
@@ -68,7 +71,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[0,0],[0,0],[0,0]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
 
     tape('Search for germany style address - with language tag but no german vaue', function(t) {
@@ -128,7 +131,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
     });
 
     tape('index region', function(t) {
@@ -144,7 +147,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.region, region, t.end);
+        queueFeature(conf.region, region, t.end);
     });
 
     tape('index place', function(t) {
@@ -160,7 +163,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
 
     tape('index postcode', function(t) {
@@ -176,7 +179,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.postcode, postcode, t.end);
+        queueFeature(conf.postcode, postcode, t.end);
     });
 
     tape('index address', function(t) {
@@ -192,7 +195,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[0,0],[0,0],[0,0]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
     });
 
     tape('index poi', function(t) {
@@ -208,7 +211,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.poi, poi, t.end);
+        queueFeature(conf.poi, poi, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
     tape('Search for an address (multiple layers)', function(t) {
         c.geocode('9 fake street', { limit_verify: 1 }, function(err, res) {
@@ -258,7 +270,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [[0,0],[0,0],[0,0]]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
 
     tape('test address index for US relev', function(t) {
@@ -308,7 +320,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test address index for relev', function(t) {
         c.geocode('9 fake street', { limit_verify: 1 }, function(err, res) {
@@ -339,7 +351,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.place, place, t.end);
+        queueFeature(conf.place, place, t.end);
     });
     tape('index kitten', function(t) {
         var kitten = {
@@ -355,7 +367,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.kitten, kitten, t.end);
+        queueFeature(conf.kitten, kitten, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('Search for an address using a template that has nonstandard properites', function(t) {

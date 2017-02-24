@@ -4,7 +4,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -26,7 +28,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test address index for relev', function(t) {
         c.geocode('fake st', { limit_verify: 1 }, function(err, res) {
@@ -59,7 +61,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test address index for relev', function(t) {
         c.geocode('avenue du 18e régiment', { limit_verify: 1 }, function(err, res) {
@@ -98,7 +100,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test token replacement', function(t) {
         c.geocode('qabc', { limit_verify: 1 }, function(err, res) {
@@ -143,7 +145,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, t.end);
     });
     tape('geocoder token test', function(t) {
         var address = {
@@ -157,7 +159,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('unset opts', function(t) {
         addFeature.setOptions({});
@@ -211,7 +213,7 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [0,0]
             }
         };
-        addFeature(conf.address, address, t.end);
+        queueFeature(conf.address, address, function() { buildQueued(conf.address, t.end) });
     });
     tape('test token replacement', function(t) {
         c.geocode('Talstrasse', { limit_verify: 1 }, function(err, res) {

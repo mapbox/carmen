@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var mem = require('../lib/api-mem');
 var context = require('../lib/context');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -11,7 +14,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -28,7 +31,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id: 2,
             type: 'Feature',
             properties: {
@@ -44,7 +47,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             id: 3,
             type: 'Feature',
             properties: {
@@ -56,6 +59,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [1,1]
             }
         }, assert.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('query: c, language: zh, languageMode: strict', function(assert) {
@@ -148,7 +161,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -165,7 +178,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index region', function(assert) {
-        addFeature(conf.region, {
+        queueFeature(conf.region, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -181,7 +194,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index place', function(assert) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -195,6 +208,16 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [1,1]
             }
         }, assert.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
 
@@ -263,7 +286,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -281,7 +304,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index region', function(assert) {
-        addFeature(conf.region, {
+        queueFeature(conf.region, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -297,7 +320,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index place', function(assert) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -313,7 +336,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index place', function(assert) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             type: 'Feature',
             id: 2,
             properties: {
@@ -329,6 +352,16 @@ var addFeature = require('../lib/util/addfeature');
         }, assert.end);
     });
 
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
+    });
+
 
     tape('query: paris, language: sr-Latn, languageMode: strict', function(assert) {
         c.geocode('paris', { language: 'sr-Latn', languageMode: 'strict' }, function(err, res) {
@@ -341,7 +374,6 @@ var addFeature = require('../lib/util/addfeature');
     tape('query: belgrade, language: sr-Latn, languageMode: strict', function(assert) {
         c.geocode('belgrade', { language: 'sr-Latn', languageMode: 'strict' }, function(err, res) {
             assert.ifError(err);
-            console.log("Res", res)
             assert.equal(res.features.length, 1, 'allows hr result');
             assert.equal(res.features[0].language, 'hr', 'language code is hr');
             assert.end();
@@ -351,7 +383,6 @@ var addFeature = require('../lib/util/addfeature');
     tape('query: belgrade, language: hr, languageMode: strict', function(assert) {
         c.geocode('belgrade', { language: 'hr', languageMode: 'strict' }, function(err, res) {
             assert.ifError(err);
-            console.log("res", res)
             assert.equal(res.features.length, 1, 'allows hr result');
             assert.equal(res.features[0].language, 'hr', 'language code is hr');
             assert.equal(res.features[0].place_name, 'Beograd, Teksas', 'language=hr excludes sr results');

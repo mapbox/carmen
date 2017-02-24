@@ -27,8 +27,6 @@ test('copy', function(t) {
             q.deepEqual(stats, {
                 byRelev: { '0.4': 0, '0.6': 0, '0.8': 0, '1.0': 0 },
                 byScore: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
-                degen: 0,
-                ender: 0,
                 total: 0
             });
             q.end();

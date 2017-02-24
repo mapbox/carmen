@@ -5,7 +5,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var mem = require('../lib/api-mem');
 var context = require('../lib/context');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -32,7 +35,16 @@ var addFeature = require('../lib/util/addfeature');
             },
             bbox: [0,-5.615985819155337,5.625,0]
         };
-        addFeature(conf.country, country, t.end);
+        queueFeature(conf.country, country, t.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('0,0 ?language=en', function(t) {

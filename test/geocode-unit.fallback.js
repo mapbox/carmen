@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     region: new mem({maxzoom: 6}, function() {}),
@@ -28,7 +31,7 @@ tape('index place "Cold City"', function(t) {
             coordinates: coldCityCenter
         }
     };
-    addFeature(conf.place, place, t.end);
+    queueFeature(conf.place, place, t.end);
 });
 
 //Address 1 in Cold City
@@ -46,7 +49,7 @@ tape('index address "Main St" in "Cold City"', function(t) {
             coordinates: [coldCityCenter]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
 });
 
 //Address 2 in Cold City
@@ -63,7 +66,7 @@ tape('index address "Market" in "Cold City"', function(t) {
             coordinates: [coldCityCenter]
         }
     };
-    addFeature(conf.address, address, t.end);
+    queueFeature(conf.address, address, t.end);
 });
 
 //Place 2: Seattle
@@ -80,7 +83,7 @@ tape('index place Seattle', function(t) {
             coordinates: seattleCenter
         }
     };
-    addFeature(conf.place, place, t.end);
+    queueFeature(conf.place, place, t.end);
 });
 
 //Postcode 1: Centered to line up with Seattle
@@ -96,7 +99,7 @@ tape('index postcode "12345" in Seattle', function(t) {
             coordinates: seattleCenter
         }
     };
-    addFeature(conf.postcode, postcode, t.end);
+    queueFeature(conf.postcode, postcode, t.end);
 });
 
 //Region 1: Centered to line up with Seattle 
@@ -112,7 +115,16 @@ tape('index region "Washington" lines up with Seattle', function(t) {
             coordinates: seattleCenter
         }
     };
-    addFeature(conf.region, region, t.end);
+    queueFeature(conf.region, region, t.end);
+});
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 //Make a mismatched query with a street(100 Main St - containing 3 tokens) in Cold City and postcode, place and region layers lining up with Seattle, Washington

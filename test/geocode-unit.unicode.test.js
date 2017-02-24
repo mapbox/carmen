@@ -5,14 +5,17 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 var conf = {
     test: new mem({ maxzoom:6 }, function() {})
 };
 var c = new Carmen(conf);
 tape('index 京都市', function(t) {
-    addFeature(conf.test, {
+    queueFeature(conf.test, {
         id:1,
         properties: {
             'carmen:text':'京都市',
@@ -22,7 +25,7 @@ tape('index 京都市', function(t) {
     }, t.end);
 });
 tape('index москва', function(t) {
-    addFeature(conf.test, {
+    queueFeature(conf.test, {
         id:2,
         properties: {
             'carmen:text':'москва',
@@ -32,7 +35,7 @@ tape('index москва', function(t) {
     }, t.end);
 });
 tape('index josé', function(t) {
-    addFeature(conf.test, {
+    queueFeature(conf.test, {
         id:3,
         properties: {
             'carmen:text':'josé',
@@ -40,6 +43,16 @@ tape('index josé', function(t) {
             'carmen:center':[0,0]
         }
     }, t.end);
+});
+
+tape('build queued features', function(t) {
+    var q = queue();
+    Object.keys(conf).forEach(function(c) {
+        q.defer(function(cb) {
+            buildQueued(conf[c], cb);
+        });
+    });
+    q.awaitAll(t.end);
 });
 
 tape('京 => 京都市', function(t) {

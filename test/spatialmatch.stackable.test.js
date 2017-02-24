@@ -11,8 +11,8 @@ test('stackable simple', function(assert) {
     var b1 = new Phrasematch(['b1'], 0.5, parseInt('1', 2), null, null, 1, null, 1);
     var b2 = new Phrasematch(['b2'], 0.5, parseInt('1', 2), null, null, 1, null, 1);
     var debug = stackable([
-        new PhrasematchResult([a1], null, null, { idx: 0, bmask: {}, ndx: 0 }),
-        new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: {}, ndx: 1 })
+        new PhrasematchResult([a1], { idx: 0, bmask: {}, ndx: 0 }),
+        new PhrasematchResult([b1, b2], { idx: 1, bmask: {}, ndx: 1 })
     ]);
 
     debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
@@ -33,9 +33,9 @@ test('stackable nmask', function(assert) {
     var b1 = new Phrasematch(['b1'], 0.33, parseInt('10', 2), null, null, 1, null, 1);
     var c1 = new Phrasematch(['c1'], 0.33, parseInt('1', 2), null, null, 2, null, 1);
     var debug = stackable([
-        new PhrasematchResult([a1], null, null, { idx: 0, bmask: {}, ndx: 0 }),
-        new PhrasematchResult([b1], null, null, { idx: 1, bmask: {}, ndx: 1 }),
-        new PhrasematchResult([c1], null, null, { idx: 2, bmask: {}, ndx: 1 })
+        new PhrasematchResult([a1], { idx: 0, bmask: {}, ndx: 0 }),
+        new PhrasematchResult([b1], { idx: 1, bmask: {}, ndx: 1 }),
+        new PhrasematchResult([c1], { idx: 2, bmask: {}, ndx: 1 })
     ]);
 
     debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
@@ -55,8 +55,8 @@ test('stackable bmask', function(assert) {
     var a1 = new Phrasematch(['a1'], 0.66, parseInt('100', 2), null, null, 0, null, 1);
     var b1 = new Phrasematch(['b1'], 0.66, parseInt('10', 2), null, null, 1, null, 1);
     var debug = stackable([
-        new PhrasematchResult([a1], null, null, { idx: 0, bmask: [0, 1], ndx: 0 }),
-        new PhrasematchResult([b1], null, null, { idx: 1, bmask: [1, 0], ndx: 1 })
+        new PhrasematchResult([a1], { idx: 0, bmask: [0, 1], ndx: 0 }),
+        new PhrasematchResult([b1], { idx: 1, bmask: [1, 0], ndx: 1 })
     ]);
 
     debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
@@ -80,9 +80,9 @@ test('stackable complex', function(assert) {
     var c1 = new Phrasematch(['c1'], 0.33, parseInt('1', 2), null, null, 1, null, 1);
     var c2 = new Phrasematch(['c2'], 0.33, parseInt('100', 2), null, null, 1, null, 1);
     var debug = stackable([
-        new PhrasematchResult([a1, a2], null, null, { idx: 0, bmask: [], ndx: 0 }),
-        new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: [], ndx: 1 }),
-        new PhrasematchResult([c1, c2], null, null, { idx: 1, bmask: [], ndx: 2 }),
+        new PhrasematchResult([a1, a2], { idx: 0, bmask: [], ndx: 0 }),
+        new PhrasematchResult([b1, b2], { idx: 1, bmask: [], ndx: 1 }),
+        new PhrasematchResult([c1, c2], { idx: 1, bmask: [], ndx: 2 }),
     ]);
 
     debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
@@ -115,10 +115,10 @@ test('stackable direction change', function(assert) {
     var d1 = new Phrasematch(['d1'], 0.25, parseInt('1000', 2), null, null, 3, null, 3);
     var d2 = new Phrasematch(['d2'], 0.25, parseInt('0001', 2), null, null, 3, null, 4);
     var debug = stackable([
-        new PhrasematchResult([a1, a2], null, null, { idx: 0, bmask: [], ndx: 0 }),
-        new PhrasematchResult([b1, b2], null, null, { idx: 1, bmask: [], ndx: 1 }),
-        new PhrasematchResult([c1, c2], null, null, { idx: 2, bmask: [], ndx: 2 }),
-        new PhrasematchResult([d1, d2], null, null, { idx: 3, bmask: [], ndx: 3 }),
+        new PhrasematchResult([a1, a2], { idx: 0, bmask: [], ndx: 0 }),
+        new PhrasematchResult([b1, b2], { idx: 1, bmask: [], ndx: 1 }),
+        new PhrasematchResult([c1, c2], { idx: 2, bmask: [], ndx: 2 }),
+        new PhrasematchResult([d1, d2], { idx: 3, bmask: [], ndx: 3 }),
     ]);
 
     debug.forEach(function(stack) { stack.sort(sortByZoomIdx); });
@@ -179,7 +179,7 @@ test('stackable bench', function(assert) {
                 for (var o = 0; o < matchingTerms; o++) {
                     mask = mask | (1 << (offset + o));
                 }
-                phraseMatches[i] = phraseMatches[i] || new PhrasematchResult([], null, null, { idx: i, bmask: [], ndx: i });
+                phraseMatches[i] = phraseMatches[i] || new PhrasematchResult([], { idx: i, bmask: [], ndx: i });
                 var weight = matchingTerms / termCount;
                 phraseMatches[i].phrasematches.push(new Phrasematch([t + '-' + i], weight, mask, null, null, i, null, 0));
             }

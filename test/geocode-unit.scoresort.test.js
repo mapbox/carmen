@@ -4,7 +4,9 @@ var tape = require('tape');
 var Carmen = require('..');
 var context = require('../lib/context');
 var mem = require('../lib/api-mem');
-var addFeature = require('../lib/util/addfeature');
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 var queue = require('d3-queue').queue;
 
 (function() {
@@ -19,7 +21,7 @@ var queue = require('d3-queue').queue;
     var c = new Carmen(conf);
     // very high max score in region index
     tape('index region (high score)', function(t) {
-        addFeature(conf.region, {
+        queueFeature(conf.region, {
             id:1,
             properties: {
                 'carmen:text':'bigtown',
@@ -34,7 +36,7 @@ var queue = require('d3-queue').queue;
     tape('index region (low score)', function(t) {
         var q = queue(1);
         for (var i =2; i < 25; i++) q.defer(function(i, done) {
-            addFeature(conf.region, {
+            queueFeature(conf.region, {
                 id:i,
                 properties: {
                     'carmen:text':'smallville' + i,
@@ -51,7 +53,7 @@ var queue = require('d3-queue').queue;
     tape('index region (medium score)', function(t) {
         var q = queue(1);
         for (var i =25; i < 50; i++) q.defer(function(i, done) {
-            addFeature(conf.region, {
+            queueFeature(conf.region, {
                 id:i,
                 properties: {
                     'carmen:text':'smallville' + i,
@@ -66,7 +68,7 @@ var queue = require('d3-queue').queue;
 
     // Feature is scored higher than all but one region
     tape('index place (high score)', function(t) {
-        addFeature(conf.place, {
+        queueFeature(conf.place, {
             id:1,
             properties: {
                 'carmen:text':'smallville1',
@@ -78,7 +80,7 @@ var queue = require('d3-queue').queue;
     });
 
     tape('index lamplace (high score)', function(t) {
-        addFeature(conf.lamplace, {
+        queueFeature(conf.lamplace, {
             id:1,
             properties: {
                 'carmen:text':'smallville1',
@@ -93,7 +95,7 @@ var queue = require('d3-queue').queue;
     tape('index lamplace (medium score)', function(t) {
         var q = queue(1);
         for (var i =2; i < 25; i++) q.defer(function(i, done) {
-            addFeature(conf.lamplace, {
+            queueFeature(conf.lamplace, {
                 id:i,
                 properties: {
                     'carmen:text':'smallville' + i,
@@ -107,7 +109,7 @@ var queue = require('d3-queue').queue;
     });
 
     tape('index namplace (high score)', function(t) {
-        addFeature(conf.namplace, {
+        queueFeature(conf.namplace, {
             id:1,
             properties: {
                 'carmen:text':'smallville1',
@@ -119,7 +121,7 @@ var queue = require('d3-queue').queue;
     });
 
     tape('index locality (low score)', function(t) {
-        addFeature(conf.locality, {
+        queueFeature(conf.locality, {
             id:1,
             properties: {
                 'carmen:text':'smallville1',
@@ -128,6 +130,16 @@ var queue = require('d3-queue').queue;
                 'carmen:center':[0,0]
             }
         }, t.end);
+    });
+
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     // High-scored feature wins over low-scored features in index with high max score

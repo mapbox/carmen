@@ -8,7 +8,7 @@ test('termops.getWeights', function(assert) {
 
     tokens = ['a','b','c'];
     freq = {};
-    freq[0] = [1002];
+    freq["__COUNT__"] = [1002];
     freq[termops.encodeTerm(tokens[0])] = [1000];
     freq[termops.encodeTerm(tokens[1])] = [1];
     freq[termops.encodeTerm(tokens[2])] = [1];

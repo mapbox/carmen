@@ -2,7 +2,10 @@ var tape = require('tape');
 var Carmen = require('..');
 var mem = require('../lib/api-mem');
 var context = require('../lib/context');
-var addFeature = require('../lib/util/addfeature');
+var queue = require('d3-queue').queue;
+var addFeature = require('../lib/util/addfeature'),
+    queueFeature = addFeature.queueFeature,
+    buildQueued = addFeature.buildQueued;
 
 (function() {
     var conf = {
@@ -12,7 +15,7 @@ var addFeature = require('../lib/util/addfeature');
     var c = new Carmen(conf);
 
     tape('index country', function(assert) {
-        addFeature(conf.country, {
+        queueFeature(conf.country, {
             type: 'Feature',
             id: 1,
             properties: {
@@ -28,7 +31,7 @@ var addFeature = require('../lib/util/addfeature');
     });
 
     tape('index postcode', function(assert) {
-        addFeature(conf.postcode, {
+        queueFeature(conf.postcode, {
             id: 1,
             type: 'Feature',
             properties: {
@@ -40,6 +43,15 @@ var addFeature = require('../lib/util/addfeature');
                 coordinates: [1,1]
             }
         }, assert.end);
+    });
+    tape('build queued features', function(t) {
+        var q = queue();
+        Object.keys(conf).forEach(function(c) {
+            q.defer(function(cb) {
+                buildQueued(conf[c], cb);
+            });
+        });
+        q.awaitAll(t.end);
     });
 
     tape('query: 10000', function(assert) {
@@ -95,4 +107,3 @@ var addFeature = require('../lib/util/addfeature');
         assert.end();
     });
 })();
-

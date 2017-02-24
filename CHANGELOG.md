@@ -1,5 +1,10 @@
 # Changelog
 
+## 20.0.0
+- Update to carmen-cache@0.17.0, a major revision which eliminates cache sharding and moves the underlying storage mechanism to one backed by [RocksDB](http://rocksdb.org/)
+- Adapt carmen to this new cache layer by eliminating logic around on-the-fly loading and storing of grid and frequency data, which is now delegated to RocksDB
+- Change phrase IDs to strings, allowing elimination of degen indexing in favor of ID prefix scans in carmen-cache
+
 ## 19.0.3
 - Add a `digraphic` array of languages known to use multiple scripts, for more rigorous filtering in `languageMode: strict`
 

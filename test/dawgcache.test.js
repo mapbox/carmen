@@ -28,6 +28,7 @@ tape('dump/load', function(assert) {
 
             assert.equal(loaded.hasPhrase("a", false), false, 'not a');
             assert.equal(loaded.hasPhrase("a", true), true, 'has a as degen');
+
             assert.end();
         });
     });
