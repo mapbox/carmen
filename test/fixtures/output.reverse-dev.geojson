@@ -289,7 +289,8 @@
                 "carmen:extid": "place.1",
                 "carmen:tmpid": 67108865,
                 "carmen:vtquerydist": 0,
-                "carmen:geomtype": 3
+                "carmen:geomtype": 3,
+                "carmen:reverseMode": false
             },
             "bbox": [
                 -40,
@@ -600,7 +601,8 @@
                 "carmen:extid": "region.1",
                 "carmen:tmpid": 33554433,
                 "carmen:vtquerydist": 0,
-                "carmen:geomtype": 3
+                "carmen:geomtype": 3,
+                "carmen:reverseMode": false
             },
             "bbox": [
                 -40,
@@ -907,7 +909,8 @@
                 "carmen:extid": "country.1",
                 "carmen:tmpid": 1,
                 "carmen:vtquerydist": 0,
-                "carmen:geomtype": 3
+                "carmen:geomtype": 3,
+                "carmen:reverseMode": false
             },
             "bbox": [
                 -40,
