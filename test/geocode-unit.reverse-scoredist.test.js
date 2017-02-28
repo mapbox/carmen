@@ -111,6 +111,14 @@ tape('add address', function(assert) {
 
 });
 
+tape('invalid', function(assert) {
+    c.geocode('0,0', {reverseMode: 'foo'}, function(err, res) {
+        assert.deepEqual(err && err.toString(), 'Error: foo is not a valid reverseMode. Must be one of: score, distance');
+    });
+
+    assert.end();
+});
+
 tape('reverse distance threshold - close enough', function(assert) {
     c.geocode('0.106,-0.106', {}, function(err, res) {
         assert.deepEqual(res.features.length, 1, 'finds a feature when coords are off by .006');
