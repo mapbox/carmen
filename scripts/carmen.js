@@ -28,6 +28,7 @@ if (argv.help) {
     console.log('  --language={ISO code}   Return responses in specified language (if available in index)');
     console.log('  --stats                 Generate Stats on the query');
     console.log('  --debug="feat id"       Follows a feature through geocode"');
+    console.log('  --reverseMode="{mode}"  Sort features in reverse queries by one of `score` or `distance`');
     console.log('  --help                  Print this report');
     process.exit(0);
 }
@@ -81,6 +82,10 @@ if (argv.debug) argv.debug = parseInt(argv.debug);
 
 if (argv.limit) argv.limit = parseInt(argv.limit);
 
+if (argv.reverseMode) {
+    if (argv.reverseMode !== 'score' && argv.reverseMode !== 'distance') throw new Error('reverseMode must be one of `score` or `distance`');
+}
+
 var load = +new Date();
 
 carmen.geocode(argv.query, {
@@ -91,7 +96,8 @@ carmen.geocode(argv.query, {
     'debug': argv.debug,
     'stats': true,
     'language': argv.language,
-    'indexes': true
+    'indexes': true,
+    'reverseMode': argv.reverseMode
 }, function(err, data) {
     if (err) throw err;
     load = +new Date() - load;
