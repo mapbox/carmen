@@ -87,9 +87,7 @@ tape('no address', function(t) {
 tape('only number', function(t) {
     c.geocode('500', { limit_verify: 2 }, function(err, res) {
         t.ifError(err);
-        t.equal(res.features.length, 2);
-        t.equals(res.features[0].place_name, '500 baker street', '500 baker street');
-        t.equals(res.features[1].place_name, '500 15th street', '500 15th street');
+        t.notok(res.features.length);
         t.end();
     });
 });
