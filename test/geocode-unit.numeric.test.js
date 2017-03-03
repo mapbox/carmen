@@ -8,7 +8,8 @@ var addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 var conf = {
-    postcode: new mem({maxzoom: 6}, function() {})
+    postcode: new mem({maxzoom: 6}, function() {}),
+    address: new mem({maxzoom: 6, geocoder_address: 1, geocoder_name:'address'}, function() {})
 };
 var c = new Carmen(conf);
 
@@ -33,6 +34,24 @@ tape('index', function(assert) {
         }
     }, assert.end);
 });
+
+tape('index address', function(assert) {
+    queueFeature(conf.address, {
+        id:2,
+        properties: {
+            'carmen:text':'main st',
+            'carmen:addressnumber':['22209'],
+            'carmen:score': 1000,
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        },
+        geometry: {
+            type: 'MultiPoint',
+            coordinates: [[0,0]]
+        }
+    }, assert.end);
+});
+
 tape('build queued features', function(t) {
     var q = queue();
     Object.keys(conf).forEach(function(c) {
