@@ -280,6 +280,9 @@ tape('indexdocs.standardize', function(assert) {
 tape('indexdocs.verifyCenter', function(assert) {
     assert.equal(indexdocs.verifyCenter([0,0], [[0,0,0]]), true, 'center in tiles');
     assert.equal(indexdocs.verifyCenter([0,-45], [[0,0,1],[1,0,1]]), false, 'center outside tiles');
+    assert.equal(indexdocs.verifyCenter([0,null], [[32,32,6]]), false, 'handle null lon');
+    assert.equal(indexdocs.verifyCenter([null,0], [[32,32,6]]), false, 'handle null lat');
+    assert.equal(indexdocs.verifyCenter([null,null], [[32,32,6]]), false, 'handle null lon,lat');
     assert.end();
 });
 
