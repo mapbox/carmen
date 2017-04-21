@@ -3,7 +3,10 @@ var feature = require('../lib/util/feature.js');
 var Memsource = require('../lib/api-mem.js');
 var Carmen = require('../index.js');
 
-var source = new Memsource(null, function() {});
+var source = new Memsource({
+    maxzoom: 6,
+    maxscore: 2000
+}, function() {});
 var conf = { source: source };
 var carmen = new Carmen(conf);
 
@@ -56,7 +59,7 @@ tape('putFeatures', function(assert) {
                 'carmen:text': 'Dr Jekyll',
                 'carmen:center': [ 0, 0 ],
                 'carmen:zxy': ['6/32/32'],
-                'carmen:score': 1000
+                'carmen:score': 10
             },
             geometry: {
                 type: 'Point',
@@ -70,7 +73,7 @@ tape('putFeatures', function(assert) {
                 'carmen:text': 'Mr Hyde',
                 'carmen:center': [ 0, 0 ],
                 'carmen:zxy': ['6/32/32'],
-                'carmen:score': 10
+                'carmen:score': 1000
             },
             geometry: {
                 type: 'Point',
@@ -100,8 +103,8 @@ tape('getFeatureByCover', function(assert) {
 });
 
 tape('getFeatureByCover, collision', function(assert) {
-    feature.getFeatureByCover(conf.source, { id:187838, x:32, y:32 }, function(err, data) {
-        console.log("data", data)
+    feature.getFeatureByCover(conf.source, { id:187838, x:32, y:32, score:2000 }, function(err, data) {
+        assert.equal(data.id, 6832527855771070);
         assert.end();
     });
 });
