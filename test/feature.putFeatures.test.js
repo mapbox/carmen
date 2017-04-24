@@ -53,6 +53,20 @@ tape('putFeatures', function(assert) {
             }
         },
         {
+            id: 2814870916619710,
+            type: 'Feature',
+            properties: {
+                'carmen:text': 'Frankenstein',
+                'carmen:center': [ 0, 0 ],
+                'carmen:zxy': ['6/32/32'],
+                'carmen:score': 1500
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [ 0, 0 ]
+            }
+        },
+        {
             id: 11111222222183870,
             type: 'Feature',
             properties: {
@@ -103,7 +117,7 @@ tape('getFeatureByCover', function(assert) {
 });
 
 tape('getFeatureByCover, collision', function(assert) {
-    feature.getFeatureByCover(conf.source, { id:187838, x:32, y:32, score:2000 }, function(err, data) {
+    feature.getFeatureByCover(conf.source, { id:187838, x:32, y:32, score:2000, text:'Mr Hyde' }, function(err, data) {
         assert.equal(data.id, 6832527855771070);
         assert.end();
     });
