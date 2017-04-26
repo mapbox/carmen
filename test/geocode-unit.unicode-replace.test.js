@@ -12,7 +12,7 @@ var addFeature = require('../lib/util/addfeature'),
 var conf = {
     test: new mem({
         geocoder_tokens: {
-            'Maréchal': 'Mal'
+            'Maréchal': 'Mal',
         },
         maxzoom:6
     }, function() {})
@@ -43,6 +43,34 @@ tape('Maréchal => Maréchal', function(t) {
 tape('Marechal => Maréchal', function(t) {
     c.geocode('Marechal', { limit_verify:1 }, function(err, res) {
         t.deepEqual(res.features[0].place_name, 'Maréchal');
+        t.end();
+    });
+});
+
+var config = {
+    test: new mem({
+        geocoder_tokens: {
+            'straße': 'str',
+            'strasse': 'str'
+        },
+        maxzoom:6
+    }, function() {})
+};
+var b = new Carmen(config);
+
+tape('index Alpenstraße', function(t) {
+    addFeature(config.test, {
+        id:1,
+        properties: {
+            'carmen:text': 'Alpenstraße' ,
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    }, t.end);
+});
+tape('straße => str', function(t) {
+    b.geocode('Alpenstraße', { limit_verify:1 }, function(err, res) {
+        t.deepEqual(res.features[0].place_name, 'Alpenstraße');
         t.end();
     });
 });
