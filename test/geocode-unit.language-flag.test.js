@@ -32,6 +32,7 @@ const addFeature = require('../lib/util/addfeature'),
                 'carmen:zxy': ['6/32/32'],
                 'carmen:text_es': null,
                 'carmen:text_ru': 'Российская Федерация',
+                'carmen:text_tr':'Rusya',
                 'carmen:text': 'Russian Federation,Rossiyskaya Federatsiya'
             },
             id: 1,
@@ -218,13 +219,13 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    // fallback to ru on az
+    // fallback to tr on az
     tape('Rossiyskaya => Russian Federation - {language: "az"}', (t) => {
         c.geocode('Russian Federation', { limit_verify:1, language: 'az' }, (err, res) => {
             t.ifError(err);
-            t.equal(res.features[0].place_name, 'Российская Федерация');
+            t.equal(res.features[0].place_name, 'Rusya');
             t.equal(res.features[0].id, 'country.1');
-            t.equal(res.features[0].language, 'ru');
+            t.equal(res.features[0].language, 'tr');
             t.end();
         });
     });
