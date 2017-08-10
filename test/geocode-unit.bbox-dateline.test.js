@@ -26,7 +26,7 @@ tape('index feature', (t) => {
         "geometry": {
             "type":"MultiPolygon",
             "coordinates":[[[[-140,25],[-65,25],[-65,50],[-140,50],[-140,25]]],[[[160,40],[170,40],[170,50],[160,50],[160,40]]]]}
-      };
+    };
     queueFeature(conf.country, feature, t.end);
 });
 
