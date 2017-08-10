@@ -15,7 +15,8 @@ const c = new Carmen(conf);
 
 tape('index feature', (t) => {
     let feature = {
-        id:102,
+        id:1,
+        type: 'Feature',
         properties: {
             'carmen:text':'USA',
             'carmen:zxy':['6/32/32'],
@@ -23,33 +24,9 @@ tape('index feature', (t) => {
             'carmen:score': 1,
         },
         "geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                  [
-                    [
-                      -179.330951,
-                      -14.6528
-                    ],
-                    [
-                      -179.330951,
-                      71.540724
-                    ],
-                    [
-                      179.959578,
-                      71.540724
-                    ],
-                    [
-                      179.959578,
-                      -14.6528
-                    ],
-                    [
-                      -179.330951,
-                      -14.6528
-                    ]
-                  ]
-                ]
-              }
-    };
+            "type":"MultiPolygon",
+            "coordinates":[[[[-140,25],[-65,25],[-65,50],[-140,50],[-140,25]]],[[[160,40],[170,40],[170,50],[160,50],[160,40]]]]}
+      };
     queueFeature(conf.country, feature, t.end);
 });
 
