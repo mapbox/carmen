@@ -13,6 +13,7 @@ const conf = {
 
 const c = new Carmen(conf);
 
+// Multipolygon with one big part in the Western hemisphere, and one small part in the Eastern
 tape('index feature', (t) => {
     const feature = {
         id:1,
@@ -48,7 +49,6 @@ tape('USA', (t) => {
         t.end();
     });
 });
-
 
 tape('teardown', (t) => {
     context.getTile.cache.reset();
