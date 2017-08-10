@@ -31,6 +31,23 @@ tape('index feature', (t) => {
     queueFeature(conf.country, feature, t.end);
 });
 
+tape('index feature', (t) => {
+    const feature = {
+        id:2,
+        type: 'Feature',
+        properties: {
+            'carmen:text':'Russia',
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0],
+            'carmen:score': 1,
+        },
+        "geometry": {
+            "type":"MultiPolygon",
+            "coordinates":[[[[-140,25],[-130,25],[-130,50],[-140,50],[-140,25]]],[[[60,40],[170,40],[170,50],[60,50],[60,40]]]]}
+    };
+    queueFeature(conf.country, feature, t.end);
+});
+
 tape('build queued features', (t) => {
     const q = queue();
     Object.keys(conf).forEach((c) => {
@@ -46,6 +63,17 @@ tape('USA', (t) => {
         t.ifError(err);
         const width = res.features[0].bbox[2] - res.features[0].bbox[0];
         t.ok(width < 180, "bbox is sane");
+        t.deepEquals(res.features[0].bbox, [ -179.9, 25, -65, 50 ])
+        t.end();
+    });
+});
+
+tape('Russia', (t) => {
+    c.geocode('Russia', { }, (err, res) => {
+        t.ifError(err);
+        const width = res.features[0].bbox[2] - res.features[0].bbox[0];
+        t.ok(width < 180, "bbox is sane");
+        t.deepEquals(res.features[0].bbox, [ 60, 25, 179.9, 50 ])
         t.end();
     });
 });
