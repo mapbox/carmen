@@ -14,7 +14,7 @@ const conf = {
 const c = new Carmen(conf);
 
 tape('index feature', (t) => {
-    let feature = {
+    const feature = {
         id:1,
         type: 'Feature',
         properties: {
