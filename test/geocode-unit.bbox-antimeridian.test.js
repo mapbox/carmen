@@ -13,7 +13,7 @@ const conf = {
 
 const c = new Carmen(conf);
 
-// Multipolygon with one big part in the Western hemisphere, and one small part in the Eastern
+// Multipolygon with one big part in the Western Hemisphere, and one small part in the Eastern
 tape('index feature', (t) => {
     const feature = {
         id:1,
@@ -31,6 +31,7 @@ tape('index feature', (t) => {
     queueFeature(conf.country, feature, t.end);
 });
 
+// Multipolygon with one big part in the Eastern Hemisphere, and one small part in the Western
 tape('index feature', (t) => {
     const feature = {
         id:2,
@@ -63,6 +64,16 @@ tape('USA', (t) => {
         t.ifError(err);
         const width = res.features[0].bbox[2] - res.features[0].bbox[0];
         t.ok(width < 180, "bbox is sane");
+        t.deepEquals(res.features[0].bbox, [ 160, 25, -65, 50 ])
+        t.end();
+    });
+});
+
+tape('USA, clip bbox at antimeridian', (t) => {
+    c.geocode('USA', { clipBBox: true }, (err, res) => {
+        t.ifError(err);
+        const width = res.features[0].bbox[2] - res.features[0].bbox[0];
+        t.ok(width < 180, "bbox is sane");
         t.deepEquals(res.features[0].bbox, [ -179.9, 25, -65, 50 ])
         t.end();
     });
@@ -70,6 +81,16 @@ tape('USA', (t) => {
 
 tape('Russia', (t) => {
     c.geocode('Russia', { }, (err, res) => {
+        t.ifError(err);
+        const width = res.features[0].bbox[2] - res.features[0].bbox[0];
+        t.ok(width < 180, "bbox is sane");
+        t.deepEquals(res.features[0].bbox, [ 60, 25, -130, 50 ])
+        t.end();
+    });
+});
+
+tape('Russia, clip bbox at antimeridian', (t) => {
+    c.geocode('Russia', { clipBBox: true }, (err, res) => {
         t.ifError(err);
         const width = res.features[0].bbox[2] - res.features[0].bbox[0];
         t.ok(width < 180, "bbox is sane");
