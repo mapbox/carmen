@@ -202,6 +202,8 @@ let tokenList = {
     "Rio": "R",
     "S.": "S"
 };
+// store an original copy of the tokenList object that we can compare against
+const tokenClone = JSON.parse(JSON.stringify(tokenList));
 
 let tokens = token.createReplacer(tokenList);
 var tokensR = token.createReplacer(tokenList, {includeUnambiguous: true});
@@ -227,6 +229,13 @@ var tokensRC = token.createReplacer(tokenList, {
         }
     }
 })
+
+// We use the same tokens object to create both indexer and runtime token replacers.
+// Test that indexer-only token replacers don't leak into runtime replacers.
+test('createReplacer', (q) => {
+    q.deepEqual(tokenList, tokenClone, 'createReplacer does not change original value of tokenList');
+    q.end();
+});
 
 test('token replacement', (q) => {
     q.deepEqual(token.replaceToken(tokens, 'fargo street northeast, san francisco'),'fargo St NE, sf');
@@ -274,7 +283,7 @@ test('custom reverse replacement', (q) => {
     ]);
     q.deepEqual(token.enumerateTokenReplacements(tokensRC, 'e first st'), [
         '',
-        [ 'East', 'e' ],
+        [ 'e', 'East' ],
         '',
         [ ' 1st ', ' first ' ],
         '',
