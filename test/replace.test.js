@@ -202,7 +202,7 @@ let tokenList = {
     "Rio": "R",
     "S.": "S"
 };
-
+let tokenClone = JSON.parse(JSON.stringify(tokenList));
 let tokens = token.createReplacer(tokenList);
 var tokensR = token.createReplacer(tokenList, {includeUnambiguous: true});
 
@@ -227,6 +227,11 @@ var tokensRC = token.createReplacer(tokenList, {
         }
     }
 })
+
+test('createReplacer', (q) => {
+    q.deepEqual(tokenList, tokenClone, 'createReplacer does not change original value of tokenList');
+    q.end();
+});
 
 test('token replacement', (q) => {
     q.deepEqual(token.replaceToken(tokens, 'fargo street northeast, san francisco'),'fargo St NE, sf');
