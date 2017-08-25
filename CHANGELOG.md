@@ -1,5 +1,9 @@
 # Changelog
 
+## 23.0.2
+
+- Remove stacky bonus and gappy penalty (https://github.com/mapbox/carmen/pull/647)
+
 ## 23.0.1
 
 - Packaging fix for carmen-cache.
