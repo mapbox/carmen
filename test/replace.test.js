@@ -202,7 +202,9 @@ let tokenList = {
     "Rio": "R",
     "S.": "S"
 };
-let tokenClone = JSON.parse(JSON.stringify(tokenList));
+// store an original copy of the tokenList object that we can compare against
+const tokenClone = JSON.parse(JSON.stringify(tokenList));
+
 let tokens = token.createReplacer(tokenList);
 var tokensR = token.createReplacer(tokenList, {includeUnambiguous: true});
 
@@ -228,6 +230,8 @@ var tokensRC = token.createReplacer(tokenList, {
     }
 })
 
+// We use the same tokens object to create both indexer and runtime token replacers.
+// Test that indexer-only token replacers don't leak into runtime replacers.
 test('createReplacer', (q) => {
     q.deepEqual(tokenList, tokenClone, 'createReplacer does not change original value of tokenList');
     q.end();
