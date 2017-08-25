@@ -274,7 +274,7 @@ test('custom reverse replacement', (q) => {
     ]);
     q.deepEqual(token.enumerateTokenReplacements(tokensRC, 'e first st'), [
         '',
-        [ 'East', 'e' ],
+        [ 'e', 'East' ],
         '',
         [ ' 1st ', ' first ' ],
         '',
