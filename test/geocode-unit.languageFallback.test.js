@@ -59,8 +59,8 @@ const addFeature = require('../lib/util/addfeature'),
         t.deepEquals(
             conf.country._geocoder.grid.list(),
             [
-                [ 'india', [ 0 ] ],
-                [ 'united states', [ 0, 1 ] ],
+                [ 'india', [ 0, 1 ] ],
+                [ 'unitedstates', [ 0, 1, 2, 3 ] ],
                 [ 'بھارت', [ 3 ] ],
                 [ 'هندوستان', [ 2 ] ]
             ],

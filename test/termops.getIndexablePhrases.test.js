@@ -14,13 +14,13 @@ test('termops.getIndexablePhrases', (t) => {
     t.deepEqual(termops.getIndexablePhrases(tokens, freq), [
         {
             "relev": 1,
-            "text": "main st",
-            "phrase": termops.encodePhrase('main st'),
+            "text": "mainst",
+            "phrase": termops.removeWhiteSpace(termops.encodePhrase('main st')),
         },
         {
             "relev": 0.8,
             "text": "main",
-            "phrase": termops.encodePhrase('main'),
+            "phrase": termops.removeWhiteSpace(termops.encodePhrase('main')),
         }
     ]);
 
@@ -43,10 +43,10 @@ test('termops.getIndexablePhrases (weight sieve)', (t) => {
     t.deepEqual(termops.getIndexablePhrases(tokens, freq).map((p) => {
         return (p.relev) + '-1-' + p.text;
     }), [
-        '1-1-jose de la casa',
-        '1-1-jose de casa',
-        '1-1-jose la casa',
-        '0.8-1-jose casa'
+        '1-1-josedelacasa',
+        '1-1-josedecasa',
+        '1-1-joselacasa',
+        '0.8-1-josecasa'
     ]);
 
     t.end();

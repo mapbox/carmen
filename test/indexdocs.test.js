@@ -54,7 +54,7 @@ tape('indexdocs.loadDoc', (t) => {
     }, 'patch.grid[0][0]');
     t.deepEqual(patch.docs.length, 1);
     t.deepEqual(patch.docs[0], doc);
-    t.deepEqual(patch.text, ['main st', 'main']);
+    t.deepEqual(patch.text, ['mainst', 'main']);
 
     t.end();
 });

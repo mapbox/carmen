@@ -259,23 +259,35 @@ The indexer then generates all possible subqueries that might match this feature
 
     0.2 west
     0.7 west lake
+    0.7 westlake
     0.9 west lake view
+    0.9 westlakeview
     1.0 west lake view rd
+    1.0 westlakeviewrd
     0.5 lake
     0.7 lake view
+    0.7 lakeview
     0.8 lake view rd
+    0.8 lakeviewrd
     0.2 view
     0.3 view rd
+    0.3 viewrd
     0.1 rd
 
 It drops any of the subqueries below a threshold (e.g. 0.4). This will also save bloating our index for phrases like `rd`:
 
     0.5 lake
     0.7 west lake
+    0.7 westlake
     0.7 lake view
+    0.7 lakeview
     0.8 lake view rd
+    0.8 lakeviewrd
     0.9 west lake view
+    0.9 westlakeview
     1.0 west lake view rd
+    1.0 westlakeviewrd
+
 
 Finally the indexer generates degenerates for all these subqueries, making it possible to match using typeahead, like this:
 
@@ -319,46 +331,56 @@ We take the entire query and break it into all the possible subquery permutation
 
 > West Lake View Englewood USA
 
-Leads to 15 subquery permutations:
+Leads to subquery permutations:
 
-    1  west lake view englewood usa
-    2  west lake view englewood
-    3  lake view englewood usa
-    4  west lake view
-    5  lake view englewood
-    6  view englewood usa
-    7  west lake
-    8  lake view
-    9  view englewood
-    10 englewood usa
-    11 west
-    12 lake
-    13 view
-    14 englewood
-    15 usa
+    west lake view englewood usa
+    westlakeviewenglewoodusa
+    west lake view englewood
+    westlakeviewenglewood
+    lake view englewood usa
+    lakeviewenglewoodusa
+    west lake view
+    westlakeview
+    lake view englewood
+    lakeviewenglewood
+    view englewood usa
+    viewenglewoodusa
+    west lake
+    westlake
+    lake view
+    lakeview
+    view englewood
+    viewenglewood
+    englewood usa
+    englewoodusa
+    west
+    lake
+    view
+    englewood
+    usa
 
 Once phrasematch results are retrieved any subqueries that didn't match any results are eliminated.
 
-    4  west lake view   11100 street
-    7  west lake        11000 street
-    8  lake view        01100 street
-    11 west             10000 street, place, country
-    12 lake             01000 street, place
-    13 view             00100 street
-    14 englewood        00010 street, place
-    15 usa              00001 country
+    west lake view   11100 street
+    west lake        11000 street
+    lake view        01100 street
+    west             10000 street, place, country
+    lake             01000 street, place
+    view             00100 street
+    englewood        00010 street, place
+    usa              00001 country
 
 By assigning a bitmask to each subquery representing the positions of the input query it represents we can evaluate all the permutations that *could* be "stacked" to match the input query more completely. We can also calculate a *potential* max relevance score that would result from each permutation if the features matched by these subqueries do indeed stack spatially. Examples:
 
-    4  west lake view   11100 street
-    14 englewood        00010 place
-    15 usa              00001 country
+    west lake view   11100 street
+    englewood        00010 place
+    usa              00001 country
 
     potential relev 5/5 query terms = 1
 
-    14 englewood        00010 street
-    11 west             10000 place
-    15 usa              00001 country
+    englewood        00010 street
+    west             10000 place
+    usa              00001 country
 
     potential relev 3/5 query terms = 0.6
 
@@ -585,4 +607,3 @@ The `carmen:types` property of a feature allows it to shift between different ty
 In this example the feature Sparta can be returned as either a `country` feature or a `city` feature. Types should be listed in order of ascending preference (last is most preferred).
 
 To use multitype features properly, make sure to set the `geocoder_types` key of the source so that the source is not prematurely excluded from queries when the `types` filter is used.
-

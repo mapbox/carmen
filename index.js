@@ -182,6 +182,7 @@ function Geocoder(indexes, options) {
             this.byidx[i] = source;
         }.bind(this));
 
+
         // Second pass -- generate bmask (geocoder_stack) per index.
         // The bmask of an index represents a mask of all indexes that their
         // geocoder_stacks do not intersect with -- ie. a spatialmatch with any of
