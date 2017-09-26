@@ -203,6 +203,14 @@ test('termops.getIndexableText', (t) => {
     ];
     t.deepEqual(termops.getIndexableText(replacer, [], doc, true), texts, 'translations with phrase overlaps are properly grouped');
 
+    replacer = token.createReplacer({});
+    doc = { properties: { 'carmen:text': 'United States', 'carmen:text_sv': 'USA', 'carmen:text_universal': 'USA' } };
+    texts = [
+        { languages: [ 'default' ], tokens: [ 'united', 'states' ] },
+        { languages: [ 'sv', 'all' ], tokens: [ 'usa' ] }
+    ];
+    t.deepEqual(termops.getIndexableText(replacer, [], doc, true), texts, 'universal text');
+
     t.end();
 });
 
