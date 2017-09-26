@@ -5,14 +5,21 @@ const split = require('split');
 const Carmen = require('..');
 const mem = require('../lib/api-mem');
 const de = require('deep-equal');
+const CombinedStream = require('combined-stream');
+const DawgCache = require('../lib/util/dawg');
+
+const tmpdir = require('os').tmpdir() + "/temp." + Math.random().toString(36).substr(2, 5);
+fs.mkdirSync(tmpdir);
+let tmpidx = 0;
+const tmpfile = () => { return tmpdir + "/" + (tmpidx++) + ".dat"; };
 
 const test = require('tape');
 
 test('index - streaming interface', (t) => {
-    function getIndex(start, end) {
+    function getIndex(start, end, fileName) {
 
         let count = 0;
-        let inputStream = fs.createReadStream(path.resolve(__dirname, './fixtures/docs.jsonl'), { encoding: 'utf8' });
+        let inputStream = fs.createReadStream(path.resolve(__dirname, './fixtures/' + (fileName || 'docs.jsonl')), { encoding: 'utf8' });
         let transformStream = new Stream.Transform();
         transformStream._transform = (data, encoding, done) => {
             if (data) {
@@ -26,6 +33,13 @@ test('index - streaming interface', (t) => {
         inputStream.pipe(split()).pipe(transformStream);
         return transformStream;
     }
+    function combine() {
+        var cs = CombinedStream.create();
+        for (let arg of arguments) {
+            cs.append(arg);
+        }
+        return cs;
+    }
 
     let outputStream = new Stream.Writable();
     outputStream._write = (chunk, encoding, done) => {
@@ -36,13 +50,14 @@ test('index - streaming interface', (t) => {
         done();
     };
 
-    const memObjectA = new mem([], { use_normalization_cache: true, geocoder_tokens: {'South': 'S'}, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
+    const tokens = {'South': 'S', 'ü': {skipBoundaries: true, skipDiacriticStripping: true, text: 'ue'}};
+    const memObjectA = new mem([], { use_normalization_cache: true, geocoder_tokens: tokens, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
     const confA = {
         country : memObjectA
     };
 
     const carmenA = new Carmen(confA);
-    const indexA = getIndex(0,100);
+    const indexA = combine(getIndex(0,100), getIndex(0,2,'docs-normalization.jsonl'));
     t.test('index docs.json', (q) => {
         carmenA.index(indexA, confA.country, {
             zoom: 6,
@@ -67,13 +82,13 @@ test('index - streaming interface', (t) => {
         });
     });
 
-    const memObjectB = new mem([], { use_normalization_cache: true, geocoder_tokens: {'South': 'S'}, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
+    const memObjectB = new mem([], { use_normalization_cache: true, geocoder_tokens: tokens, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
     const confB = {
         country: memObjectB
     };
 
     const carmenB = new Carmen(confB);
-    const indexB = getIndex(100,200);
+    const indexB = combine(getIndex(100,200), getIndex(2,4,'docs-normalization.jsonl'));
     t.test('index docs.json', (q) => {
         carmenB.index(indexB, confB.country, {
             zoom: 6,
@@ -98,13 +113,13 @@ test('index - streaming interface', (t) => {
         });
     });
 
-    const memObjectD = new mem([], { use_normalization_cache: true, geocoder_tokens: {'South': 'S'}, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
+    const memObjectD = new mem([], { use_normalization_cache: true, geocoder_tokens: tokens, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
     const confD = {
         country: memObjectD
     };
 
     const carmenD = new Carmen(confD);
-    const indexD = getIndex(0,200);
+    const indexD = combine(getIndex(0,200), getIndex(0,4,'docs-normalization.jsonl'));
     t.test('index docs.json', (q) => {
         carmenD.index(indexD, confD.country, {
             zoom: 6,
@@ -115,7 +130,7 @@ test('index - streaming interface', (t) => {
         });
     });
 
-    const memObjectC = new mem([], { use_normalization_cache: true, geocoder_tokens: {'South': 'S'}, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
+    const memObjectC = new mem([], { use_normalization_cache: true, geocoder_tokens: tokens, maxzoom: 6, geocoder_languages: ['fa', 'zh'] }, () => {});
     const confC = { country: memObjectC };
     const carmenC = new Carmen(confC);
 
@@ -124,7 +139,6 @@ test('index - streaming interface', (t) => {
             if (err) throw err;
             // the dictcache has been reloaded, so copy it over to the carmen object
             carmenC.indexes.country._dictcache = memObjectC._dictcache;
-            console.log(carmenC.indexes.country._dictcache.normalizationCache);
             q.end();
         });
     });
@@ -170,10 +184,10 @@ test('index - streaming interface', (t) => {
 
     t.test('ensure merged index features and original features are identical', (q) => {
         let count = 0;
-        for (let i = 1; i <= 200; i++) {
+        for (let i = 1; i <= 202; i++) {
             count += de(memObjectC._shards.feature[i], memObjectD._shards.feature[i], "==") ? 1 : 0;
         }
-        let percentage = (count/200)*100;
+        let percentage = (count/202)*100;
         t.ok(percentage == 100, "features are identical");
         q.end();
     });
@@ -198,11 +212,22 @@ test('index - streaming interface', (t) => {
         var cNormalizations = memObjectC._dictcache.normalizationCache.getAll().map(function(row) {
             return [
                 memObjectC._dictcache.lookupCounts(row[0]).text,
-                memObjectC._dictcache.lookupCounts(row[1]).text,
+                row[1].map((x) => { return memObjectC._dictcache.lookupCounts(x).text }),
             ]
         });
 
-        var dNormalizations = Array.from(memObjectD._dictcache.normalizationMap.keys()).sort().map((x) => { return [x, memObjectD._dictcache.normalizationMap.get(x)]; })
+        var normData = tmpfile();
+        var buf = memObjectD._dictcache.dumpWithNormalizations(normData);
+
+        var loaded = new DawgCache(buf);
+        loaded.loadNormalizationCache(normData);
+
+        var dNormalizations = loaded.normalizationCache.getAll().map(function(row) {
+            return [
+                loaded.lookupCounts(row[0]).text,
+                row[1].map((x) => { return loaded.lookupCounts(x).text }),
+            ]
+        });
 
         t.deepEquals(cNormalizations, dNormalizations, "normalization maps match");
 

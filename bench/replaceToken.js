@@ -18,7 +18,7 @@ function benchmark(cb) {
         console.log(String(event.target));
     })
     .on('complete', function() {
-      console.log('Fastest is ' + this.filter('fastest').pluck('name'), '\n');
+      console.log('Fastest is ' + this.filter('fastest').map('name'), '\n');
       cb(null, suite);
     })
     .run();
