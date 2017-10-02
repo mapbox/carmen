@@ -16,13 +16,13 @@ var conf = {};
 
 try {
     conf.from = Carmen.auto(f);
-} catch(err) {
+} catch (err) {
     console.warn('Error: Could not load index %s', f);
     process.exit(1);
 }
 try {
     conf.to = Carmen.auto(t);
-} catch(err) {
+} catch (err) {
     console.warn('Error: Could not load index %s', t);
     process.exit(1);
 }
@@ -38,4 +38,3 @@ carmen.copy(conf.from, conf.to, function(err) {
         process.exit(0);
     });
 });
-

@@ -25,4 +25,3 @@ carmen.analyze(s, function(err, stats) {
     if (err) throw err;
     console.log(stats);
 });
-

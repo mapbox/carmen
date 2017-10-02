@@ -22,36 +22,40 @@ function oldGetPhraseDegens(tokens) {
     // Iterate through subsets of each term to generate degens.
     for (var i = 1; !i || (i < length && length - i > 0); i++) {
         var degen = text.substr(0, i);
-        if (degen.charAt(degen.length-1) === ' ') continue;
+        if (degen.charAt(degen.length - 1) === ' ') continue;
         if (leadsWithNumToken && degen.indexOf(' ') === -1) continue;
         degens.push(degen);
     }
 
     return degens;
-};
+}
 
 function benchmark(cb) {
-    if (!cb) cb = function(){};
+    if (!cb) cb = function() {};
     console.log('# token.replaceToken');
 
-    suite.add('old getPhraseDegens', function() {
-        var outputs = inputs.map(function(input) {
-            return oldGetPhraseDegens(input);
-        });
-    })
-    .add('getPhraseDegens', function() {
-        var outputs = inputs.map(function(input) {
-            return termops.getPhraseDegens(input);
-        });
-    })
-    .on('cycle', function(event) {
-        console.log(String(event.target));
-    })
-    .on('complete', function() {
-      console.log('Fastest is ' + this.filter('fastest').map('name'), '\n');
-      cb(null, suite);
-    })
-    .run();
+    suite
+        .add('old getPhraseDegens', function() {
+            var outputs = inputs.map(function(input) {
+                return oldGetPhraseDegens(input);
+            });
+        })
+        .add('getPhraseDegens', function() {
+            var outputs = inputs.map(function(input) {
+                return termops.getPhraseDegens(input);
+            });
+        })
+        .on('cycle', function(event) {
+            console.log(String(event.target));
+        })
+        .on('complete', function() {
+            console.log(
+                'Fastest is ' + this.filter('fastest').map('name'),
+                '\n'
+            );
+            cb(null, suite);
+        })
+        .run();
 }
 
 if (!process.env.runSuite) benchmark();

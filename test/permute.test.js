@@ -4,13 +4,13 @@ const test = require('tape');
 // Convert bitmasks to readable strings that are 0-padded.
 function debug(p) {
     let length = p[0].toString(2).length;
-    return p.map((v) => {
+    return p.map(v => {
         v = v.toString(2);
-        return new Array(length-v.length+1).join('0') + v;
+        return new Array(length - v.length + 1).join('0') + v;
     });
 }
 
-test('permute.all', (t) => {
+test('permute.all', t => {
     t.deepEqual(permute.all(1).length, 1);
     t.deepEqual(permute.all(2).length, 3);
     t.deepEqual(permute.all(3).length, 7);
@@ -21,14 +21,8 @@ test('permute.all', (t) => {
     t.deepEqual(permute.all(8).length, 255);
     t.deepEqual(permute.all(9).length, 511);
     t.deepEqual(permute.all(10).length, 1023);
-    t.deepEqual(debug(permute.all(1)), [
-        '1'
-    ]);
-    t.deepEqual(debug(permute.all(2)), [
-        '11',
-        '01',
-        '10',
-    ]);
+    t.deepEqual(debug(permute.all(1)), ['1']);
+    t.deepEqual(debug(permute.all(2)), ['11', '01', '10']);
     t.deepEqual(debug(permute.all(3)), [
         '111',
         '011',
@@ -36,7 +30,7 @@ test('permute.all', (t) => {
         '110',
         '001',
         '010',
-        '100',
+        '100'
     ]);
     t.deepEqual(debug(permute.all(4)), [
         '1111',
@@ -53,27 +47,21 @@ test('permute.all', (t) => {
         '0001',
         '0010',
         '0100',
-        '1000',
+        '1000'
     ]);
     t.end();
 });
 
-test('permute.continuous', (t) => {
-    t.deepEqual(debug(permute.continuous(1)), [
-        '1'
-    ]);
-    t.deepEqual(debug(permute.continuous(2)), [
-        '11',
-        '01',
-        '10',
-    ]);
+test('permute.continuous', t => {
+    t.deepEqual(debug(permute.continuous(1)), ['1']);
+    t.deepEqual(debug(permute.continuous(2)), ['11', '01', '10']);
     t.deepEqual(debug(permute.continuous(3)), [
         '111',
         '011',
         '110',
         '001',
         '010',
-        '100',
+        '100'
     ]);
     t.deepEqual(debug(permute.continuous(4)), [
         '1111',
@@ -85,8 +73,7 @@ test('permute.continuous', (t) => {
         '0001',
         '0010',
         '0100',
-        '1000',
+        '1000'
     ]);
     t.end();
 });
-

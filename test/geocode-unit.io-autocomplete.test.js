@@ -11,28 +11,37 @@ const addFeature = require('../lib/util/addfeature'),
 
 // Setup includes the api-mem `timeout` option to simulate asynchronous I/O.
 const conf = {
-    place: new mem({ maxzoom:6, geocoder_name: 'place', timeout:10 }, () => {}),
+    place: new mem(
+        { maxzoom: 6, geocoder_name: 'place', timeout: 10 },
+        () => {}
+    )
 };
 const c = new Carmen(conf);
 
-tape('ready', (t) => {
+tape('ready', t => {
     c._open(t.end);
 });
 
-tape('index place', (t) => {
+tape('index place', t => {
     let docs = [];
     for (let i = 1; i < 100; i++) {
-        let text = Math.random().toString().split('.').pop().toString(36);
+        let text = Math.random()
+            .toString()
+            .split('.')
+            .pop()
+            .toString(36);
         docs.push({
-            id:i,
+            id: i,
             properties: {
                 'carmen:text': 'aa' + text,
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
+                'carmen:zxy': ['6/32/32'],
+                'carmen:center': [0, 0]
             }
         });
     }
-    queueFeature(conf.place, docs, () => { buildQueued(conf.place, t.end) })
+    queueFeature(conf.place, docs, () => {
+        buildQueued(conf.place, t.end);
+    });
 });
 
 function reset() {
@@ -41,19 +50,22 @@ function reset() {
     conf.place._original.logs.getTile = [];
 }
 
-tape('io', (t) => {
+tape('io', t => {
     reset();
     c.geocode('aa', {}, (err, res) => {
         t.ifError(err);
         t.deepEqual(res.features.length, 5, 'returns 5 features');
-        let loaded = c.indexes.place._original.logs.getGeocoderData.filter((id) => { return /grid/.test(id) }).length;
+        let loaded = c.indexes.place._original.logs.getGeocoderData.filter(
+            id => {
+                return /grid/.test(id);
+            }
+        ).length;
         t.deepEqual(loaded <= 10, true, '<= 10 shards loaded: ' + loaded);
         t.end();
     });
 });
 
-tape('index.teardown', (t) => {
+tape('index.teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });
-

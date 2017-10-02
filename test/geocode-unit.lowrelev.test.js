@@ -11,42 +11,42 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    country: new mem({ maxzoom:6 }, () => {})
+    country: new mem({ maxzoom: 6 }, () => {})
 };
 const c = new Carmen(conf);
-tape('index country', (t) => {
+tape('index country', t => {
     let country = {
-        id:1,
+        id: 1,
         properties: {
-            'carmen:text':'czech republic',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center':[0,0]
+            'carmen:text': 'czech republic',
+            'carmen:zxy': ['6/32/32'],
+            'carmen:center': [0, 0]
         }
     };
     queueFeature(conf.country, country, t.end);
 });
-tape('index country2', (t) => {
+tape('index country2', t => {
     let country = {
-        id:2,
+        id: 2,
         properties: {
-            'carmen:text':'fake country two',
-            'carmen:zxy':['7/32/32'],
-            'carmen:center':[0,0]
+            'carmen:text': 'fake country two',
+            'carmen:zxy': ['7/32/32'],
+            'carmen:center': [0, 0]
         }
     };
     queueFeature(conf.country, country, t.end);
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
-tape('czech => czech republic', (t) => {
-    c.geocode('czech', { limit_verify:1 }, (err, res) => {
+tape('czech => czech republic', t => {
+    c.geocode('czech', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.deepEqual(res.features[0].place_name, 'czech republic');
         t.deepEqual(res.features[0].id, 'country.1');
@@ -55,15 +55,15 @@ tape('czech => czech republic', (t) => {
 });
 
 //Is not above 0.5 relev so should fail.
-tape('fake blah blah => [fail]', (t) => {
-    c.geocode('fake blah blah', { limit_verify:1 }, (err, res) => {
+tape('fake blah blah => [fail]', t => {
+    c.geocode('fake blah blah', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.notOk(res.features[0]);
         t.end();
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

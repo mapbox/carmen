@@ -5,11 +5,17 @@ const tape = require('tape');
 
 // Creates an index with fuzzed data
 function fuzzIndex(limit, callback) {
-    const conf = { street: new mem({ maxzoom:14 }, () => {}) };
+    const conf = { street: new mem({ maxzoom: 14 }, () => {}) };
     const c = new Carmen(conf);
-    const docs = require('fs').readFileSync(__dirname + '/../bench/fixtures/lake-streetnames.txt', 'utf8')
+    const docs = require('fs')
+        .readFileSync(
+            __dirname + '/../bench/fixtures/lake-streetnames.txt',
+            'utf8'
+        )
         .split('\n')
-        .filter((text) => { return !!text; })
+        .filter(text => {
+            return !!text;
+        })
         .sort((a, b) => {
             return Math.random() - Math.random();
         });
@@ -19,18 +25,18 @@ function fuzzIndex(limit, callback) {
         let lat = Math.random() * 85 * (Math.random() < 0.5 ? -1 : 1);
         let lon = Math.random() * 180 * (Math.random() < 0.5 ? -1 : 1);
         features.push({
-            id: Math.floor(Math.random() * Math.pow(2,25)),
+            id: Math.floor(Math.random() * Math.pow(2, 25)),
             type: 'Feature',
             properties: {
                 'carmen:text': text,
                 'carmen:center': [lon, lat]
             },
-            geometry: { type:'Point', coordinates:[lon,lat] }
+            geometry: { type: 'Point', coordinates: [lon, lat] }
         });
     }
-    index.update(conf.street, features, { zoom:14 }, (err) => {
+    index.update(conf.street, features, { zoom: 14 }, err => {
         if (err) return callback(err);
-        index.store(conf.street, (err) => {
+        index.store(conf.street, err => {
             if (err) return callback(err);
             callback(null, c, conf.street);
         });
@@ -39,28 +45,28 @@ function fuzzIndex(limit, callback) {
 
 let sources = {};
 
-tape('setup a', (t) => {
-    let start = +new Date;
+tape('setup a', t => {
+    let start = +new Date();
     fuzzIndex(50000, (err, geocoder, a) => {
-        let time = +new Date - start;
+        let time = +new Date() - start;
         t.ifError(err, 'completed indexing a in ' + time + 'ms');
         sources.a = a;
         t.end();
     });
 });
 
-tape('setup b', (t) => {
-    let start = +new Date;
+tape('setup b', t => {
+    let start = +new Date();
     fuzzIndex(50000, (err, geocoder, b) => {
-        let time = +new Date - start;
+        let time = +new Date() - start;
         t.ifError(err, 'completed indexing b in ' + time + 'ms');
         sources.b = b;
         t.end();
     });
 });
 
-tape('merge a + b = c', (t) => {
-    const conf = { street: new mem({ maxzoom:14 }, () => {}) };
+tape('merge a + b = c', t => {
+    const conf = { street: new mem({ maxzoom: 14 }, () => {}) };
     const c = new Carmen(conf);
     c.merge(sources.a, sources.b, conf.street, {}, (err, stats) => {
         t.ifError(err);
@@ -71,4 +77,3 @@ tape('merge a + b = c', (t) => {
         t.end();
     });
 });
-

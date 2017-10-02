@@ -11,127 +11,165 @@ const addFeature = require('../lib/util/addfeature'),
 
 (() => {
     const conf = {
-        region: new mem({maxzoom: 6 }, () => {}),
-        place: new mem({maxzoom: 6 }, () => {}),
-        postcode: new mem({maxzoom: 6 }, () => {}),
-        address: new mem({maxzoom: 6,  geocoder_address:1}, () => {}),
+        region: new mem({ maxzoom: 6 }, () => {}),
+        place: new mem({ maxzoom: 6 }, () => {}),
+        postcode: new mem({ maxzoom: 6 }, () => {}),
+        address: new mem({ maxzoom: 6, geocoder_address: 1 }, () => {})
     };
     const c = new Carmen(conf);
 
-    tape('index region', (assert) => {
-        queueFeature(conf.region, {
-            id:1,
-            properties: {
-                'carmen:text': 'Massachusetts, MA',
-                'carmen:center': [10,0]
+    tape('index region', assert => {
+        queueFeature(
+            conf.region,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Massachusetts, MA',
+                    'carmen:center': [10, 0]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[10, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[10,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('index region', (assert) => {
-        queueFeature(conf.region, {
-            id:2,
-            properties: {
-                'carmen:text': 'Illinois, IL',
-                'carmen:center': [0,0]
+    tape('index region', assert => {
+        queueFeature(
+            conf.region,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'Illinois, IL',
+                    'carmen:center': [0, 0]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[0, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('index place', (assert) => {
+    tape('index place', assert => {
         // Quincy IL
-        queueFeature(conf.place, {
-            id:1,
-            properties: {
-                'carmen:text': 'Quincy',
-                'carmen:center': [0,0]
+        queueFeature(
+            conf.place,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Quincy',
+                    'carmen:center': [0, 0]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[0, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('index place', (assert) => {
+    tape('index place', assert => {
         // Quincy MA
-        queueFeature(conf.place, {
-            id:2,
-            properties: {
-                'carmen:text': 'Quincy',
-                'carmen:center': [10,0]
+        queueFeature(
+            conf.place,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'Quincy',
+                    'carmen:center': [10, 0]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[10, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[10,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('index postcode', (assert) => {
+    tape('index postcode', assert => {
         // 02169 Quincy Mass
-        queueFeature(conf.postcode, {
-            id:1,
-            properties: {
-                'carmen:text': '02169',
-                'carmen:center': [10,0]
+        queueFeature(
+            conf.postcode,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': '02169',
+                    'carmen:center': [10, 0]
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[10, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[10,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('index address', (assert) => {
+    tape('index address', assert => {
         // 02169 Maine St Quincy IL
-        queueFeature(conf.address, {
-            id:1,
-            properties: {
-                'carmen:text': 'Maine St',
-                'carmen:center': [0,0],
-                'carmen:addressnumber': ['02169']
+        queueFeature(
+            conf.address,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Maine St',
+                    'carmen:center': [0, 0],
+                    'carmen:addressnumber': ['02169']
+                },
+                geometry: {
+                    type: 'MultiPoint',
+                    coordinates: [[0, 0]]
+                }
             },
-            geometry: {
-                type: 'MultiPoint',
-                coordinates: [[0,0]]
-            }
-        }, assert.end);
+            assert.end
+        );
     });
 
-    tape('build', (assert) => { buildQueued(conf.region, assert.end); });
-    tape('build', (assert) => { buildQueued(conf.place, assert.end); });
-    tape('build', (assert) => { buildQueued(conf.postcode, assert.end); });
-    tape('build', (assert) => { buildQueued(conf.address, assert.end); });
+    tape('build', assert => {
+        buildQueued(conf.region, assert.end);
+    });
+    tape('build', assert => {
+        buildQueued(conf.place, assert.end);
+    });
+    tape('build', assert => {
+        buildQueued(conf.postcode, assert.end);
+    });
+    tape('build', assert => {
+        buildQueued(conf.address, assert.end);
+    });
 
-    tape('Search', (assert) => {
+    tape('Search', assert => {
         c.geocode('Quincy MA 02169', {}, (err, res) => {
             assert.ifError(err);
-            assert.deepEqual(res.features[0].place_name, '02169, Quincy, Massachusetts', 'should match postcode/place/state first');
+            assert.deepEqual(
+                res.features[0].place_name,
+                '02169, Quincy, Massachusetts',
+                'should match postcode/place/state first'
+            );
             assert.end();
         });
     });
 
-    tape('Search', (assert) => {
+    tape('Search', assert => {
         c.geocode('0216', {}, (err, res) => {
             assert.ifError(err);
-            assert.deepEqual(res.features[0].place_name, '02169, Quincy, Massachusetts', 'should match autocomplete to a postcode');
+            assert.deepEqual(
+                res.features[0].place_name,
+                '02169, Quincy, Massachusetts',
+                'should match autocomplete to a postcode'
+            );
             assert.end();
         });
     });
-
 })();
 
-
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

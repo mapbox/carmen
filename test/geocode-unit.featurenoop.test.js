@@ -11,29 +11,34 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    a: new mem(null, () => {}),
+    a: new mem(null, () => {})
 };
 const c = new Carmen(conf);
-tape('index', (t) => {
-    queueVT(conf.a, {
-        id:1,
-        properties: {
-            'carmen:text':'\n',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center':[0,0]
+tape('index', t => {
+    queueVT(
+        conf.a,
+        {
+            id: 1,
+            properties: {
+                'carmen:text': '\n',
+                'carmen:zxy': ['6/32/32'],
+                'carmen:center': [0, 0]
+            }
+        },
+        () => {
+            buildQueued(conf.a, t.end);
         }
-    }, () => { buildQueued(conf.a, t.end) });
+    );
 });
-tape('reverse geocode', (t) => {
-    c.geocode('0,0', { limit_verify:1 }, (err, res) => {
+tape('reverse geocode', t => {
+    c.geocode('0,0', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.deepEqual(res.features.length, 0);
         t.end();
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });
-

@@ -12,63 +12,63 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    place: new mem({maxzoom: 6}, () => {}),
-    address: new mem({maxzoom: 6, geocoder_address: 1}, () => {})
+    place: new mem({ maxzoom: 6 }, () => {}),
+    address: new mem({ maxzoom: 6, geocoder_address: 1 }, () => {})
 };
 const c = new Carmen(conf);
-tape('index place', (t) => {
+tape('index place', t => {
     let feature = {
-        id:1,
+        id: 1,
         properties: {
-            'carmen:text':'fakecity',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center':[0,0],
+            'carmen:text': 'fakecity',
+            'carmen:zxy': ['6/32/32'],
+            'carmen:center': [0, 0]
         }
     };
     queueFeature(conf.place, feature, t.end);
 });
-tape('index matching address', (t) => {
+tape('index matching address', t => {
     let feature = {
-        id:2,
+        id: 2,
         properties: {
-            'carmen:text':'fake street',
-            'carmen:zxy':['6/32/32','6/32/33'],
-            'carmen:center':[0,0],
+            'carmen:text': 'fake street',
+            'carmen:zxy': ['6/32/32', '6/32/33'],
+            'carmen:center': [0, 0],
             'carmen:addressnumber': ['1']
         },
         geometry: {
             type: 'MultiPoint',
-            coordinates: [[0,0]]
+            coordinates: [[0, 0]]
         }
     };
     queueFeature(conf.address, feature, t.end);
 });
-tape('index other address', (t) => {
+tape('index other address', t => {
     let feature = {
-        id:3,
+        id: 3,
         properties: {
-            'carmen:text':'fake street',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center': [0,0],
+            'carmen:text': 'fake street',
+            'carmen:zxy': ['6/32/32'],
+            'carmen:center': [0, 0],
             'carmen:addressnumber': ['2']
         },
         geometry: {
             type: 'MultiPoint',
-            coordinates: [[0,0]]
+            coordinates: [[0, 0]]
         }
     };
     queueFeature(conf.address, feature, t.end);
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
-tape('test spatialmatch relev', (t) => {
+tape('test spatialmatch relev', t => {
     c.geocode('1 fake street fakecity', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equals(res.features.length, 1);
@@ -78,8 +78,7 @@ tape('test spatialmatch relev', (t) => {
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });
-
