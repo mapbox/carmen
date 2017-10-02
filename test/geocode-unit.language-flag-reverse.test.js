@@ -12,16 +12,31 @@ const addFeature = require('../lib/util/addfeature'),
 
 (() => {
     const conf = {
-        country: new mem({ maxzoom: 6, geocoder_name: 'country', geocoder_languages: ['zh'] }, () => {}),
-        place: new mem({ maxzoom: 6, geocoder_name: 'place', geocoder_languages: ['zh'], geocoder_format_zh: '{country._name}{region._name}{place._name}' }, () => {}),
+        country: new mem(
+            {
+                maxzoom: 6,
+                geocoder_name: 'country',
+                geocoder_languages: ['zh']
+            },
+            () => {}
+        ),
+        place: new mem(
+            {
+                maxzoom: 6,
+                geocoder_name: 'place',
+                geocoder_languages: ['zh'],
+                geocoder_format_zh: '{country._name}{region._name}{place._name}'
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country', (t) => {
+    tape('index country', t => {
         let country = {
             type: 'Feature',
             properties: {
-                'carmen:center': [0,0],
+                'carmen:center': [0, 0],
                 'carmen:zxy': ['6/32/32'],
                 'carmen:text_zh': '中国',
                 'carmen:text': 'China'
@@ -30,19 +45,27 @@ const addFeature = require('../lib/util/addfeature'),
             geometry: {
                 type: 'MultiPolygon',
                 coordinates: [
-                    [[[0,-5.615985819155337],[0,0],[5.625,0],[5.625,-5.615985819155337],[0,-5.615985819155337]]]
+                    [
+                        [
+                            [0, -5.615985819155337],
+                            [0, 0],
+                            [5.625, 0],
+                            [5.625, -5.615985819155337],
+                            [0, -5.615985819155337]
+                        ]
+                    ]
                 ]
             },
-            bbox: [0,-5.615985819155337,5.625,0]
+            bbox: [0, -5.615985819155337, 5.625, 0]
         };
         queueFeature(conf.country, country, t.end);
     });
 
-    tape('index city', (t) => {
+    tape('index city', t => {
         let place = {
             type: 'Feature',
             properties: {
-                'carmen:center': [0,0],
+                'carmen:center': [0, 0],
                 'carmen:zxy': ['6/32/32'],
                 'carmen:text_zh': '北京市',
                 'carmen:text': 'Beijing'
@@ -51,25 +74,33 @@ const addFeature = require('../lib/util/addfeature'),
             geometry: {
                 type: 'MultiPolygon',
                 coordinates: [
-                    [[[0,-5.615985819155337],[0,0],[5.625,0],[5.625,-5.615985819155337],[0,-5.615985819155337]]]
+                    [
+                        [
+                            [0, -5.615985819155337],
+                            [0, 0],
+                            [5.625, 0],
+                            [5.625, -5.615985819155337],
+                            [0, -5.615985819155337]
+                        ]
+                    ]
                 ]
             },
-            bbox: [0,-5.615985819155337,5.625,0]
+            bbox: [0, -5.615985819155337, 5.625, 0]
         };
         queueFeature(conf.place, place, t.end);
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('中国 => China', (t) => {
-        c.geocode('中国', { limit_verify:1 }, (err, res) => {
+    tape('中国 => China', t => {
+        c.geocode('中国', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'China');
             t.deepEqual(res.features[0].id, 'country.1');
@@ -77,8 +108,8 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('北京市 => Beijing', (t) => {
-        c.geocode('北京市', { limit_verify:1 }, (err, res) => {
+    tape('北京市 => Beijing', t => {
+        c.geocode('北京市', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'Beijing, China');
             t.deepEqual(res.features[0].id, 'place.1');
@@ -86,17 +117,21 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('Beijing, China => 中国北京市', (t) => {
-        c.geocode('Beijing, China', { limit_verify:1, language: 'zh'}, (err, res) => {
-            t.ifError(err);
-            t.deepEqual(res.features[0].place_name, '中国北京市');
-            t.deepEqual(res.features[0].id, 'place.1');
-            t.end();
-        });
+    tape('Beijing, China => 中国北京市', t => {
+        c.geocode(
+            'Beijing, China',
+            { limit_verify: 1, language: 'zh' },
+            (err, res) => {
+                t.ifError(err);
+                t.deepEqual(res.features[0].place_name, '中国北京市');
+                t.deepEqual(res.features[0].id, 'place.1');
+                t.end();
+            }
+        );
     });
 
-    tape('北京市, 中国 => Beijing, China', (t) => {
-        c.geocode('北京市, 中国', { limit_verify:1}, (err, res) => {
+    tape('北京市, 中国 => Beijing, China', t => {
+        c.geocode('北京市, 中国', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'Beijing, China');
             t.deepEqual(res.features[0].id, 'place.1');
@@ -105,8 +140,8 @@ const addFeature = require('../lib/util/addfeature'),
     });
 
     //fails
-    tape('北京市中国 (BeijingChina) => Beijing, China', (t) => {
-        c.geocode('北京市中国', { limit_verify:1}, (err, res) => {
+    tape('北京市中国 (BeijingChina) => Beijing, China', t => {
+        c.geocode('北京市中国', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'Beijing, China');
             t.deepEqual(res.features[0].id, 'place.1');
@@ -115,8 +150,8 @@ const addFeature = require('../lib/util/addfeature'),
     });
 
     //fails
-    tape('中国北京市 (ChinaBeijing) => Beijing, China', (t) => {
-        c.geocode('中国北京市', { limit_verify:1}, (err, res) => {
+    tape('中国北京市 (ChinaBeijing) => Beijing, China', t => {
+        c.geocode('中国北京市', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.deepEqual(res.features[0].place_name, 'Beijing, China');
             t.deepEqual(res.features[0].id, 'place.1');
@@ -125,7 +160,7 @@ const addFeature = require('../lib/util/addfeature'),
     });
 })();
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

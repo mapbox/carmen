@@ -12,15 +12,22 @@ const addFeature = require('../lib/util/addfeature'),
 
 (() => {
     const conf = {
-        country: new mem({ maxzoom: 6, geocoder_name: 'country', geocoder_languages: ['en', 'es'] }, () => {})
+        country: new mem(
+            {
+                maxzoom: 6,
+                geocoder_name: 'country',
+                geocoder_languages: ['en', 'es']
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country', (t) => {
+    tape('index country', t => {
         let country = {
             type: 'Feature',
             properties: {
-                'carmen:center': [0,0],
+                'carmen:center': [0, 0],
                 'carmen:zxy': ['6/32/32'],
                 'carmen:text_es': 'Estados Unidos',
                 'carmen:text_en': 'United States',
@@ -30,25 +37,33 @@ const addFeature = require('../lib/util/addfeature'),
             geometry: {
                 type: 'MultiPolygon',
                 coordinates: [
-                    [[[0,-5.615985819155337],[0,0],[5.625,0],[5.625,-5.615985819155337],[0,-5.615985819155337]]]
+                    [
+                        [
+                            [0, -5.615985819155337],
+                            [0, 0],
+                            [5.625, 0],
+                            [5.625, -5.615985819155337],
+                            [0, -5.615985819155337]
+                        ]
+                    ]
                 ]
             },
-            bbox: [0,-5.615985819155337,5.625,0]
+            bbox: [0, -5.615985819155337, 5.625, 0]
         };
         queueFeature(conf.country, country, t.end);
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('0,0 ?language=en', (t) => {
-        c.geocode('0,0', { language:'en', limit_verify:1 }, (err, res) => {
+    tape('0,0 ?language=en', t => {
+        c.geocode('0,0', { language: 'en', limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.equal(res.features[0].place_name, 'United States');
             t.equal(res.features[0].id, 'country.1');
@@ -57,8 +72,8 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('0,0 ?language=es', (t) => {
-        c.geocode('0,0', { language:'es', limit_verify:1 }, (err, res) => {
+    tape('0,0 ?language=es', t => {
+        c.geocode('0,0', { language: 'es', limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.equal(res.features[0].place_name, 'Estados Unidos');
             t.equal(res.features[0].id, 'country.1');
@@ -67,8 +82,8 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('0,0 ?language=es-XX', (t) => {
-        c.geocode('0,0', { language:'es-XX', limit_verify:1 }, (err, res) => {
+    tape('0,0 ?language=es-XX', t => {
+        c.geocode('0,0', { language: 'es-XX', limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.equal(res.features[0].place_name, 'Estados Unidos');
             t.equal(res.features[0].id, 'country.1');
@@ -77,8 +92,8 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('0,0 ?language=en-XX', (t) => {
-        c.geocode('0,0', { language:'en-XX', limit_verify:1 }, (err, res) => {
+    tape('0,0 ?language=en-XX', t => {
+        c.geocode('0,0', { language: 'en-XX', limit_verify: 1 }, (err, res) => {
             t.ifError(err);
             t.equal(res.features[0].place_name, 'United States');
             t.equal(res.features[0].id, 'country.1');
@@ -86,10 +101,9 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-
 })();
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

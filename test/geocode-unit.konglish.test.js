@@ -17,83 +17,102 @@ const addFeature = require('../lib/util/addfeature'),
 
 (() => {
     const conf = {
-        place: new mem({ maxzoom: 6, geocoder_languages: ['en','ko','ar','es'] }, () => {}),
-        neighborhood: new mem({ maxzoom: 6, geocoder_languages: [] }, () => {}),
+        place: new mem(
+            { maxzoom: 6, geocoder_languages: ['en', 'ko', 'ar', 'es'] },
+            () => {}
+        ),
+        neighborhood: new mem({ maxzoom: 6, geocoder_languages: [] }, () => {})
     };
     const c = new Carmen(conf);
 
-    tape('index San Francisco CA', (t) => {
-        queueFeature(conf.place, {
-            type: 'Feature',
-            id: 1,
-            properties: {
-                'carmen:text': 'San Francisco',
-                'carmen:text_ar': 'مقاطعة سان فرانسيسكو، كاليفورنيا',
-                'carmen:text_en': 'San Francisco',
-                'carmen:text_ko': '샌프란시스코',
-                'carmen:score': 10
+    tape('index San Francisco CA', t => {
+        queueFeature(
+            conf.place,
+            {
+                type: 'Feature',
+                id: 1,
+                properties: {
+                    'carmen:text': 'San Francisco',
+                    'carmen:text_ar': 'مقاطعة سان فرانسيسكو، كاليفورنيا',
+                    'carmen:text_en': 'San Francisco',
+                    'carmen:text_ko': '샌프란시스코',
+                    'carmen:score': 10
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [1, 1]
+                }
             },
-            geometry: {
-                type: 'Point',
-                coordinates: [1,1]
-            }
-        }, t.end);
+            t.end
+        );
     });
-    tape('index San Francisco VE', (t) => {
-        queueFeature(conf.place, {
-            type: 'Feature',
-            id: 2,
-            properties: {
-                'carmen:text': 'San Francisco',
-                'carmen:text_es': 'San Francisco',
-                'carmen:score': 5
+    tape('index San Francisco VE', t => {
+        queueFeature(
+            conf.place,
+            {
+                type: 'Feature',
+                id: 2,
+                properties: {
+                    'carmen:text': 'San Francisco',
+                    'carmen:text_es': 'San Francisco',
+                    'carmen:score': 5
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [80, -10]
+                }
             },
-            geometry: {
-                type: 'Point',
-                coordinates: [80,-10]
-            }
-        }, t.end);
+            t.end
+        );
     });
-    tape('index San Francisco ZZ', (t) => {
-        queueFeature(conf.place, {
-            type: 'Feature',
-            id: 3,
-            properties: {
-                'carmen:text': 'San Francisco',
-                'carmen:text_en': 'San Francisco',
-                'carmen:score': 5
+    tape('index San Francisco ZZ', t => {
+        queueFeature(
+            conf.place,
+            {
+                type: 'Feature',
+                id: 3,
+                properties: {
+                    'carmen:text': 'San Francisco',
+                    'carmen:text_en': 'San Francisco',
+                    'carmen:score': 5
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [-80, -10]
+                }
             },
-            geometry: {
-                type: 'Point',
-                coordinates: [-80,-10]
-            }
-        }, t.end);
+            t.end
+        );
     });
-    tape('index San Francisco (neighborhood)', (t) => {
-        queueFeature(conf.neighborhood, {
-            type: 'Feature',
-            id: 3,
-            properties: {
-                'carmen:text': 'San Francisco',
-                'carmen:score': 0
+    tape('index San Francisco (neighborhood)', t => {
+        queueFeature(
+            conf.neighborhood,
+            {
+                type: 'Feature',
+                id: 3,
+                properties: {
+                    'carmen:text': 'San Francisco',
+                    'carmen:score': 0
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [100, -20]
+                }
             },
-            geometry: {
-                type: 'Point',
-                coordinates: [100,-20]
-            }
-        }, t.end);
+            t.end
+        );
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('query: San Francisco', (t) => {
+    tape('query: San Francisco', t => {
         c.geocode('San Francisco', {}, (err, res) => {
             t.equal('place.1', res.features[0].id, 'Finds SF, CA');
             t.ifError(err);
@@ -101,7 +120,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query: San Francisco, language=en', (t) => {
+    tape('query: San Francisco, language=en', t => {
         c.geocode('San Francisco', { language: 'en' }, (err, res) => {
             t.equal('place.1', res.features[0].id, 'Finds SF, CA');
             t.ifError(err);
@@ -109,7 +128,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query: San Francisco, language=ko', (t) => {
+    tape('query: San Francisco, language=ko', t => {
         c.geocode('San Francisco', { language: 'ko' }, (err, res) => {
             t.equal('place.1', res.features[0].id, 'Finds SF, CA');
             t.equal('place.2', res.features[1].id, 'Finds SF, VE');
@@ -118,7 +137,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query: San Francisco, language=ar', (t) => {
+    tape('query: San Francisco, language=ar', t => {
         c.geocode('San Francisco', { language: 'ar' }, (err, res) => {
             t.equal('place.1', res.features[0].id, 'Finds SF, CA');
             t.equal('place.2', res.features[1].id, 'Finds SF, VE');
@@ -127,7 +146,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('teardown', (t) => {
+    tape('teardown', t => {
         context.getTile.cache.reset();
         t.end();
     });

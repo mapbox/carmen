@@ -8,56 +8,68 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    test: new mem({ maxzoom:6, geocoder_address: 1 }, () => {})
+    test: new mem({ maxzoom: 6, geocoder_address: 1 }, () => {})
 };
 const c = new Carmen(conf);
-tape('index "av francisco de aguirre #"', (t) => {
-    queueFeature(conf.test, {
-        id:1,
-        properties: {
-            'carmen:text':'av francisco de aguirre',
-            'carmen:center': [0,0],
-            'carmen:addressnumber': ['2']
+tape('index "av francisco de aguirre #"', t => {
+    queueFeature(
+        conf.test,
+        {
+            id: 1,
+            properties: {
+                'carmen:text': 'av francisco de aguirre',
+                'carmen:center': [0, 0],
+                'carmen:addressnumber': ['2']
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: [[0, 0]]
+            }
         },
-        geometry: {
-            type: 'MultiPoint',
-            coordinates: [[0,0]]
-        }
-    }, t.end);
+        t.end
+    );
 });
-tape('index "# r ademar da silva neiva"', (t) => {
-    queueFeature(conf.test, {
-        id:2,
-        properties: {
-            'carmen:text':'r ademar da silva neiva',
-            'carmen:center':[0,0],
-            'carmen:addressnumber': ['2']
+tape('index "# r ademar da silva neiva"', t => {
+    queueFeature(
+        conf.test,
+        {
+            id: 2,
+            properties: {
+                'carmen:text': 'r ademar da silva neiva',
+                'carmen:center': [0, 0],
+                'carmen:addressnumber': ['2']
+            },
+            geometry: {
+                type: 'MultiPoint',
+                coordinates: [[0, 0]]
+            }
         },
-        geometry: {
-            type: 'MultiPoint',
-            coordinates: [[0,0]]
-        }
-    }, t.end);
+        t.end
+    );
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
 // partial unidecoded terms do not match
-tape('search: "av francisco de aguirre 2 la serena"', (t) => {
-    c.geocode('av francisco de aguirre 2 la serena', { limit_verify:2 }, (err, res) => {
-        t.equal(res.features.length, 1);
-        t.equal(res.features[0].id, 'test.1');
-        t.end();
-    });
+tape('search: "av francisco de aguirre 2 la serena"', t => {
+    c.geocode(
+        'av francisco de aguirre 2 la serena',
+        { limit_verify: 2 },
+        (err, res) => {
+            t.equal(res.features.length, 1);
+            t.equal(res.features[0].id, 'test.1');
+            t.end();
+        }
+    );
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

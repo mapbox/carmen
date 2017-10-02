@@ -14,54 +14,54 @@ const conf = {
     province: new mem(null, () => {}),
     postcode: new mem(null, () => {}),
     city: new mem(null, () => {}),
-    street: new mem({ maxzoom:6, geocoder_address:1 }, () => {})
+    street: new mem({ maxzoom: 6, geocoder_address: 1 }, () => {})
 };
 const c = new Carmen(conf);
-tape('index province', (t) => {
+tape('index province', t => {
     let province = {
-        id:1,
+        id: 1,
         properties: {
-            'carmen:text':'connecticut, court',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center':[0,0]
+            'carmen:text': 'connecticut, court',
+            'carmen:zxy': ['6/32/32'],
+            'carmen:center': [0, 0]
         }
     };
     queueFeature(conf.province, province, t.end);
 });
-tape('index city', (t) => {
+tape('index city', t => {
     let city = {
-        id:1,
+        id: 1,
         properties: {
-            'carmen:text':'windsor',
-            'carmen:zxy':['6/32/32','6/34/32'],
-            'carmen:center':[0,0]
+            'carmen:text': 'windsor',
+            'carmen:zxy': ['6/32/32', '6/34/32'],
+            'carmen:center': [0, 0]
         }
     };
     queueFeature(conf.city, city, t.end);
 });
-tape('index street', (t) => {
+tape('index street', t => {
     let street = {
-        id:1,
+        id: 1,
         properties: {
-            'carmen:text':'windsor court',
-            'carmen:zxy':['6/34/32'],
-            'carmen:center':[360/32,0]
+            'carmen:text': 'windsor court',
+            'carmen:zxy': ['6/34/32'],
+            'carmen:center': [360 / 32, 0]
         }
     };
     queueFeature(conf.street, street, t.end);
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
 // city beats street at context sort
-tape('windsor court (limit 2)', (t) => {
-    c.geocode('windsor court', { limit_verify:2 }, (err, res) => {
+tape('windsor court (limit 2)', t => {
+    c.geocode('windsor court', { limit_verify: 2 }, (err, res) => {
         t.ifError(err);
         t.deepEqual(res.features[0].place_name, 'windsor, connecticut');
         t.deepEqual(res.features[0].id, 'city.1');
@@ -69,8 +69,8 @@ tape('windsor court (limit 2)', (t) => {
     });
 });
 // street beats city
-tape('windsor court windsor', (t) => {
-    c.geocode('windsor court windsor', { limit_verify:2 }, (err, res) => {
+tape('windsor court windsor', t => {
+    c.geocode('windsor court windsor', { limit_verify: 2 }, (err, res) => {
         t.ifError(err);
         t.deepEqual(res.features[0].place_name, 'windsor court, windsor');
         t.deepEqual(res.features[0].id, 'street.1');
@@ -79,7 +79,7 @@ tape('windsor court windsor', (t) => {
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

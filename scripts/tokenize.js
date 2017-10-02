@@ -14,8 +14,6 @@ if (type !== 'phrase' && type !== 'term') {
 
 var separator = type === 'phrase' ? ' ' : '\n';
 
-process.stdin
-    .pipe(split())
-    .on('data', function(line) {
-        process.stdout.write(termops.tokenize(line).join(separator) + '\n');
-    });
+process.stdin.pipe(split()).on('data', function(line) {
+    process.stdout.write(termops.tokenize(line).join(separator) + '\n');
+});

@@ -15,38 +15,46 @@ const conf = {
 };
 const c = new Carmen(conf);
 
-tape('index country', (t) => {
-    queueFeature(conf.country, {
-        id:1,
-        properties: {
-            'carmen:text': 'china',
-            'carmen:zxy': ['6/32/32'],
-            'carmen:center': [0,0]
-        }
-    }, t.end);
+tape('index country', t => {
+    queueFeature(
+        conf.country,
+        {
+            id: 1,
+            properties: {
+                'carmen:text': 'china',
+                'carmen:zxy': ['6/32/32'],
+                'carmen:center': [0, 0]
+            }
+        },
+        t.end
+    );
 });
 
-tape('index place', (t) => {
-    queueFeature(conf.place, {
-        id:1,
-        properties: {
-            'carmen:text':'chicago',
-            'carmen:zxy':['6/32/32'],
-            'carmen:center':[0,0]
-        }
-    }, t.end);
+tape('index place', t => {
+    queueFeature(
+        conf.place,
+        {
+            id: 1,
+            properties: {
+                'carmen:text': 'chicago',
+                'carmen:zxy': ['6/32/32'],
+                'carmen:center': [0, 0]
+            }
+        },
+        t.end
+    );
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
 
-tape('query byid', (t) => {
+tape('query byid', t => {
     c.geocode('country.1', {}, (err, res) => {
         t.ifError(err);
         t.equals(res.features.length, 1);
@@ -56,7 +64,7 @@ tape('query byid', (t) => {
     });
 });
 
-tape('query byid', (t) => {
+tape('query byid', t => {
     c.geocode('place.1', {}, (err, res) => {
         t.ifError(err);
         t.equals(res.features.length, 1);
@@ -66,7 +74,7 @@ tape('query byid', (t) => {
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

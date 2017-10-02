@@ -12,66 +12,80 @@ const addFeature = require('../lib/util/addfeature'),
 //Tests string value for index level geocoder_stack
 (() => {
     const conf = {
-        us: new mem({
-            maxzoom: 6,
-            geocoder_name: 'country',
-            geocoder_stack: 'us'
-        }, () => {}),
-        ca: new mem({
-            maxzoom: 6,
-            geocoder_name: 'country',
-            geocoder_stack: 'ca'
-        }, () => {})
+        us: new mem(
+            {
+                maxzoom: 6,
+                geocoder_name: 'country',
+                geocoder_stack: 'us'
+            },
+            () => {}
+        ),
+        ca: new mem(
+            {
+                maxzoom: 6,
+                geocoder_name: 'country',
+                geocoder_stack: 'ca'
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country ca', (t) => {
-        queueFeature(conf.ca, {
-            id:1,
-            properties: {
-                'carmen:text':'Canada',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index country ca', t => {
+        queueFeature(
+            conf.ca,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Canada',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
 
-    tape('index country us', (t) => {
-        queueFeature(conf.us, {
-            id:1,
-            properties: {
-                'carmen:text': 'United States',
-                'carmen:zxy': ['6/32/32'],
-                'carmen:center': [0,0]
-            }
-        }, t.end);
+    tape('index country us', t => {
+        queueFeature(
+            conf.us,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'United States',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
 
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('Invalid stack - not a stack name', (t) => {
+    tape('Invalid stack - not a stack name', t => {
         c.geocode('0,0', { stacks: ['zz'] }, (err, res) => {
             t.ok(err, 'throws error');
             t.end();
         });
     });
 
-    tape('Invalid stack - not an array', (t) => {
+    tape('Invalid stack - not an array', t => {
         c.geocode('0,0', { stacks: 'zz' }, (err, res) => {
             t.ok(err, 'throws error');
             t.end();
         });
     });
 
-    tape('query filter', (t) => {
+    tape('query filter', t => {
         c.geocode('0,0', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, 'Canada');
@@ -79,7 +93,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query filter - will be lowercased', (t) => {
+    tape('query filter - will be lowercased', t => {
         c.geocode('0,0', { stacks: ['CA'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, 'Canada');
@@ -87,7 +101,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query filter', (t) => {
+    tape('query filter', t => {
         c.geocode('United States', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 0);
@@ -95,7 +109,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 
-    tape('query filter - reverse (ca)', (t) => {
+    tape('query filter - reverse (ca)', t => {
         c.geocode('0,0', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -103,7 +117,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('query filter - reverse (us)', (t) => {
+    tape('query filter - reverse (us)', t => {
         c.geocode('0,0', { stacks: ['us'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -116,65 +130,87 @@ const addFeature = require('../lib/util/addfeature'),
 //Tests array values for index level geocoder_stack
 (() => {
     const conf = {
-        country: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'us', 'ca' ]
-        }, () => {}),
-        place: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'ca', 'us' ]
-        }, () => {})
+        country: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['us', 'ca']
+            },
+            () => {}
+        ),
+        place: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['ca', 'us']
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country ca', (t) => {
-        queueFeature(conf.country, {
-            id:1,
-            properties: {
-                'carmen:text':'Canada',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:geocoder_stack': 'ca'
-            }
-        }, t.end);
+    tape('index country ca', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Canada',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:geocoder_stack': 'ca'
+                }
+            },
+            t.end
+        );
     });
-    tape('index country us', (t) => {
-        queueFeature(conf.country, {
-            id:2,
-            properties: {
-                'carmen:text':'United States',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:geocoder_stack': 'us'
-            }
-        }, t.end);
+    tape('index country us', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'United States',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:geocoder_stack': 'us'
+                }
+            },
+            t.end
+        );
     });
-    tape('index place us', (t) => {
-        queueFeature(conf.place, {
-            id:1,
-            properties: {
-                'carmen:text':'Place',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:geocoder_stack': 'us'
-            }
-        }, t.end);
+    tape('index place us', t => {
+        queueFeature(
+            conf.place,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Place',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:geocoder_stack': 'us'
+                }
+            },
+            t.end
+        );
     });
-    tape('index place ca', (t) => {
-        queueFeature(conf.place, {
-            id:2,
-            properties: {
-                'carmen:text':'Place',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:geocoder_stack': 'ca'
-            }
-        }, t.end);
+    tape('index place ca', t => {
+        queueFeature(
+            conf.place,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'Place',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:geocoder_stack': 'ca'
+                }
+            },
+            t.end
+        );
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
@@ -183,7 +219,7 @@ const addFeature = require('../lib/util/addfeature'),
 
     //Features are first filtered by the index level geocoder_stack
     //At the end each feature is then filtered by the feature level geocoder_stack
-    tape('dual filter', (t) => {
+    tape('dual filter', t => {
         c.geocode('Place', { stacks: ['us'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -191,7 +227,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('dual filter', (t) => {
+    tape('dual filter', t => {
         c.geocode('Place', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -206,59 +242,77 @@ const addFeature = require('../lib/util/addfeature'),
 //    - Lack of geocoder_stack should make them able to appear in all stacks
 (() => {
     const conf = {
-        country: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'us', 'ca' ]
-        }, () => {}),
-        place: new mem({
-            maxzoom: 6,
-            geocoder_stack: 'ca'
-        }, () => {})
+        country: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['us', 'ca']
+            },
+            () => {}
+        ),
+        place: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: 'ca'
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country ca', (t) => {
-        queueFeature(conf.country, {
-            id:1,
-            properties: {
-                'carmen:text':'Canada',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index country ca', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Canada',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
-    tape('index country us', (t) => {
-        queueFeature(conf.country, {
-            id:2,
-            properties: {
-                'carmen:text':'United States',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index country us', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'United States',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
-    tape('index place ca', (t) => {
-        queueFeature(conf.place, {
-            id:1,
-            properties: {
-                'carmen:text':'Tess',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:geocoder_stack': 'ca'
-            }
-        }, t.end);
+    tape('index place ca', t => {
+        queueFeature(
+            conf.place,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Tess',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:geocoder_stack': 'ca'
+                }
+            },
+            t.end
+        );
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('Canada', (t) => {
+    tape('Canada', t => {
         c.geocode('Canada', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -266,7 +320,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('United States', (t) => {
+    tape('United States', t => {
         c.geocode('United States', { stacks: ['us'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -274,7 +328,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('Place', (t) => {
+    tape('Place', t => {
         c.geocode('Tess, Canada', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -287,52 +341,66 @@ const addFeature = require('../lib/util/addfeature'),
 // Test idx assignment
 (() => {
     const conf = {
-        country: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'us', 'ca' ]
-        }, () => {}),
-        place: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'us', 'ca' ]
-        }, () => {})
+        country: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['us', 'ca']
+            },
+            () => {}
+        ),
+        place: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['us', 'ca']
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country high score (us)', (t) => {
-        queueFeature(conf.country, {
-            id:1,
-            properties: {
-                'carmen:text': 'XXX',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:score': 999,
-                'carmen:geocoder_stack': 'us'
-            }
-        }, t.end);
+    tape('index country high score (us)', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'XXX',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:score': 999,
+                    'carmen:geocoder_stack': 'us'
+                }
+            },
+            t.end
+        );
     });
-    tape('index place low score (ca)', (t) => {
-        queueFeature(conf.place, {
-            id:2,
-            properties: {
-                'carmen:text':'XXX',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0],
-                'carmen:score': 0,
-                'carmen:geocoder_stack': 'ca'
-            }
-        }, t.end);
+    tape('index place low score (ca)', t => {
+        queueFeature(
+            conf.place,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'XXX',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0],
+                    'carmen:score': 0,
+                    'carmen:geocoder_stack': 'ca'
+                }
+            },
+            t.end
+        );
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('check stack/idx agreement', (t) => {
+    tape('check stack/idx agreement', t => {
         c.geocode('XXX', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -345,57 +413,75 @@ const addFeature = require('../lib/util/addfeature'),
 //Test existing/non-existing index level geocoder_stack
 (() => {
     const conf = {
-        country: new mem({
-            maxzoom: 6
-        }, () => {}),
-        place: new mem({
-            maxzoom: 6,
-            geocoder_stack: [ 'ca', 'us' ]
-        }, () => {})
+        country: new mem(
+            {
+                maxzoom: 6
+            },
+            () => {}
+        ),
+        place: new mem(
+            {
+                maxzoom: 6,
+                geocoder_stack: ['ca', 'us']
+            },
+            () => {}
+        )
     };
     const c = new Carmen(conf);
 
-    tape('index country ca', (t) => {
-        queueFeature(conf.country, {
-            id:1,
-            properties: {
-                'carmen:text':'Canada',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index country ca', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Canada',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
-    tape('index country us', (t) => {
-        queueFeature(conf.country, {
-            id:2,
-            properties: {
-                'carmen:text':'United States',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index country us', t => {
+        queueFeature(
+            conf.country,
+            {
+                id: 2,
+                properties: {
+                    'carmen:text': 'United States',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
-    tape('index place ca', (t) => {
-        queueFeature(conf.place, {
-            id:1,
-            properties: {
-                'carmen:text':'Tess',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
-            }
-        }, t.end);
+    tape('index place ca', t => {
+        queueFeature(
+            conf.place,
+            {
+                id: 1,
+                properties: {
+                    'carmen:text': 'Tess',
+                    'carmen:zxy': ['6/32/32'],
+                    'carmen:center': [0, 0]
+                }
+            },
+            t.end
+        );
     });
-    tape('build queued features', (t) => {
+    tape('build queued features', t => {
         const q = queue();
-        Object.keys(conf).forEach((c) => {
-            q.defer((cb) => {
+        Object.keys(conf).forEach(c => {
+            q.defer(cb => {
                 buildQueued(conf[c], cb);
             });
         });
         q.awaitAll(t.end);
     });
 
-    tape('Canada', (t) => {
+    tape('Canada', t => {
         c.geocode('Canada', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -403,7 +489,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('United States', (t) => {
+    tape('United States', t => {
         c.geocode('United States', { stacks: ['us'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -411,7 +497,7 @@ const addFeature = require('../lib/util/addfeature'),
             t.end();
         });
     });
-    tape('Place', (t) => {
+    tape('Place', t => {
         c.geocode('Tess, Canada', { stacks: ['ca'] }, (err, res) => {
             t.ifError(err);
             t.equals(res.features.length, 1);
@@ -420,8 +506,7 @@ const addFeature = require('../lib/util/addfeature'),
         });
     });
 })();
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });
-

@@ -8,36 +8,39 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    address: new mem({maxzoom: 6, geocoder_address: 1, geocoder_name:'address'}, () => {})
+    address: new mem(
+        { maxzoom: 6, geocoder_address: 1, geocoder_name: 'address' },
+        () => {}
+    )
 };
 const c = new Carmen(conf);
 
-tape('index address (dataterm only)', (t) => {
+tape('index address (dataterm only)', t => {
     let address = {
-        id:100,
+        id: 100,
         properties: {
-            'carmen:text':'-',
-            'carmen:center':[0,0],
+            'carmen:text': '-',
+            'carmen:center': [0, 0],
             'carmen:addressnumber': ['100']
         },
         geometry: {
             type: 'MultiPoint',
-            coordinates: [[0,0]]
+            coordinates: [[0, 0]]
         }
     };
     queueFeature(conf.address, address, t.end);
 });
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     const q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
 
-tape('test address', (t) => {
+tape('test address', t => {
     c.geocode('100', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equals(res.features.length, 0);
@@ -45,7 +48,7 @@ tape('test address', (t) => {
     });
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

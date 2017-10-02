@@ -8,41 +8,41 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    address : new mem({maxzoom: 6}, () => {}),
-    poi : new mem({maxzoom: 6}, () => {})
+    address: new mem({ maxzoom: 6 }, () => {}),
+    poi: new mem({ maxzoom: 6 }, () => {})
 };
 const c = new Carmen(conf);
 
-tape('index address', (t) => {
+tape('index address', t => {
     let docs = [];
     let address;
 
-    for (let i=0; i<1; i++) {
+    for (let i = 0; i < 1; i++) {
         address = {
-            id:1,
+            id: 1,
             type: 'Feature',
             properties: {
-                'carmen:text':'lake view road,lake view',
-                'carmen:center':[0,10]
+                'carmen:text': 'lake view road,lake view',
+                'carmen:center': [0, 10]
             },
             geometry: {
                 type: 'Point',
-                coordinates: [0,10]
+                coordinates: [0, 10]
             }
         };
         docs.push(address);
     }
-    for (let j=2; j<=103; j++) {
+    for (let j = 2; j <= 103; j++) {
         address = {
-            id:2,
+            id: 2,
             type: 'Feature',
             properties: {
-                'carmen:text':'main road',
-                'carmen:center':[0,10]
+                'carmen:text': 'main road',
+                'carmen:center': [0, 10]
             },
             geometry: {
                 type: 'Point',
-                coordinates: [0,10]
+                coordinates: [0, 10]
             }
         };
         docs.push(address);
@@ -50,22 +50,22 @@ tape('index address', (t) => {
     queueFeature(conf.address, docs, t.end);
 });
 
-tape('index pois', (t) => {
+tape('index pois', t => {
     let docs = [];
     let poi;
 
-    for (let k=103; k<=104; k++) {
+    for (let k = 103; k <= 104; k++) {
         poi = {
-            id:3,
+            id: 3,
             type: 'Feature',
             properties: {
-                'carmen:text':'Starbucks',
-                'carmen:score':'150',
-                'carmen:center':[0,10]
+                'carmen:text': 'Starbucks',
+                'carmen:score': '150',
+                'carmen:center': [0, 10]
             },
             geometry: {
                 type: 'Point',
-                coordinates: [0,10]
+                coordinates: [0, 10]
             }
         };
         docs.push(poi);
@@ -73,25 +73,29 @@ tape('index pois', (t) => {
     queueFeature(conf.poi, docs, t.end);
 });
 
-tape('build queued features', (t) => {
+tape('build queued features', t => {
     let q = queue();
-    Object.keys(conf).forEach((c) => {
-        q.defer((cb) => {
+    Object.keys(conf).forEach(c => {
+        q.defer(cb => {
             buildQueued(conf[c], cb);
         });
     });
     q.awaitAll(t.end);
 });
 
-tape('Search for Starbucks', (t) => {
-    c.geocode('starbucks lake view', {autocomplete: false, limit_verify: 2}, (err, res) => {
-        t.equal(res.features[0].relevance, 1, 'stacked relevance');
-        t.equal(res.features.length, 2, 'two features returned');
-        t.end();
-    });
+tape('Search for Starbucks', t => {
+    c.geocode(
+        'starbucks lake view',
+        { autocomplete: false, limit_verify: 2 },
+        (err, res) => {
+            t.equal(res.features[0].relevance, 1, 'stacked relevance');
+            t.equal(res.features.length, 2, 'two features returned');
+            t.end();
+        }
+    );
 });
 
-tape('teardown', (t) => {
+tape('teardown', t => {
     context.getTile.cache.reset();
     t.end();
 });

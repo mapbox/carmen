@@ -5,8 +5,8 @@ var path = require('path');
 var argv = process.argv;
 var Carmen = require('../index.js');
 var argv = require('minimist')(process.argv, {
-    string: [ 'version', 'config', 'index', 'tokens', 'inverse_tokens' ],
-    boolean: [ 'help' ]
+    string: ['version', 'config', 'index', 'tokens', 'inverse_tokens'],
+    boolean: ['help']
 });
 var settings = require('../package.json');
 
@@ -15,18 +15,22 @@ function help() {
     console.log('[options]:');
     console.log('  --help                  Prints this message');
     console.log('  --version               Print the carmen version');
-    console.log('  --config="<path>"       path to JSON document with index settings');
+    console.log(
+        '  --config="<path>"       path to JSON document with index settings'
+    );
     console.log('  --tokens=<tokens.json>  Load global token file');
     console.log('  --index="<path>"        Tilelive path to output index to');
-    console.log('  --inverse_tokens="<path.js>[<path2.js>,...]"')
-    console.log('      Paths to JS files with functions for guessing token reversal');
+    console.log('  --inverse_tokens="<path.js>[<path2.js>,...]"');
+    console.log(
+        '      Paths to JS files with functions for guessing token reversal'
+    );
     process.exit(0);
 }
 
 if (argv.help) help();
 
 if (argv.version) {
-    console.log('carmen@'+settings.version);
+    console.log('carmen@' + settings.version);
     process.exit(0);
 }
 
@@ -36,7 +40,7 @@ if (!argv.index) throw new Error('--index argument required');
 var tokens = {};
 if (argv.tokens) {
     tokens = require(path.resolve(argv.tokens));
-    if (typeof tokens === "function") {
+    if (typeof tokens === 'function') {
         tokens = tokens();
     }
 }
@@ -44,7 +48,7 @@ if (argv.tokens) {
 var inverseTokens = {};
 if (argv.inverse_tokens) {
     let rtFiles = argv.inverse_tokens.split(',');
-    rtFiles.forEach((file) => {
+    rtFiles.forEach(file => {
         let data = require(file);
         for (let key of Object.keys(data)) inverseTokens[key] = data[key];
     });
@@ -84,10 +88,14 @@ function index(err) {
     });
     config.output = process.stdout;
 
-    var last = +new Date;
+    var last = +new Date();
     carmen.on('index', function(num) {
-        console.error('Indexed %s docs @ %s/s', num, Math.floor(num * 1000 / (+new Date - last)));
-        last = +new Date;
+        console.error(
+            'Indexed %s docs @ %s/s',
+            num,
+            Math.floor(num * 1000 / (+new Date() - last))
+        );
+        last = +new Date();
     });
 
     conf.to.freqPath = freqPath;
