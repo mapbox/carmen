@@ -277,6 +277,23 @@ test('token replacement', (q) => {
 
     q.deepEqual(token.enumerateTokenReplacements(tokens, 'coolstreet'),['coolstreet']);
     q.deepEqual(token.enumerateTokenReplacements(tokens, 'streetwise'),['streetwise']);
+
+    // Demonstrate that replacements can cascade, but our current behavior is
+    // quite non-deterministic because token order matters very much for the
+    // variants that will actually get hit.
+    let ubTokens;
+    ubTokens = token.createReplacer({
+        'ü': {skipBoundaries: true, skipDiacriticStripping: true, text: 'ue'},
+        'uber': 'üb',
+    });
+    q.deepEqual(token.enumerateTokenReplacements(ubTokens, 'uber cat'),[ 'üb cat', 'uber cat' ], 'does not cascade replacements');
+    ubTokens = token.createReplacer({
+        'uber': 'üb',
+        'ü': {skipBoundaries: true, skipDiacriticStripping: true, text: 'ue'},
+    });
+    q.deepEqual(token.enumerateTokenReplacements(ubTokens, 'uber cat'),[ 'ueb cat', 'üb cat', 'uber cat' ], 'hits all permutations');
+
+
     q.end();
 });
 

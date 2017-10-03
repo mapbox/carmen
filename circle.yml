@@ -1,12 +1,15 @@
 machine:
   node:
-    version: 6
+    version: 6.10.2
   pre:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; sudo apt-get -y update; sudo apt-get -y install libstdc++-5-dev gcc-4.8 g++-4.8; export CXX=g++-4.8
+
 dependencies:
-  pre:
-    - npm install -g npm
+    override:
+    - yarn
+
 test:
   override:
-    - npm run lint
-    - npm run coverage
+    - yarn run lint
+    - yarn run coverage
+    - yarn run bench

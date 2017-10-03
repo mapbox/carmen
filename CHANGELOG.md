@@ -1,5 +1,30 @@
 # Changelog
 
+## 24.1.5
+
+- Indexing performance improvements via optimizations to token replacement.
+
+## 24.1.4
+
+- Switch to `yarn` for tests and migrate package-lock to yarn.lock
+
+## 24.1.3
+
+- Fix indexing of `universal_text` when the value is shared with another language
+
+## 24.1.2
+
+- Disable autocomplete on an address's numerical token when the token is moved to the beginning of the query string.
+
+## 24.1.1
+
+- Support correct forward geocoding over address clusters that contain multiple entries
+  for the same address number.
+
+## 24.1.0
+
+- Allow for greater flexibility in the token replacement representation introduced in 24.0.0
+
 ## 24.0.0
 
 - Optionally support a greater number of token-replacement permutations efficiently

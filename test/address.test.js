@@ -423,6 +423,26 @@ test('address point clustering', (t) => {
     t.deepEqual(
         addressCluster.forward({
             properties: {
+                'carmen:addressnumber': [[9,10,7,9]]
+            },
+            geometry: {
+                type: 'GeometryCollection',
+                geometries: [{
+                    type: 'MultiPoint',
+                    coordinates: [ [1,1], [2,2], [0,0], [6,6] ]
+                }]
+            }
+        },9), [{
+            type:'Point',
+            coordinates:[1,1]
+        }, {
+            type:'Point',
+            coordinates:[6,6]
+        }]
+    );
+    t.deepEqual(
+        addressCluster.forward({
+            properties: {
                 'carmen:addressnumber': [[9,10,7]]
             },
             geometry: {
@@ -432,10 +452,10 @@ test('address point clustering', (t) => {
                     coordinates: [ [1,1], [2,2], [0,0] ]
                 }]
             }
-        },9), {
+        },9), [{
             type:'Point',
             coordinates:[1,1]
-        }
+        }]
     );
     t.end();
 });

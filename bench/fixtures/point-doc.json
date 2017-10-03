@@ -1,20 +1,22 @@
 {
-    "_id": 2,
-    "_text": "Cyprus Coastal Point",
-    "iso2": "-99",
-    "name": "Cyprus Coastal Point",
-    "population": 0,
-    "_center": [
-      33.96385422843953,
-      35.05813252818876
-    ],
-    "_bbox": [
+    "id": 2,
+    "type": "Feature",
+    "bbox": [
       33.96385422843953,
       35.05813252818876,
       333.96385422843953,
       35.05813252818876
     ],
-    "_geometry": {
+    "properties": {
+      "carmen:text": "Cyprus Coastal Point",
+      "iso2": "-99",
+      "population": 0,
+      "carmen:center": [
+        33.96385422843953,
+        35.05813252818876
+      ]
+    },
+    "geometry": {
       "type": "Point",
       "coordinates": [
         33.96385422843953,

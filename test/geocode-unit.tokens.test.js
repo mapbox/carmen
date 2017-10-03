@@ -413,9 +413,37 @@ const addFeature = require('../lib/util/addfeature'),
         addFeature.setOptions(opts);
         t.end();
     });
-    tape('geocoder token test', (t) => {
+    tape('geocoder token test -- Burbarg', (t) => {
         let address = {
             id:1,
+            properties: {
+                'carmen:text':'Burbarg',
+                'carmen:center':[0,0],
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        };
+        queueFeature(conf.address, address, t.end);
+    });
+    tape('geocoder token test -- Bürbarg', (t) => {
+        let address = {
+            id:2,
+            properties: {
+                'carmen:text':'Bürbarg',
+                'carmen:center':[0,0],
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        };
+        queueFeature(conf.address, address, t.end);
+    });
+    tape('geocoder token test -- Phoenistraße', (t) => {
+        let address = {
+            id:3,
             properties: {
                 'carmen:text':'Phoenixstraße',
                 'carmen:center':[0,0],
@@ -443,6 +471,28 @@ const addFeature = require('../lib/util/addfeature'),
             c.geocode(query, { limit_verify: 1 }, (err, res) => {
                 t.equals(res.features[0].place_name, 'Phoenixstraße');
                 t.end();
+            });
+        });
+    });
+    // what we expect here is for it to learn that burbarg could mean burbarg but also bürbarg or buerbarg
+    // but that bürbarg and buerbarg are equivalent but don't mean burbarg
+    [
+        'burbarg',
+        'bürbarg',
+        'buerbarg'
+    ].forEach((query) => {
+        [true, false].forEach((autocomplete) => {
+            tape(`finds by ${query} with autocomplete = ${autocomplete}`, (t) => {
+                c.geocode(query, { autocomplete: autocomplete }, (err, res) => {
+                    if (query == "burbarg") {
+                        t.equals(res.features.length, 2);
+                        t.deepEqual(res.features.map((x) => { return x.place_name; }).sort(), ['Burbarg', 'Bürbarg']);
+                    } else {
+                        t.equals(res.features.length, 1);
+                        t.equals(res.features[0].place_name, 'Bürbarg');
+                    }
+                    t.end();
+                });
             });
         });
     });
