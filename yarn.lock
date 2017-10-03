@@ -3,6 +3,7 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@mapbox/carmen-cache@0.19.0":
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/@mapbox/carmen-cache/-/carmen-cache-0.19.0.tgz#aeb761db90ba442da26ddf2cace5cc7440387f9a"
@@ -11,6 +12,11 @@
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/@mapbox/carmen-cache/-/carmen-cache-0.20.0.tgz#0bf87c30b794c495e96df06668554c63f1b4d53b"
 >>>>>>> master
+=======
+"@mapbox/carmen-cache@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/carmen-cache/-/carmen-cache-0.20.0.tgz#0bf87c30b794c495e96df06668554c63f1b4d53b"
+>>>>>>> 86bdfc42844589c80a022aca0bd27bfc807aa1e4
   dependencies:
     nan "~2.5.1"
     node-pre-gyp "~0.6.32"
@@ -684,12 +690,17 @@ err-code@^1.1.2:
 
 es-abstract@^1.5.0:
 <<<<<<< HEAD
+<<<<<<< HEAD
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.9.0.tgz#690829a07cae36b222e7fd9b75c0d0573eb25227"
 =======
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.8.2.tgz#25103263dc4decbda60e0c737ca32313518027ee"
 >>>>>>> master
+=======
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.8.2.tgz#25103263dc4decbda60e0c737ca32313518027ee"
+>>>>>>> 86bdfc42844589c80a022aca0bd27bfc807aa1e4
   dependencies:
     es-to-primitive "^1.1.1"
     function-bind "^1.1.1"
