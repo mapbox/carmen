@@ -50,7 +50,8 @@
     "carmen": "./scripts/carmen.js",
     "carmen-analyze": "./scripts/carmen-analyze.js",
     "carmen-copy": "./scripts/carmen-copy.js",
-    "carmen-index": "./scripts/carmen-index.js"
+    "carmen-index": "./scripts/carmen-index.js",
+    "carmen-merge": "./scripts/carmen-merge.js"
   },
   "main": "./index.js",
   "scripts": {
