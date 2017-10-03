@@ -119,10 +119,6 @@ be passed to `pointer` or omitted.
 Analyze index relations for a given source. Generates stats on degenerate terms,
 term => phrase relations, etc.
 
-### wipe(source, callback)
-
-Clear all geocoding indexes on a source.
-
 ### copy(from, to, callback)
 
 Copy an index wholesale between `from` and `to`.

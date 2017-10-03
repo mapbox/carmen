@@ -8,8 +8,8 @@ const addFeature = require('../lib/util/addfeature'),
     buildQueued = addFeature.buildQueued;
 
 const conf = {
-    region: new mem({ maxzoom: 6, geocoder_name: 'region', geocoder_languages: ['en'] }, () => {}),
-    country: new mem({ maxzoom: 6, geocoder_name: 'country', geocoder_languages: ['en'] }, () => {})
+    country: new mem({ maxzoom: 6, geocoder_name: 'country', geocoder_languages: ['en', 'sv'] }, () => {}),
+    region: new mem({ maxzoom: 6, geocoder_name: 'region', geocoder_languages: ['en'] }, () => {})
 };
 const c = new Carmen(conf);
 
@@ -52,6 +52,35 @@ tape('index Cerracs', (t) => {
         }
     };
     queueFeature(conf.country, country, t.end);
+});
+
+tape('index USA', (t) => {
+    let country = {
+        id:2,
+        properties: {
+            'carmen:text':'United States',
+            'carmen:text_sv': 'USA',
+            'carmen:text_universal':'US,USA',
+            'carmen:score': 1000,
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    };
+    queueFeature(conf.country, country, t.end);
+});
+
+tape('index Usak', (t) => {
+    let region = {
+        id:3,
+        properties: {
+            'carmen:text':'Usak',
+            'carmen:text_en':'Usak',
+            'carmen:score': 100,
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    };
+    queueFeature(conf.region, region, t.end);
 });
 
 tape('build queued features', (t) => {
@@ -101,6 +130,15 @@ tape('Find universal text feature using strict mode with another language', (t) 
     c.geocode('Cerracs', {languageMode: 'strict', language: 'en'}, (err, res) => {
         t.ifError(err);
         t.equal(res.features[0].text, 'Cerracs', 'finds Cerracs');
+        t.end();
+    });
+});
+
+tape ('Find USA', (t)=> {
+    c.geocode('usa', {language: 'en'}, (err, res) => {
+        t.ifError(err);
+        t.equal(res.features[0].id, 'country.2', 'finds USA feature first');
+        t.equal(res.features[0].relevance, 1, 'first feature has relevance of 1');
         t.end();
     });
 });

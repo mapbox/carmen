@@ -1,12 +1,12 @@
 {
   "name": "@mapbox/carmen",
   "description": "Mapnik vector-tile-based geocoder with support for swappable data sources.",
-  "version": "24.0.0",
+  "version": "24.1.5",
   "url": "http://github.com/mapbox/carmen",
   "author": "Mapbox (https://www.mapbox.com)",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@mapbox/carmen-cache": "0.19.0",
+    "@mapbox/carmen-cache": "0.20.0",
     "@mapbox/geojsonhint": "^2.0.1",
     "@mapbox/locking": "^3.0.0",
     "@mapbox/mbtiles": "^0.9.0",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "benchmark": "^2.1.4",
     "bytes": "^2.5.0",
+    "combined-stream": "~1.0.5",
     "coveralls": "^2.11.4",
     "deep-equal": "1.0.1",
     "eslint": "^3.19.0",
@@ -55,9 +56,9 @@
   "main": "./index.js",
   "scripts": {
     "lint": "eslint index.js lib test",
-    "test": "npm run lint && (retire -n || echo 'WARNING: retire found insecure packages') && tape ./test/*.js && npm run bench",
-    "coverage": "istanbul cover tape test/*.js && coveralls < ./coverage/lcov.info",
-    "bench": "for file in bench/*.js; do node $file; done"
+    "test": "yarn run lint && (retire -n || echo 'WARNING: retire found insecure packages') && TESTING=true tape ./test/*.js && yarn run bench",
+    "coverage": "TESTING=true istanbul cover tape test/*.js && coveralls < ./coverage/lcov.info",
+    "bench": "./test/run_all_benchmarks.sh"
   },
   "eslintConfig": {
     "rules": {
