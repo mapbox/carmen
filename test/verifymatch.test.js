@@ -1,5 +1,6 @@
 const verifymatch = require('../lib/verifymatch');
 const tape = require('tape');
+const bigAddress = require('./fixtures/bigaddress.json');
 
 tape('verifymatch.sortFeature', (t) => {
     let arr = [
@@ -137,3 +138,28 @@ tape('verifymatch.sortContext (distance vs addresstype)', (t) => {
     t.end();
 });
 
+tape('verifymatch.verifyFeatures', (t) => {
+    let doc = bigAddress;
+    let arr = [];
+    let query = [ '9', 'stationsplein' ];
+    let spatialmatches = [{"relev":1,"covers":[{"x":33,"y":21,"relev":1,"id":558998,"idx":0,"tmpid":558998,"distance":0,"score":19,"scoredist":19,"scorefactor":19,"matches_language":true,"prefix":true,"mask":3,"text":"# stationsplein","zoom":6}]}];
+    let geocoder = {
+        byidx: {
+            0: {
+                geocoder_address: true
+            }
+        }
+    }
+    doc.properties['carmen:addressnumber'] = [doc.properties['carmen:addressnumber']];
+    doc.geometry = {
+                type: 'GeometryCollection',
+                geometries: [
+                    doc.geometry
+                ]
+            }
+    doc.properties['carmen:types'] = ["address"]
+    let filtered = verifymatch.verifyFeatures(query, geocoder, spatialmatches, [doc], {});
+    t.ok(filtered.length <= 10, 'limit dupe address numbers to 10')
+    t.end()
+
+});
