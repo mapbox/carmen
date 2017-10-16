@@ -115,9 +115,11 @@ function Geocoder(indexes, options) {
             source.token_replacer = token.createReplacer(info.geocoder_tokens||{});
             source.indexing_replacer = token.createReplacer(info.geocoder_tokens||{}, {includeUnambiguous: true, custom: source.geocoder_inverse_tokens||{}});
 
+/*
             if (tokenValidator(source.token_replacer)) {
                 throw new Error('Using global tokens');
             }
+*/
 
             source.maxzoom = info.maxzoom;
             source.maxscore = info.maxscore;
