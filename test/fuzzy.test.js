@@ -196,7 +196,7 @@ tape('dump/load DawgCache', (t) => {
             // fuzzy search addition
             t.deepEqual(loaded.hasPhrase("a45", false, true), { exact_match: false, final: true, text: 'a4' }, 'not a45');
             // fuzzy search deletion
-            t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: true, text: 'a' }, 'not a');
+            t.deepEqual(loaded.hasPhrase("a", false, true), null, 'not a');
             t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: true, text: 'a' }, 'has a as degen');
 
             t.end();
