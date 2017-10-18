@@ -187,27 +187,23 @@ tape('dump/load DawgCache', (t) => {
         zlib.gunzip(zdata, (err, data) => {
             t.ifError(err);
             let loaded = new DawgCache(data);
+            // lookupprefix = false
             for (let i = 1; i <= 4; i++) {
                 var phrase = loaded.hasPhrase(`a${i}`, false, true);
                 console.log(typeof phrase);
-                t.equal(phrase, { exact_match: true, final: true, text: `a${i}` }, `not { exact_match: true, final: true, text: a${i}}`);
+                t.deepEqual(phrase, { exact_match: true, final: true, text: `a${i}` }, `return { exact_match: true, final: true, text: a${i}}`);
             }
-            t.equal(loaded.hasPhrase("a45", false, true), false, 'not a45');
-            t.equal(loaded.hasPhrase("a", false), false, 'not a');
-            t.equal(loaded.hasPhrase("a", true), true, 'has a as degen');
+            // fuzzy search addition
+            t.deepEqual(loaded.hasPhrase("a45", false, true), { exact_match: false, final: true, text: 'a4' }, 'not a45');
+            // fuzzy search deletion
+            t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: true, text: 'a' }, 'not a');
+            t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: true, text: 'a' }, 'has a as degen');
 
             t.end();
         });
     });
 });
-//
-// // check dawg cache
-// tape('invalid data', (t) => {
-//     const dict = new DawgCache();
-//     t.throws(() => { dict.setText(""); });
-//     t.end();
-// });
-//
+
 // // index contents
 // tape('test index contents for new york', (assert) => {
 //     assert.equal(Array.from(conf.city._dictcache)[0], 'new york', 'test index contents for new york');
