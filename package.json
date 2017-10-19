@@ -24,7 +24,7 @@
     "@turf/line-distance": "^4.0.1",
     "@turf/point-on-surface": "^4.0.1",
     "d3-queue": "3.0.x",
-    "dawg-cache": "https://github.com/mapbox/dawg-cache/tarball/ef60027ebc5f0c37c279eaab3688716363e2da35",
+    "dawg-cache": "https://github.com/mapbox/dawg-cache/tarball/fbe9528a560306bd67a02e53b12762fa46dcc765",
     "err-code": "^1.1.2",
     "fs-extra": "^2.1.2",
     "geojson-rewind": "^0.2.0",

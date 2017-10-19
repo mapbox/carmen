@@ -204,32 +204,21 @@ tape('dump/load DawgCache', (t) => {
     });
 });
 
-// // index contents
-// tape('test index contents for new york', (assert) => {
-//     assert.equal(Array.from(conf.city._dictcache)[0], 'new york', 'test index contents for new york');
-//     assert.end();
-// });
-//
-// tape('test index contents for wallst', (assert) => {
-//     assert.equal(Array.from(conf.street._dictcache)[0], 'wallst', 'test index contents for wallst');
-//     assert.end();
-// });
-//
-// // query in carmen
+// query in carmen
 // tape('query for "wall st new york"', (assert) => {
 //     c.geocode('wall st new york', { limit_verify:1 }, (err, res) => {
 //         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wall st new york" returns "Wall St"');
 //         assert.end();
 //     });
 // });
-//
-// tape('query for "wallst new york"', (assert) => {
-//     c.geocode('wallst new york', { limit_verify:1 }, (err, res) => {
-//         assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
-//         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wallst new york" returns "Wall St"');
-//         assert.end();
-//     });
-// });
+
+tape('query for "wallst new york"', (assert) => {
+    c.geocode('wallst new york', { limit_verify:1 }, (err, res) => {
+        assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
+        assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wallst new york" returns "Wall St"');
+        assert.end();
+    });
+});
 //
 // //landmark search with geocoder_address = 0
 // tape('query for "christ the redeemer, brazil"', (assert) => {
