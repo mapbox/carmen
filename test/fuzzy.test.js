@@ -165,63 +165,87 @@ tape('build queued features', (t) => {
     });
     q.awaitAll(t.end);
 });
+//
+// // create and load DawgCache
+// tape('create', (t) => {
+//     const dict = new DawgCache();
+//     t.ok(dict, "dawg created")
+//     t.end();
+// });
+//
+// tape('dump/load DawgCache', (t) => {
+//     const dict = new DawgCache();
+//     dict.setText("a1");
+//     dict.setText("a2");
+//     dict.setText("a3");
+//     dict.setText("a4");
+//
+//
+//     zlib.gzip(dict.dump(), (err, zdata) => {
+//         t.ifError(err);
+//         t.ok(zdata.length < 200e3, 'gzipped dictcache < 200k');
+//         zlib.gunzip(zdata, (err, data) => {
+//             t.ifError(err);
+//             let loaded = new DawgCache(data);
+//             // lookupprefix = false
+//             for (let i = 1; i <= 4; i++) {
+//                 var phrase = loaded.hasPhrase(`a${i}`, false, true);
+//                 console.log(typeof phrase);
+//                 t.deepEqual(phrase, { exact_match: true, final: true, text: `a${i}` }, `return { exact_match: true, final: true, text: a${i}}`);
+//             }
+//             // fuzzy search addition
+//             t.deepEqual(loaded.hasPhrase("a45", false, true), { exact_match: false, final: true, text: 'a4' }, 'not a45');
+//             // These tests we will need to update when we begin fixing the case where a prefix is found before an actual complete query.
+//             t.deepEqual(loaded.hasPhrase("a", false, true), null, 'not a');
+//             t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: false, text: 'a' }, 'has a as degen');
+//
+//             t.end();
+//         });
+//     });
+// });
+//
+// // query in carmen
+// tape('query for "wall st new york"', (assert) => {
+//     // actual query
+//     c.geocode('wall st new york', { limit_verify:1 }, (err, res) => {
+//         assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
+//         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wall st new york" returns "Wall St"');
+//     });
+//     // query missing a space
+//     c.geocode('wallst new york', { limit_verify:1 }, (err, res) => {
+//         assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
+//         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wallst new york" returns "Wall St"');
+//     });
+//     //landmark search with geocoder_address = 0
+//     c.geocode('christ the redeemer brazil', { limit_verify:1 }, (err, res) => {
+//         assert.deepEqual(res.features[0].place_name, 'Christ the Redeemer, Brazil', 'query for "christ the redeemer brazil" returns "Christ the Redeemer, Brazil"');
+//         assert.end();
+//     });
+// });
 
-// create and load DawgCache
-tape('create', (t) => {
-    const dict = new DawgCache();
-    t.ok(dict, "dawg created")
-    t.end();
-});
-
+// load and test indices in the dawgcache
 tape('dump/load DawgCache', (t) => {
-    const dict = new DawgCache();
-    dict.setText("a1");
-    dict.setText("a2");
-    dict.setText("a3");
-    dict.setText("a4");
+    const dawg = new DawgCache();
 
+    const queries = ["Wall St", "New York", "Christ the Redeemer", "Brazil"]
 
-    zlib.gzip(dict.dump(), (err, zdata) => {
+    for (var i = 0; i < queries.length; i++) {
+        dawg.setText(queries[i])
+    }
+
+    zlib.gzip(dawg.dump(), (err, zdata) => {
         t.ifError(err);
         t.ok(zdata.length < 200e3, 'gzipped dictcache < 200k');
         zlib.gunzip(zdata, (err, data) => {
             t.ifError(err);
             let loaded = new DawgCache(data);
             // lookupprefix = false
-            for (let i = 1; i <= 4; i++) {
-                var phrase = loaded.hasPhrase(`a${i}`, false, true);
-                console.log(typeof phrase);
-                t.deepEqual(phrase, { exact_match: true, final: true, text: `a${i}` }, `return { exact_match: true, final: true, text: a${i}}`);
+            for (let i = 0; i < 4; i++) {
+                var phrase = loaded.hasPhrase(queries[i], false, true);
+                t.deepEqual(phrase, { exact_match: true, final: true, text: queries[i] }, `return { exact_match: true, final: true, text: ${queries[i]}}`);
             }
-            // fuzzy search addition
-            t.deepEqual(loaded.hasPhrase("a45", false, true), { exact_match: false, final: true, text: 'a4' }, 'not a45');
-            // These tests we will need to update when we begin fixing the case where a prefix is found before an actual complete query.
-            t.deepEqual(loaded.hasPhrase("a", false, true), null, 'not a');
-            t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: false, text: 'a' }, 'has a as degen');
-
             t.end();
         });
-    });
-});
-
-// query in carmen
-tape('query for "wall st new york"', (assert) => {
-    // actual query
-    c.geocode('wall st new york', { limit_verify:1 }, (err, res) => {
-        assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
-        assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wall st new york" returns "Wall St"');
-    });
-    // query missing a space
-    c.geocode('wallst new york', { limit_verify:1 }, (err, res) => {
-        assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
-        assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wallst new york" returns "Wall St"');
-        assert.end();
-    });
-
-    //landmark search with geocoder_address = 0
-    c.geocode('christ the redeemer brazil', { limit_verify:1 }, (err, res) => {
-        assert.deepEqual(res.features[0].place_name, 'Christ the Redeemer, Brazil', 'query for "christ the redeemer brazil" returns "Christ the Redeemer, Brazil"');
-        assert.end();
     });
 });
 
@@ -231,10 +255,8 @@ tape('language fallback query: Wall St', (t) => {
         t.equal('Wall St', res.features[0].text, 'Fallback to English');
         t.equal('en', res.features[0].language, 'Language returned is English');
         t.ifError(err, 'no error');
-        t.end();
     });
-});
-tape('language fallback query: Christ the Redeemer', (t) => {
+
     c.geocode('Christ the Redeemer', { language: 'ar'}, (err, res) => {
         t.equal('Christ the Redeemer', res.features[0].text, 'Fallback to English');
         t.equal('en', res.features[0].language, 'Language returned is English');
@@ -242,3 +264,4 @@ tape('language fallback query: Christ the Redeemer', (t) => {
         t.end();
     });
 });
+
