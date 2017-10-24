@@ -203,10 +203,11 @@ tape('dump/load DawgCache', (t) => {
     });
 });
 
-// query in carmen
+// query in carmen with fuzzy relevance
 tape('query for "wall st new york"', (assert) => {
     // actual query
     c.geocode('wall st new york', { limit_verify:1 }, (err, res) => {
+        console.log(res);
         assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wall st new york" returns "Wall St"');
     });
