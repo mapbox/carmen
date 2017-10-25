@@ -4,7 +4,15 @@ const DawgCache = require('../lib/util/dawg');
 const Carmen = require('..');
 const mem = require('../lib/api-mem');
 const queue = require('d3-queue').queue;
-// const context = require('../lib/context');
+
+// for fuzz test
+const stackable = require('../lib/spatialmatch.js').stackable;
+const sortByRelevLengthIdx = require('../lib/spatialmatch.js').sortByRelevLengthIdx;
+const sortByZoomIdx = require('../lib/spatialmatch.js').sortByZoomIdx;
+const phrasematch = require('../lib/phrasematch');
+const Phrasematch = phrasematch.Phrasematch;
+const PhrasematchResult = phrasematch.PhrasematchResult;
+
 
 
 // be able to add a specific feature
@@ -189,7 +197,6 @@ tape('dump/load DawgCache', (t) => {
             // lookupprefix = false
             for (let i = 1; i <= 4; i++) {
                 var phrase = loaded.hasPhrase(`a${i}`, false, true);
-                console.log(typeof phrase);
                 t.deepEqual(phrase, { exact_match: true, final: true, text: `a${i}` }, `return { exact_match: true, final: true, text: a${i}}`);
             }
             // fuzzy search addition
@@ -197,7 +204,6 @@ tape('dump/load DawgCache', (t) => {
             // These tests we will need to update when we begin fixing the case where a prefix is found before an actual complete query.
             t.deepEqual(loaded.hasPhrase("a", false, true), null, 'not a');
             t.deepEqual(loaded.hasPhrase("a", true, true), { exact_match: true, final: false, text: 'a' }, 'has a as degen');
-
             t.end();
         });
     });
@@ -207,7 +213,6 @@ tape('dump/load DawgCache', (t) => {
 tape('query for "wall st new york"', (assert) => {
     // actual query
     c.geocode('wall st new york', { limit_verify:1 }, (err, res) => {
-        console.log(res);
         assert.equal(res.features.length > 0, true, 'query for "wallst new york" returns any feature');
         assert.deepEqual(res.features[0].place_name, 'Wall St, New York', 'query for "wall st new york" returns "Wall St"');
     });
@@ -242,13 +247,14 @@ tape('dump/load DawgCache', (t) => {
             // lookupprefix = false
             for (let i = 0; i < 4; i++) {
                 var phrase = loaded.hasPhrase(queries[i], false, true);
+                // let phrasematching = new phrasematch(queries[i], 0.5, parseInt('10', 2), phrase, null, null, 0, 6, false, null, exactMatch);
+
                 t.deepEqual(phrase, { exact_match: true, final: true, text: queries[i] }, `return { exact_match: true, final: true, text: ${queries[i]}}`);
             }
             t.end();
         });
     });
 });
-
 //language flag test to trigger during getMatchingText();
 tape('language fallback query: Wall St', (t) => {
     c.geocode('Wall St', { language: 'ar'}, (err, res) => {
@@ -264,4 +270,3 @@ tape('language fallback query: Wall St', (t) => {
         t.end();
     });
 });
-
