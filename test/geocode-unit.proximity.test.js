@@ -142,7 +142,7 @@ tape('error: invalid options.proximity[1] value', (t) => {
 });
 
 tape('forward country - single layer - limit', (t) => {
-    c.geocode('country', { limit_verify: 1, }, (err, res) => {
+    c.geocode('country', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equals(res.features[0].place_name, 'country', 'found country');
         t.equals(res.features[0].id, 'country.1', 'found country.1');
@@ -172,7 +172,7 @@ tape('forward country - proximity - single layer - limit', (t) => {
 });
 
 tape('forward country - multi layer - limit', (t) => {
-    c.geocode('province', { limit_verify: 1, }, (err, res) => {
+    c.geocode('province', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equals(res.features[0].place_name, 'province', 'found province');
         t.equals(res.features[0].id, 'country.3', 'found country.3');

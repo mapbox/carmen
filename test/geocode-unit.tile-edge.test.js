@@ -26,7 +26,7 @@ tape('index test', (t) => {
 });
 
 tape('forward between tiles', (t) => {
-    c.geocode('test', { limit_verify: 1, }, (err, res) => {
+    c.geocode('test', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equals(res.features[0].place_name, 'test', 'found feature');
         t.equals(res.features[0].id, 'test.1', 'found feature');
