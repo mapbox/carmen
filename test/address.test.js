@@ -34,7 +34,7 @@ test('address.reverse - null ITP', (t) => {
                 }]
             }
         }, [151.166296, -33.93218]),
-        { geometry: { coordinates: [ 151.16590392952008, -33.9322160058351 ], type: 'Point' }, id: 75018674165319, properties: { 'carmen:center': [ 151.16541649214923, -33.93020039306708 ], 'carmen:extid': 'address.14642155882791', 'carmen:lfromhn': [ [ null ] ], 'carmen:ltohn': [ [ null ] ], 'carmen:parityl': [ [ null ] ], 'carmen:parityr': [ [ null ] ], 'carmen:rangetype': 'tiger', 'carmen:rfromhn': [ [ null ] ], 'carmen:rtohn': [ [ null ] ], 'carmen:text': 'Link Road', 'carmen:tmpid': 905972007, 'carmen:zxy': [ '14/15071/9835' ] } }
+    { geometry: { coordinates: [ 151.16590392952008, -33.9322160058351 ], type: 'Point' }, id: 75018674165319, properties: { 'carmen:center': [ 151.16541649214923, -33.93020039306708 ], 'carmen:extid': 'address.14642155882791', 'carmen:lfromhn': [ [ null ] ], 'carmen:ltohn': [ [ null ] ], 'carmen:parityl': [ [ null ] ], 'carmen:parityr': [ [ null ] ], 'carmen:rangetype': 'tiger', 'carmen:rfromhn': [ [ null ] ], 'carmen:rtohn': [ [ null ] ], 'carmen:text': 'Link Road', 'carmen:tmpid': 905972007, 'carmen:zxy': [ '14/15071/9835' ] } }
     );
 
     t.end();
@@ -174,7 +174,7 @@ test('address.lineIntersects', (t) => {
 
 test('address.standardize', (t) => {
     t.deepEqual(address.standardize({ properties: { 'carmen:rangetype': 'canvec'} }), [], 'canvec rangetype');
-    t.deepEqual(address.standardize({ properties: { 'carmen:rangetype': 'tiger' } }), []), 'no geometry';
+    t.deepEqual(address.standardize({ properties: { 'carmen:rangetype': 'tiger' } }), [], 'no geometry');
     t.deepEqual(address.standardize({
         properties: {
             'carmen:rangetype': 'tiger',

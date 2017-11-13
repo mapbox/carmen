@@ -159,6 +159,7 @@ test('index.update freq', (t) => {
     t.test('indexes doc with geometry and no carmen:center', (q) => {
         let doc = { id:1, type: 'Feature', properties: { 'carmen:text': 'main st' }, geometry:{ type:'Point', coordinates: [-75.598211,38.367333]}};
         index.update(conf.to, [doc], { zoom: 6 }, (err, res, too) => {
+            q.ifError(err);
             q.ok(doc.properties['carmen:center'], 'carmen:center has been set');
             q.end();
         });

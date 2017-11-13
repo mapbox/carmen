@@ -1,3 +1,5 @@
+/* eslint no-process-exit: "off" */
+
 var EventEmitter = require('events').EventEmitter,
     queue = require('d3-queue').queue,
     fs = require('fs'),

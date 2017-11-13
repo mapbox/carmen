@@ -41,7 +41,7 @@
     "combined-stream": "~1.0.5",
     "coveralls": "^2.11.4",
     "deep-equal": "1.0.1",
-    "eslint": "^3.19.0",
+    "eslint": "^4.11.0",
     "istanbul": "^0.4.0",
     "retire": "^1.2.12",
     "tape": "4.6.3"
@@ -59,55 +59,6 @@
     "test": "yarn run lint && (retire -n || echo 'WARNING: retire found insecure packages') && TESTING=true tape ./test/*.js && yarn run bench",
     "coverage": "TESTING=true istanbul cover tape test/*.js && coveralls < ./coverage/lcov.info",
     "bench": "./test/run_all_benchmarks.sh"
-  },
-  "eslintConfig": {
-    "rules": {
-      "no-use-before-define": [
-        2,
-        "nofunc"
-      ],
-      "space-before-function-paren": [
-        2,
-        "never"
-      ],
-      "space-in-parens": 2,
-      "space-before-blocks": 2,
-      "keyword-spacing": 2,
-      "comma-style": 2,
-      "indent": 2,
-      "no-lonely-if": 2,
-      "no-else-return": 0,
-      "new-cap": 0,
-      "no-empty": 2,
-      "no-new": 2,
-      "no-multi-spaces": 0,
-      "space-in-brackets": 0,
-      "brace-style": 0,
-      "quotes": 0,
-      "no-underscore-dangle": 0,
-      "curly": 0,
-      "no-constant-condition": 0,
-      "no-native-reassign": 0,
-      "no-shadow": 0,
-      "key-spacing": 0,
-      "no-unused-vars": [
-        2,
-        {
-          "args": "none"
-        }
-      ],
-      "no-redeclare": 2,
-      "no-undef": 2,
-      "block-scoped-var": 2
-    },
-    "ecmaFeatures": {
-      "forOf": true
-    },
-    "env": {
-      "node": true,
-      "es6": true
-    },
-    "globals": {}
   },
   "engines": {
     "node": "6.x.x"
