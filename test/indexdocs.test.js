@@ -310,6 +310,20 @@ tape('indexdocs.runChecks', (t) => {
             id:1,
             type: 'Feature',
             properties: {
+                'carmen:text':'Main Street 1,Main Street 2,Main Street 3,Main Street 4,Main Street 5,Main Street 6,Main Street 7,Main Street 8,Main Street 9,Main Street 10,Main Street 11'
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        });
+    }, /doc's carmen:text on id:1 has more than the allowed 10 synonyms/);
+
+    t.throws(() => {
+        indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
                 'carmen:text':'Main Street'
             }
         });
