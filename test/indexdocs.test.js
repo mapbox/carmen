@@ -305,7 +305,8 @@ tape('indexdocs.runChecks', (t) => {
         });
     }, /doc has no carmen:text on id:1/);
 
-    t.throws(() => {
+    // we don't expect this one to throw because it has lots of synonyms but is not an address
+    t.doesNotThrow(() => {
         indexdocs.runChecks({
             id:1,
             type: 'Feature',
@@ -317,7 +318,53 @@ tape('indexdocs.runChecks', (t) => {
                 coordinates: [0,0]
             }
         });
-    }, /doc's carmen:text on id:1 has more than the allowed 10 synonyms/);
+    }, '11 synonyms is fine if it\'s not an address');
+
+    t.throws(() => {
+        indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street 1,Main Street 2,Main Street 3,Main Street 4,Main Street 5,Main Street 6,Main Street 7,Main Street 8,Main Street 9,Main Street 10,Main Street 11',
+                'carmen:addressnumber': [null, ["1175", "1180", "1212", "1326"]]
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        });
+    }, /doc's carmen:text on id:1 has more than the allowed 10 synonyms/, '11 synonyms is too many if an address number is present');
+
+    t.throws(() => {
+        indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street 1,Main Street 2,Main Street 3,Main Street 4,Main Street 5,Main Street 6,Main Street 7,Main Street 8,Main Street 9,Main Street 10,Main Street 11',
+                'carmen:rangetype': 'tiger'
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        });
+    }, /doc's carmen:text on id:1 has more than the allowed 10 synonyms/, '11 synonyms is too many if a range type is present');
+
+    t.throws(() => {
+        indexdocs.runChecks({
+            id:1,
+            type: 'Feature',
+            properties: {
+                'carmen:text':'Main Street 1,Main Street 2,Main Street 3,Main Street 4,Main Street 5,Main Street 6,Main Street 7,Main Street 8,Main Street 9,Main Street 10,Main Street 11',
+                'carmen:addressnumber': [null, ["1175", "1180", "1212", "1326"]],
+                'carmen:rangetype': 'tiger'
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        });
+    }, /doc's carmen:text on id:1 has more than the allowed 10 synonyms/, '11 synonyms is too many if both are present');
 
     t.throws(() => {
         indexdocs.runChecks({
