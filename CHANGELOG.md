@@ -1,5 +1,14 @@
 # Changelog
 
+## 24.1.11
+
+- Use es6-native-set and es6-native-map instead of builtin Set and Map,
+  avoid hitting Node's memory limit for large indexing jobs
+
+## 24.1.10
+
+- Update to turf@5.x.x
+
 ## 24.1.9
 
 - Fix memory issue introduced in 24.1.1 by limiting the number of duplicate address

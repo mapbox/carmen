@@ -13,9 +13,9 @@ test('proximity.distance', (t) => {
     // uses distance to center when closer than furthest corner of cover
     t.equal(proximity.distance([0, 0], [0, 0], { x: 0, y: 0, zoom: 2 }), 0);
     // uses distance to furthest corner of cover when closer than center
-    t.equal(proximity.distance([-170, 0], [0, 0], { x: 0, y: 1, zoom: 2 }), 5946.081666100757);
+    t.equal(proximity.distance([-170, 0], [0, 0], { x: 0, y: 1, zoom: 2 }), 5944.221764504916);
     // changing center does not change distance when it is further than the furthest corner of the cover
-    t.equal(proximity.distance([-170, 0], [10, 0], { x: 0, y: 1, zoom: 2 }), 5946.081666100757);
+    t.equal(proximity.distance([-170, 0], [10, 0], { x: 0, y: 1, zoom: 2 }), 5944.221764504916);
     t.end();
 });
 
