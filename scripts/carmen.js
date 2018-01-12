@@ -89,6 +89,8 @@ if (argv.types) {
     argv.types = argv.types.split(',');
 }
 
+if (argv.country) argv.stacks = argv.country;
+
 if (argv.stacks) {
     argv.stacks = argv.stacks.split(',');
 }
