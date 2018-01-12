@@ -212,6 +212,20 @@ tape('china', (t) => {
     });
 });
 
+// country wins without type filter
+tape('china', (t) => {
+    c.geocode('china', { types:['poi', 'region', 'place', 'poi.landmark', 'country'] }, (err1, res1) => {
+        t.ifError(err1);
+        c.geocode('china', { types:['region', 'place', 'poi.landmark', 'country', 'poi'] }, (err2, res2) => {
+            t.ifError(err2);
+            t.deepEqual(res1, res2, 'results with type filter and same types are the same regardless of type order');
+            t.deepEqual(res1.features[0].id, 'country.1', 'country wins in response 1');
+            t.deepEqual(res2.features[0].id, 'country.1', 'country wins in response 2');
+            t.end();
+        });
+    });
+});
+
 // types: place
 tape('china', (t) => {
     c.geocode('china', { limit_verify:3, types:['place'] }, (err, res) => {

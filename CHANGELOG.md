@@ -1,5 +1,9 @@
 # Changelog
 
+## 24.1.12
+
+- Fix a bug with validating type filters on geocodes.
+
 ## 24.1.11
 
 - Use es6-native-set and es6-native-map instead of builtin Set and Map,
