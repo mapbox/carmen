@@ -17,19 +17,21 @@ var argv = require('minimist')(process.argv, {
 if (argv.help) {
     console.log('carmen.js --query="<query>" [options]');
     console.log('[options]:');
-    console.log('  --version               Print the carmen version');
-    console.log('  --tokens=<tokens.json>  Load global token file');
-    console.log('  --config=<file.js>      Load index config from js (module)');
-    console.log('  --limit="{limit}"       Customize the number of results returned');
-    console.log('  --proximity="lat,lng"   Favour results by proximity');
-    console.log('  --types="{type},..."    Only return results of a given type');
-    console.log('  --stacks="{stack},..."  Only return results of a given stack');
-    console.log('  --geojson               Return a geojson object');
-    console.log('  --language={ISO code}   Return responses in specified language (if available in index)');
-    console.log('  --stats                 Generate Stats on the query');
-    console.log('  --debug="feat id"       Follows a feature through geocode"');
-    console.log('  --reverseMode="{mode}"  Sort features in reverse queries by one of `score` or `distance`');
-    console.log('  --help                  Print this report');
+    console.log('  --version                    Print the carmen version');
+    console.log('  --tokens=<tokens.json>       Load global token file');
+    console.log('  --config=<file.js>           Load index config from js (module)');
+    console.log('  --limit="{limit}"            Customize the number of results returned');
+    console.log('  --proximity="lng,lat"        Favour results by proximity');
+    console.log('  --types="{type},..."         Only return results of a given type');
+    console.log('  --stacks="{stack},..."       Only return results of a given stack');
+    console.log('  --geojson                    Return a geojson object');
+    console.log('  --language={ISO code}        Return responses in specified language (if available in index)');
+    console.log('  --stats                      Generate Stats on the query');
+    console.log('  --debug="feat id"            Follows a feature through geocode"');
+    console.log('  --reverseMode="{mode}"       Sort features in reverse queries by one of `score` or `distance`');
+    console.log('  --languageMode="strict"      Only return results with text in a consistent script family');
+    console.log('  --bbox="minX,minY,maxX,maxY" Limit results to those within the specified bounding box');
+    console.log('  --help                       Print this report');
     process.exit(0);
 }
 
@@ -72,9 +74,22 @@ if (argv.proximity) {
     argv.proximity = [ Number(argv.proximity.split(',')[0]), Number(argv.proximity.split(',')[1]) ];
 }
 
+if (argv.bbox) {
+    if (argv.bbox.split(',') !== 4)
+        throw new Error("bbox must be minX,minY,maxX,maxY");
+    argv.bbox = [
+        Number(argv.proximity.split(',')[0]),
+        Number(argv.proximity.split(',')[1]),
+        Number(argv.proximity.split(',')[2]),
+        Number(argv.proximity.split(',')[3])
+    ];
+}
+
 if (argv.types) {
     argv.types = argv.types.split(',');
 }
+
+if (argv.country) argv.stacks = argv.country;
 
 if (argv.stacks) {
     argv.stacks = argv.stacks.split(',');
@@ -99,7 +114,9 @@ carmen.geocode(argv.query, {
     'stats': true,
     'language': argv.language,
     'indexes': true,
-    'reverseMode': argv.reverseMode
+    'reverseMode': argv.reverseMode,
+    'languageMode': argv.languageMode,
+    'bbox': argv.bbox
 }, function(err, data) {
     if (err) throw err;
     load = +new Date() - load;
