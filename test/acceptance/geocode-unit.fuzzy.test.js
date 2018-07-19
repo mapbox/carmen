@@ -36,7 +36,6 @@ queueFeature(conf.place, places, (err) => {
         tape('parlor - with fuzzy', (t) => {
             c.geocode('pinball parlor arcade', { limit_verify:1, autocomplete: 0, fuzzyMatch: 1 }, (err, res) => {
                 t.ifError(err);
-                console.log(res.features);
                 t.deepEqual(res.features[0].place_name, 'Pinball Parlour Arcade', 'Parlour wins with fuzzy');
                 t.deepEqual(res.features[0].id, 'place.1');
                 t.end();
@@ -72,5 +71,3 @@ queueFeature(conf.place, places, (err) => {
         });
     });
 });
-
-
