@@ -10,7 +10,7 @@
     "@mapbox/geojsonhint": "^2.0.1",
     "@mapbox/locking": "^3.0.0",
     "@mapbox/mbtiles": "^0.10.0",
-    "@mapbox/node-fuzzy-phrase": "0.1.3",
+    "@mapbox/node-fuzzy-phrase": "https://github.com/mapbox/node-fuzzy-phrase/tarball/cd06f1d930c0a924718c17bb40ff317c813573eb",
     "@mapbox/sphericalmercator": "^1.1.0",
     "@mapbox/tile-cover": "^3.0.2",
     "@mapbox/tilebelt": "1.0.x",
