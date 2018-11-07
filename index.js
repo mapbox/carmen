@@ -5,6 +5,7 @@ const EventEmitter = require('events').EventEmitter;
 const queue = require('d3-queue').queue;
 const fs = require('fs');
 const crypto = require('crypto');
+const TypedFastBitSet = require('typedfastbitset');
 
 const fuzzy = require('@mapbox/node-fuzzy-phrase');
 const termops = require('./lib/text-processing/termops');
@@ -253,19 +254,15 @@ function Geocoder(indexes, options) {
         // geocoder_stacks do not intersect with -- ie. a spatialmatch with any of
         // these indexes should not be attempted as it will fail anyway.
         for (let i = 0; i < this.byidx.length; i++) {
-            const bmask = [];
+            const bmask = new TypedFastBitSet();
             const a = this.byidx[i];
-            for (let j = 0; j < this.byidx.length; j++) {
-                const b = this.byidx[j];
-                let a_it = a.stack.length;
-                while (a_it--) {
-                    let b_it = b.stack.length;
-                    while (b_it--) {
-                        if (a.stack[a_it] === b.stack[b_it]) {
-                            bmask[j] = 0;
-                        } else if (bmask[j] !== 0) {
-                            bmask[j] = 1;
-                        }
+
+            if (a.stack) {
+                const a_stack = new Set(a.stack);
+                for (let j = 0; j < this.byidx.length; j++) {
+                    const b = this.byidx[j];
+                    if (b.stack && b.stack.filter((s) => a_stack.has(s)).length === 0) {
+                        bmask.add(j);
                     }
                 }
             }
