@@ -277,8 +277,11 @@ function Geocoder(indexes, options) {
         }
         // Find the min and max score of all features in all indexes
         this.minScore = this.byidx.reduce((min, source) => Math.min(min, source.minScore), 0) || 0;
-        this.maxScore = this.byidx.reduce((max, source) => Math.max(max, source.maxscore), 0) || 1;
-
+        this.maxScore = {};
+        for (const type of Object.keys(this.byname)) {
+            const maxScore = this.byname[type].reduce((max, source) => Math.max(max, source.maxscore), 0) || 1;
+            this.maxScore[type] = maxScore;
+        }
         this._error = err;
         this._opened = true;
 

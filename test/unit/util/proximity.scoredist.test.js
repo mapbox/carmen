@@ -43,155 +43,163 @@ function calculateScoreDist(input) {
 
 test('scoredist', (t) => {
 
-    // t.test('new york near san francisco', (t) => {
-    //     // --query="new york" --proximity="-122.4234,37.7715"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'New York,NY,NYC,New York City', 'carmen:distance': 2567.3550038898834, 'carmen:score': 31104, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'New Yorker Buffalo Wings', 'carmen:distance': 0.6450163846417221, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.poi } },
-    //         { properties: { 'carmen:text': 'New York Frankfurter Co.', 'carmen:distance': 0.4914344651849769, 'carmen:score': 1, 'carmen:zoom': ZOOM_LEVELS.poi } },
-    //         { properties: { 'carmen:text': 'New York,NY', 'carmen:distance': 2426.866703400975, 'carmen:score': 79161, 'carmen:zoom': ZOOM_LEVELS.region } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'New York Frankfurter Co.', 'carmen:distance': 0.4914344651849769, 'carmen:score': 1, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:scoredist': 10.999837 } },
-    //         { properties: { 'carmen:text': 'New Yorker Buffalo Wings', 'carmen:distance': 0.6450163846417221, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:scoredist': 10.999757 } },
-    //         { properties: { 'carmen:text': 'New York,NY', 'carmen:distance': 2426.866703400975, 'carmen:score': 79161, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:scoredist': 3.064524 } },
-    //         { properties: { 'carmen:text': 'New York,NY,NYC,New York City', 'carmen:distance': 2567.3550038898834, 'carmen:score': 31104, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.190309 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('chicago near san francisco', (t) => {
-    //     // --query="chicago" --proximity="-122.4234,37.7715"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Chicago', 'carmen:distance': 1855.8900334142313, 'carmen:score': 16988, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Chicago Title', 'carmen:distance': 0.14084037845690478, 'carmen:score': 2, 'carmen:zoom': ZOOM_LEVELS.poi } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'Chicago Title', 'carmen:distance': 0.14084037845690478, 'carmen:score': 2, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:scoredist': 11.000177 } },
-    //         { properties: { 'carmen:text': 'Chicago', 'carmen:distance': 1855.8900334142313, 'carmen:score': 16988, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.104027 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('san near north sonoma county', (t) => {
-    //     // --query="san" --proximity="-123.0167,38.7471"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'São Paulo', 'carmen:distance': 6547.831697209755, 'carmen:score': 36433, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Santiago Metropolitan,METROPOLITANA,Región Metropolitana de Santiago', 'carmen:distance': 6023.053777668511, 'carmen:score': 26709, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'San Francisco', 'carmen:distance': 74.24466022598429, 'carmen:score': 8015, 'carmen:zoom': ZOOM_LEVELS.place } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'San Francisco', 'carmen:distance': 74.24466022598429, 'carmen:score': 8015, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 11.343406 } },
-    //         { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 10.442813 } },
-    //         { properties: { 'carmen:text': 'São Paulo', 'carmen:distance': 6547.831697209755, 'carmen:score': 36433, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.222914 } },
-    //         { properties: { 'carmen:text': 'Santiago Metropolitan,METROPOLITANA,Región Metropolitana de Santiago', 'carmen:distance': 6023.053777668511, 'carmen:score': 26709, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.163419 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('santa cruz near sonoma county', (t) => {
-    //     // --query="santa cruz" --proximity="-123.0167,38.7471"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Santa Cruz de Tenerife', 'carmen:distance': 5811.283048403849, 'carmen:score': 3456, 'carmen:zoom': ZOOM_LEVELS.place } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 10.442813 } },
-    //         { properties: { 'carmen:text': 'Santa Cruz de Tenerife', 'carmen:distance': 5811.283048403849, 'carmen:score': 3456, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.021151 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('washington near baltimore', (t) => {
-    //     // --query="washington" --proximity="-76.6035,39.3008"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Washington,DC', 'carmen:distance': 34.81595024835296, 'carmen:score': 7400, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Washington,WA', 'carmen:distance': 2256.6130314083157, 'carmen:score': 33373, 'carmen:zoom': ZOOM_LEVELS.region } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'Washington,DC', 'carmen:distance': 34.81595024835296, 'carmen:score': 7400, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 11.454816 } },
-    //         { properties: { 'carmen:text': 'Washington,WA', 'carmen:distance': 2256.6130314083157, 'carmen:score': 33373, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:scoredist': 2.940307 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('gilmour ave near guelph, on, canada', (t) => {
-    //     // --query="gilmour ave" --proximity="-80.1617,43.4963"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Runnymede, Toronto, M6P 3B5, Ontario, Canada, CA', 'carmen:distance': 36.12228253928214, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address } },
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Hillendale, Kingston, K7M 2Y8, Ontario, Canada, CA', 'carmen:distance': 188.29482550861198, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address } },
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Somerset, 15501, Pennsylvania, United States', 'carmen:distance': 246.29759329605977, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address } },
-    //         { properties: { 'carmen:text': 'Gilmour Avenue, West Dunbartonshire, G81 6AN, West Dunbartonshire, United Kingdom', 'carmen:distance': 3312.294287119006, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.address } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Runnymede, Toronto, M6P 3B5, Ontario, Canada, CA', 'carmen:distance': 36.12228253928214, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:scoredist': 9.514785 } },
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Hillendale, Kingston, K7M 2Y8, Ontario, Canada, CA', 'carmen:distance': 188.29482550861198, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:scoredist': 1.126649 } },
-    //         { properties: { 'carmen:text': 'Gilmour Ave, Somerset, 15501, Pennsylvania, United States', 'carmen:distance': 246.29759329605977, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:scoredist': 1.005676 } },
-    //         { properties: { 'carmen:text': 'Gilmour Avenue, West Dunbartonshire, G81 6AN, West Dunbartonshire, United Kingdom', 'carmen:distance': 3312.294287119006, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:scoredist': 1.000024 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('cambridge near guelph, on, canada', (t) => {
-    //     // --query="cambridge" --proximity="-80.1617,43.4963"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'Cambridge, N1R 6A9, Ontario, Canada, CA', 'carmen:distance': 10.73122383596493, 'carmen:score': 294, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Cambridge, 02139, Massachusetts, United States', 'carmen:distance': 464.50390088754625, 'carmen:score': 986, 'carmen:zoom': ZOOM_LEVELS.place } },
-    //         { properties: { 'carmen:text': 'Cambridgeshire, United Kingdom', 'carmen:distance': 3566.2969841802374, 'carmen:score': 2721, 'carmen:zoom': ZOOM_LEVELS.place } }
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'Cambridge, N1R 6A9, Ontario, Canada, CA', 'carmen:distance': 10.73122383596493, 'carmen:score': 294, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 11.015906 } },
-    //         { properties: { 'carmen:text': 'Cambridge, 02139, Massachusetts, United States', 'carmen:distance': 464.50390088754625, 'carmen:score': 986, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 5.812961 } },
-    //         { properties: { 'carmen:text': 'Cambridgeshire, United Kingdom', 'carmen:distance': 3566.2969841802374, 'carmen:score': 2721, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:scoredist': 1.016654 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
-    //
-    // t.test('united states near washington dc', (t) => {
-    //     // --query="United States" --proximity="-77.03361679999999,38.900039899999996"
-    //     const input = [
-    //         { properties: { 'carmen:text': 'United States of America, United States, America, USA, US', 'carmen:distance': 1117.3906777683906, 'carmen:score': 1634443, 'carmen:zoom': ZOOM_LEVELS.country  } },
-    //         { properties: { 'carmen:text': 'United States Department of Treasury Annex', 'carmen:distance': 0.11774815645353183, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.poi } },
-    //     ];
-    //
-    //     const expected = [
-    //         { properties: { 'carmen:text': 'United States of America, United States, America, USA, US', 'carmen:distance': 1117.3906777683906, 'carmen:score': 1634443, 'carmen:zoom': ZOOM_LEVELS.country, 'carmen:scoredist': 79.416753 } },
-    //         { properties: { 'carmen:text': 'United States Department of Treasury Annex', 'carmen:distance': 0.11774815645353183, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:scoredist': 11.00005 } }
-    //     ];
-    //
-    //     calculateScoreDist(input);
-    //     t.deepEqual(input.sort(compareScoreDist), expected);
-    //     t.end();
-    // });
+    t.test('new york near san francisco', (t) => {
+        // --query="new york" --proximity="-122.4234,37.7715"
+        const input = [
+            { properties: { 'carmen:text': 'New York,NY,NYC,New York City', 'carmen:distance': 2567.3550038898834, 'carmen:score': 31104, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'New Yorker Buffalo Wings', 'carmen:distance': 0.6450163846417221, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi']  } },
+            { properties: { 'carmen:text': 'New York Frankfurter Co.', 'carmen:distance': 0.4914344651849769, 'carmen:score': 1, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi']  } },
+            { properties: { 'carmen:text': 'New York,NY', 'carmen:distance': 2426.866703400975, 'carmen:score': 79161, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:types': ['region']  } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'New York Frankfurter Co.', 'carmen:distance': 0.4914344651849769, 'carmen:score': 1, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi'], 'carmen:scoredist': 10.999837 } },
+            { properties: { 'carmen:text': 'New Yorker Buffalo Wings', 'carmen:distance': 0.6450163846417221, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi'], 'carmen:scoredist': 10.999757 } },
+            { properties: { 'carmen:text': 'New York,NY', 'carmen:distance': 2426.866703400975, 'carmen:score': 79161, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:types': ['region'], 'carmen:scoredist': 3.064524 } },
+            { properties: { 'carmen:text': 'New York,NY,NYC,New York City', 'carmen:distance': 2567.3550038898834, 'carmen:score': 31104, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 1.190309 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('chicago near san francisco', (t) => {
+        // --query="chicago" --proximity="-122.4234,37.7715"
+        const input = [
+            { properties: { 'carmen:text': 'Chicago', 'carmen:distance': 1855.8900334142313, 'carmen:score': 16988, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Chicago Title', 'carmen:distance': 0.14084037845690478, 'carmen:score': 2, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'Chicago Title', 'carmen:distance': 0.14084037845690478, 'carmen:score': 2, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['place'], 'carmen:scoredist': 11.000177 } },
+            { properties: { 'carmen:text': 'Chicago', 'carmen:distance': 1855.8900334142313, 'carmen:score': 16988, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['poi'], 'carmen:scoredist': 1.104027 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('san near north sonoma county', (t) => {
+        // --query="san" --proximity="-123.0167,38.7471"
+        const input = [
+            { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'São Paulo', 'carmen:distance': 6547.831697209755, 'carmen:score': 36433, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Santiago Metropolitan,METROPOLITANA,Región Metropolitana de Santiago', 'carmen:distance': 6023.053777668511, 'carmen:score': 26709, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'San Francisco', 'carmen:distance': 74.24466022598429, 'carmen:score': 8015, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'San Francisco', 'carmen:distance': 74.24466022598429, 'carmen:score': 8015, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 11.343406 } },
+            { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 10.442813 } },
+            { properties: { 'carmen:text': 'São Paulo', 'carmen:distance': 6547.831697209755, 'carmen:score': 36433, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 1.222914 } },
+            { properties: { 'carmen:text': 'Santiago Metropolitan,METROPOLITANA,Región Metropolitana de Santiago', 'carmen:distance': 6023.053777668511, 'carmen:score': 26709, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 1.163419 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('santa cruz near sonoma county', (t) => {
+        // --query="santa cruz" --proximity="-123.0167,38.7471"
+        const input = [
+            { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Santa Cruz de Tenerife', 'carmen:distance': 5811.283048403849, 'carmen:score': 3456, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'Santa Cruz', 'carmen:distance': 133.8263938095184, 'carmen:score': 587, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 10.442813 } },
+            { properties: { 'carmen:text': 'Santa Cruz de Tenerife', 'carmen:distance': 5811.283048403849, 'carmen:score': 3456, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 1.021151 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('washington near baltimore', (t) => {
+        // --query="washington" --proximity="-76.6035,39.3008"
+        const input = [
+            { properties: { 'carmen:text': 'Washington,DC', 'carmen:distance': 34.81595024835296, 'carmen:score': 7400, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Washington,WA', 'carmen:distance': 2256.6130314083157, 'carmen:score': 33373, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:types': ['region'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'Washington,DC', 'carmen:distance': 34.81595024835296, 'carmen:score': 7400, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 11.454816 } },
+            { properties: { 'carmen:text': 'Washington,WA', 'carmen:distance': 2256.6130314083157, 'carmen:score': 33373, 'carmen:zoom': ZOOM_LEVELS.region, 'carmen:types': ['region'], 'carmen:scoredist': 2.940307 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('gilmour ave near guelph, on, canada', (t) => {
+        // --query="gilmour ave" --proximity="-80.1617,43.4963"
+        const input = [
+            { properties: { 'carmen:text': 'Gilmour Ave, Runnymede, Toronto, M6P 3B5, Ontario, Canada, CA', 'carmen:distance': 36.12228253928214, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'] } },
+            { properties: { 'carmen:text': 'Gilmour Ave, Hillendale, Kingston, K7M 2Y8, Ontario, Canada, CA', 'carmen:distance': 188.29482550861198, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'] } },
+            { properties: { 'carmen:text': 'Gilmour Ave, Somerset, 15501, Pennsylvania, United States', 'carmen:distance': 246.29759329605977, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'] } },
+            { properties: { 'carmen:text': 'Gilmour Avenue, West Dunbartonshire, G81 6AN, West Dunbartonshire, United Kingdom', 'carmen:distance': 3312.294287119006, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'Gilmour Ave, Runnymede, Toronto, M6P 3B5, Ontario, Canada, CA', 'carmen:distance': 36.12228253928214, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'], 'carmen:scoredist': 9.514785 } },
+            { properties: { 'carmen:text': 'Gilmour Ave, Hillendale, Kingston, K7M 2Y8, Ontario, Canada, CA', 'carmen:distance': 188.29482550861198, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'], 'carmen:scoredist': 1.126649 } },
+            { properties: { 'carmen:text': 'Gilmour Ave, Somerset, 15501, Pennsylvania, United States', 'carmen:distance': 246.29759329605977, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'], 'carmen:scoredist': 1.005676 } },
+            { properties: { 'carmen:text': 'Gilmour Avenue, West Dunbartonshire, G81 6AN, West Dunbartonshire, United Kingdom', 'carmen:distance': 3312.294287119006, 'carmen:score': 3, 'carmen:zoom': ZOOM_LEVELS.address, 'carmen:types': ['address'], 'carmen:scoredist': 1.000024 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('cambridge near guelph, on, canada', (t) => {
+        // --query="cambridge" --proximity="-80.1617,43.4963"
+        const input = [
+            { properties: { 'carmen:text': 'Cambridge, N1R 6A9, Ontario, Canada, CA', 'carmen:distance': 10.73122383596493, 'carmen:score': 294, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Cambridge, 02139, Massachusetts, United States', 'carmen:distance': 464.50390088754625, 'carmen:score': 986, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } },
+            { properties: { 'carmen:text': 'Cambridgeshire, United Kingdom', 'carmen:distance': 3566.2969841802374, 'carmen:score': 2721, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'] } }
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'Cambridge, N1R 6A9, Ontario, Canada, CA', 'carmen:distance': 10.73122383596493, 'carmen:score': 294, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 11.015906 } },
+            { properties: { 'carmen:text': 'Cambridge, 02139, Massachusetts, United States', 'carmen:distance': 464.50390088754625, 'carmen:score': 986, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 5.812961 } },
+            { properties: { 'carmen:text': 'Cambridgeshire, United Kingdom', 'carmen:distance': 3566.2969841802374, 'carmen:score': 2721, 'carmen:zoom': ZOOM_LEVELS.place, 'carmen:types': ['place'], 'carmen:scoredist': 1.016654 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
+
+    t.test('united states near washington dc', (t) => {
+        // --query="United States" --proximity="-77.03361679999999,38.900039899999996"
+        const input = [
+            { properties: { 'carmen:text': 'United States of America, United States, America, USA, US', 'carmen:distance': 1117.3906777683906, 'carmen:score': 1634443, 'carmen:zoom': ZOOM_LEVELS.country, 'carmen:types': ['country'] } },
+            { properties: { 'carmen:text': 'United States Department of Treasury Annex', 'carmen:distance': 0.11774815645353183, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi'] } },
+        ];
+
+        const expected = [
+            { properties: { 'carmen:text': 'United States of America, United States, America, USA, US', 'carmen:distance': 1117.3906777683906, 'carmen:score': 1634443, 'carmen:zoom': ZOOM_LEVELS.country, 'carmen:types': ['country'], 'carmen:scoredist': 79.416753 } },
+            { properties: { 'carmen:text': 'United States Department of Treasury Annex', 'carmen:distance': 0.11774815645353183, 'carmen:score': 0, 'carmen:zoom': ZOOM_LEVELS.poi, 'carmen:types': ['poi'], 'carmen:scoredist': 11.00005 } }
+        ];
+
+        calculateScoreDist(input);
+        input.sort(compareScoreDist);
+        t.deepEqual(input, expected);
+        t.end();
+    });
 
     t.test('missi near mission neighborhood san francisco', (t) => {
         // --query="missi" --proximity="-122.4213562,37.75234222"
@@ -220,10 +228,7 @@ test('scoredist', (t) => {
 
         calculateScoreDist(input);
         input.sort(compareScoreDist);
-        for (let i = 0; i < input.length; i++) {
-            const feat = input[i];
-            t.equal(i + 1, feat.id, `${feat.properties['carmen:text']}`);
-        }
+        t.deepEqual(input.map((f) => f.id), [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
         t.end();
     });
 
@@ -239,10 +244,7 @@ test('scoredist', (t) => {
 
         calculateScoreDist(input);
         input.sort(compareScoreDist);
-        for (let i = 0; i < input.length; i++) {
-            const feat = input[i];
-            t.equal(i + 1, feat.id, `${feat.properties['carmen:text']}`);
-        }
+        t.deepEqual(input.map((f) => f.id), [1,2,3,4,5]);
         t.end();
     });
 
