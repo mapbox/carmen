@@ -25,6 +25,7 @@
     "@turf/length": "^6.0.2",
     "@turf/nearest-point-on-line": "^6.0.2",
     "@turf/point-on-feature": "^5.1.5",
+    "ascii-histogram": "^1.2.1",
     "d3-queue": "3.0.x",
     "err-code": "^1.1.2",
     "fs-extra": "^7.0.0",
