@@ -181,7 +181,7 @@ function Geocoder(indexes, options) {
                 source.categories = new Set();
 
                 for (let category of info.geocoder_categories) {
-                    category = termops.tokenize(category);
+                    category = termops.tokenize(category).tokens;
 
                     source.categories.add(category.join(' '));
 

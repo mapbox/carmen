@@ -218,7 +218,7 @@ const complexTokensR = token.createComplexReplacer(categorized.complex, { includ
 // simple ones
 const applySimpleAndComplex = function(str) {
     return token.enumerateTokenReplacements(complexTokensR, str).map((s) => {
-        return termops.tokenize(s).map((word) => simpleTokens.tokens.get(word) || word).join(' ');
+        return termops.tokenize(s).tokens.map((word) => simpleTokens.tokens.get(word) || word).join(' ');
     });
 };
 

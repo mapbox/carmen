@@ -10,10 +10,10 @@ function benchmark(cb) {
     console.log('# tokenize');
 
     suite.add('tokenize', function() {
-        assert.deepEqual(termops.tokenize('Chamonix-Mont-Blanc'), ['chamonix','mont','blanc']);
+        assert.deepEqual(termops.tokenize('Chamonix-Mont-Blanc').tokens, ['chamonix','mont','blanc']);
     })
     suite.add('tokenize - cjk', function() {
-        assert.deepEqual(termops.tokenize('北京市'), ['北','京','市']);
+        assert.deepEqual(termops.tokenize('北京市').tokens, ['北','京','市']);
     })
     .on('cycle', function(event) {
         console.log(String(event.target));
