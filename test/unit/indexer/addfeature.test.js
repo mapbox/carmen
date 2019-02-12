@@ -86,6 +86,7 @@ tape('build queued features', (t) => {
 
 tape('Search for Starbucks', (t) => {
     c.geocode('starbucks lake view', { autocomplete: false, limit_verify: 2 }, (err, res) => {
+        t.error(err);
         t.equal(res.features[0].relevance, 1, 'stacked relevance');
         t.equal(res.features.length, 2, 'two features returned');
         t.end();

@@ -51,12 +51,13 @@ function runphrasematch(cb) {
     suite.add('phrasematch', {
         'defer': true,
         'fn': function(deferred) {
-                phrasematch(conf.street, 'Westside Lake Rd', {}, function(err, result) {
-                if (!result) {
-                    throw new Error("Did not get result");
-                } else {
-                    deferred.resolve();
-                }
+            phrasematch(conf.street, {
+               tokens: ['Westside', 'Lake', 'Rd'],
+               separators: [' ', ' ', ''],
+               owner: [0, 1, 2]
+            }, {}, function(err, result) {
+                if (!result) throw new Error("Did not get result");
+                deferred.resolve();
             });
         }
     })

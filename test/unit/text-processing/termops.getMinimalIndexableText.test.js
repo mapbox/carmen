@@ -36,7 +36,9 @@ test('termops.getMinimalIndexableText', (t) => {
     ];
     t.deepEqual(termops.getMinimalIndexableText(replacer, [], [], doc), texts, 'dedupes phrases');
 
-    replacer = token.createComplexReplacer({ 'dix-huitième':'18e' });
+    replacer = token.createComplexReplacer({
+        'dix-huitième': { text:'18e', spanBoundaries: 1 }
+    });
     doc = { properties: { 'carmen:text': 'Avenue du dix-huitième régiment' } };
     texts = [['avenue', 'du', '18e', 'régiment']];
     t.deepEqual(termops.getMinimalIndexableText({}, replacer, [], doc), texts, 'hypenated replacement');

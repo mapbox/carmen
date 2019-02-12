@@ -19,7 +19,7 @@ test('categorizeTokenReplacements', (t) => {
                 { from: 'lane', to: 'ln' },
                 { from: 'three', to: '3' },
                 { from: 'residence', to: 'res' },
-                { from: 'san', to: 's' }
+                { from: 'san', to: 's.' } // TODO why is the period new?
             ],
             complex: [
                 { from: 'Piazza', to: 'P.zza' },

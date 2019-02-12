@@ -186,7 +186,9 @@ function Geocoder(indexes, options) {
                     source.categories.add(category.join(' '));
 
                     category = category.map((cat) => {
-                        return token.replaceToken(source.complex_query_replacer, source.simple_replacer.tokens.get(cat) || cat).query;
+                        let text = termops.tokenize(cat);
+                        text = token.replaceToken(source.complex_query_replacer, text);
+                        return source.simple_replacer.replacer(text.tokens).join(' ');
                     });
 
                     source.categories.add(category.join(' '));

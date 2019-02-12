@@ -10,7 +10,6 @@ const token = require('../../../lib/text-processing/token');
 
 const UPDATE = process.env.UPDATE;
 const test = require('tape');
-const termops = require('../../../lib/text-processing/termops');
 
 test('index - streaming interface', (t) => {
     const inputStream = fs.createReadStream(path.resolve(__dirname, '../../fixtures/small-docs.jsonl'), { encoding: 'utf8' });
@@ -316,9 +315,8 @@ test('index phrase collection', (t) => {
     index.update(conf.test, docs, { zoom: 6 }, afterUpdate);
     function afterUpdate(err) {
         t.ifError(err);
-        const id1 = termops.encodePhrase('a');
-        t.deepEqual(conf.test._geocoder.grid.list(), [[id1.toString(), [0]]], '1 phrase');
-        t.deepEqual(conf.test._geocoder.grid.get(id1, [0]), [6755949230424066, 6755949230424065], 'grid has 2 zxy+feature ids');
+        t.deepEqual(conf.test._geocoder.grid.list(), [['a', [0]]], '1 phrase');
+        t.deepEqual(conf.test._geocoder.grid.get('a', [0]), [6755949230424066, 6755949230424065], 'grid has 2 zxy+feature ids');
         t.end();
     }
 });

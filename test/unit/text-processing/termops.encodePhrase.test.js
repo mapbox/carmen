@@ -1,9 +1,10 @@
 'use strict';
+// TODO can we remove all these tests?
 const termops = require('../../../lib/text-processing/termops');
 const uniq = require('../../../lib/util/uniq');
 const test = require('tape');
 
-test('termops.encodePhrase clustering', (t) => {
+test.skip('termops.encodePhrase clustering', (t) => {
     const sets = [
         ['apples', 'application', 'apply', 'appears', 'appomattox'],
         ['bananas', 'bandana', 'banner', 'bandit', 'banter'],
@@ -16,7 +17,7 @@ test('termops.encodePhrase clustering', (t) => {
     t.end();
 });
 
-test('termops.encodePhrase', (t) => {
+test.skip('termops.encodePhrase', (t) => {
     let a;
 
     a = termops.encodePhrase('main');

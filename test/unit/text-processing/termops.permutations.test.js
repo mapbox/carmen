@@ -4,7 +4,7 @@ const test = require('tape');
 const clone = (d) => { return JSON.parse(JSON.stringify(d)); };
 
 test('termops.permutations', (t) => {
-    t.deepEqual(clone(termops.permutations(['a','b','c','d'])), [
+    t.deepEqual(clone(termops.permutations(['a', 'b', 'c', 'd'])), [
         ['a','b','c','d'],
         ['a','b','c'],
         ['b','c','d'],
@@ -16,7 +16,7 @@ test('termops.permutations', (t) => {
         ['c'],
         ['d'],
     ]);
-    t.deepEqual(clone(termops.permutations(['a','b','c'])), [
+    t.deepEqual(clone(termops.permutations(['a', 'b', 'c'])), [
         ['a','b','c'],
         ['a','b'],
         ['b','c'],
@@ -24,7 +24,7 @@ test('termops.permutations', (t) => {
         ['b'],
         ['c'],
     ]);
-    t.deepEqual(clone(termops.permutations(['a','b'])), [
+    t.deepEqual(clone(termops.permutations(['a', 'b'])), [
         ['a','b'],
         ['a'],
         ['b'],
@@ -32,7 +32,7 @@ test('termops.permutations', (t) => {
     t.deepEqual(clone(termops.permutations(['a'])), [
         ['a'],
     ]);
-    t.deepEqual(clone(termops.permutations(['2##','b','c'])), [
+    t.deepEqual(clone(termops.permutations(['2##', 'b', 'c'])), [
         ['2##','b','c'],
         ['2##','b'],
         ['b','c'],
@@ -40,7 +40,7 @@ test('termops.permutations', (t) => {
         ['b'],
         ['c'],
     ]);
-    t.deepEqual(clone(termops.permutations(['a','b','2##'])), [
+    t.deepEqual(clone(termops.permutations(['a', 'b', '2##'])), [
         ['2##','a','b'],
         ['a','b'],
         ['2##','b'],
@@ -60,7 +60,7 @@ test('termops.permutations', (t) => {
 });
 
 test('termops.permutations (props)', (t) => {
-    const permutations = termops.permutations(['a','b','c','d'], [0.1, 0.1, 0.2, 0.6]);
+    const permutations = termops.permutations(['a', 'b', 'c', 'd'], [0.1, 0.1, 0.2, 0.6]);
     permutations.length = 10;
 
     t.deepEqual(permutations[0].join(','), ['a','b','c','d'].join(','));
@@ -97,7 +97,7 @@ test('termops.permutations (props)', (t) => {
 });
 
 test('termops.permutations (props)', (t) => {
-    const permutations = termops.permutations(['a','b','c'], [0.2, 0.2, 0.6]);
+    const permutations = termops.permutations(['a', 'b', 'c'], [0.2, 0.2, 0.6]);
     t.deepEqual(permutations.length, 6);
 
     t.deepEqual(permutations[0].join(','), ['a','b','c'].join(','));
@@ -119,7 +119,7 @@ test('termops.permutations (props)', (t) => {
 });
 
 test('termops.permutations (props + all)', (t) => {
-    const permutations = termops.permutations(['a','b','c'], [0.2, 0.2, 0.6], true);
+    const permutations = termops.permutations(['a', 'b', 'c'], [0.2, 0.2, 0.6], true);
     t.deepEqual(permutations.length, 7);
 
     t.deepEqual(permutations[0].join(','), ['a','b','c'].join(','));
