@@ -234,7 +234,7 @@ test('replaceTokens - complex', (t) => {
         },
         {
             from: 'Suite [0-9]+',
-            to: { text: '', spanBoundaries: 1 } // not working...
+            to: { text: '', spanBoundaries: 1 }
         },
         {
             from: 'Lot [0-9]+',
