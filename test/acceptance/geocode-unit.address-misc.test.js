@@ -116,15 +116,14 @@ const addFeature = require('../../lib/indexer/addfeature'),
             t.end();
         });
     });
-    // TODO something is up with the ae ligature...
-    // tape('test address index for Grundarstræti', (t) => {
-    //    c.geocode('3 Grundarstræti', null, (err, res) => {
-    //        t.ifError(err);
-    //        t.equals(res.features[0].place_name, '3 Grundarstræti', 'Matched ITP');
-    //        t.equals(res.features[0].relevance, 1.00);
-    //        t.end();
-    //    });
-    // });
+    tape('test address index for Grundarstræti', (t) => {
+        c.geocode('3 Grundarstræti', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Grundarstræti', 'Matched ITP');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
 })();
 
 /**
@@ -178,6 +177,98 @@ const addFeature = require('../../lib/indexer/addfeature'),
     });
 })();
 
+(() => {
+    const conf = {
+        address: new mem({
+            maxzoom: 6,
+            geocoder_address: 1,
+            geocoder_tokens: {
+                '(.+)stra(?:ß|ss)e':'$1 str',
+                'strasse': 'str',
+                'straße':'str'
+            }
+        }, () => {})
+    };
+    const c = new Carmen(conf);
+    tape('index german address', (t) => {
+        const address = {
+            'id':149515339584354,
+            'type':'Feature',
+            'properties':{
+                'carmen:text':'Wilhelmstraße',
+                'carmen:addressnumber':[null,[3,1,2]],
+                'carmen:parityl':[['O',null],null],
+                'carmen:lfromhn':[['1',null],null],
+                'carmen:ltohn':[['3',null],null],
+                'carmen:parityr':[[null,'E'],null],
+                'carmen:rfromhn':[[null,'2'],null],
+                'carmen:rtohn':[[null,'2'],null],
+                'carmen:center':[-22.992654,66.025387],
+                'carmen:rangetype':'tiger',
+                'carmen:geocoder_stack':'de'
+            },
+            'geometry':{
+                'type':'GeometryCollection',
+                'geometries':[{
+                    'type':'MultiLineString',
+                    'coordinates':[[[-22.991535,66.026408],[-22.992236,66.025768],[-22.992654,66.025387],[-22.992876,66.025237],[-22.992987,66.02504],[-22.992954,66.024872],[-22.992753,66.024728],[-22.992217,66.024552]],[[-22.990338,66.026095],[-22.99048,66.026126],[-22.990757,66.026186],[-22.990825,66.0262],[-22.991063,66.026251],[-22.991535,66.026408]]]
+                },{
+                    'type':'MultiPoint',
+                    'coordinates':[[-22.991473,66.025805],[-22.991589,66.025982],[-22.990171,66.026953]]
+                }]
+            }
+        };
+        queueFeature(conf.address, address, () => { buildQueued(conf.address, t.end); });
+    });
+    tape('test address index for Wilhelmstraße 3', (t) => {
+        c.geocode('Wilhelmstraße 3', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched  [num] [name-with-sharp-s]');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+    tape('test address index for 3 Wilhelmstraße', (t) => {
+        c.geocode('3 Wilhelmstraße', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched [num] [name-with-sharp-s]');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+    tape('test address index for Wilhelmstrasse 3', (t) => {
+        c.geocode('Wilhelmstraße 3', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched  [num] [name-with-double-s]');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+    tape('test address index for Wilhelm strasse 3', (t) => {
+        c.geocode('Wilhelm str 3', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched  [num] [name] straße');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+    tape('test address index for Wilhelm strasse 3', (t) => {
+        c.geocode('Wilhelm str 3', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched  [num] [name] strasse');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+    tape('test address index for Wilhelm str 3', (t) => {
+        c.geocode('Wilhelm str 3', null, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '3 Wilhelmstraße', 'Matched  [num] [name] str');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+})();
 
 tape('teardown', (t) => {
     context.getTile.cache.reset();
