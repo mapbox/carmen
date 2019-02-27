@@ -83,7 +83,7 @@ const addFeature = require('../../lib/indexer/addfeature'),
     const conf = {
         address: new mem({
             maxzoom: 6,
-            geocoder_tokens: { 'q([a-z])([a-z])([a-z])': { text: '$3$2$1', regex: true }}
+            geocoder_tokens: { 'q([a-z])([a-z])([a-z])': { text: '$3$2$1', regex: true } }
         }, () => {})
     };
     const c = new Carmen(conf);
