@@ -206,7 +206,7 @@ test('index', (t) => {
             q.ifError(err);
             // Updates the mem-analyze.json fixture on disk.
             if (UPDATE) fs.writeFileSync(__dirname + '/../../fixtures/mem-analyze.json', JSON.stringify(stats, null, 4));
-            q.deepEqual(require('../../fixtures/mem-analyze.json'), stats);
+            q.deepEqual(stats, require('../../fixtures/mem-analyze.json'));
             q.end();
         });
     });

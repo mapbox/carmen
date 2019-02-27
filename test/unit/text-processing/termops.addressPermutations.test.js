@@ -3,16 +3,15 @@
 const termops = require('../../../lib/text-processing/termops');
 const test = require('tape');
 
-test('termops.uniqPermutations', (t) => {
+test('termops.addressPermutations', (t) => {
     let a = termops.permutations(['a','b','c'], [0.2, 0.2, 0.6]);
     const b = termops.permutations(['a','b','c'], [0.2, 0.1, 0.7]);
 
     function debug(v) {
         return v.join(' ') + (v.relev ? ' - ' + v.relev : '');
     }
-
-    t.deepEqual(termops.uniqPermutations(a).length, 6, 'a: 6 uniq permutations');
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).length, 6, 'a: 6 uniq permutations');
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         'a b c - 1',
         'a b - 0.4',
         'b c - 0.8',
@@ -21,8 +20,8 @@ test('termops.uniqPermutations', (t) => {
         'c - 0.6'
     ]);
 
-    t.deepEqual(termops.uniqPermutations(a.concat(b)).length, 7, 'ab: 7 uniq permutations');
-    t.deepEqual(termops.uniqPermutations(a.concat(b)).map(debug), [
+    t.deepEqual(termops.addressPermutations(a.concat(b)).length, 7, 'ab: 7 uniq permutations');
+    t.deepEqual(termops.addressPermutations(a.concat(b)).map(debug), [
         'a b c - 1',
         'a b - 0.4',
         'b c - 0.8',
@@ -33,7 +32,7 @@ test('termops.uniqPermutations', (t) => {
     ]);
 
     a = termops.permutations(['##','b','c']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '## b c',
         '## b',
         'b c',
@@ -43,7 +42,7 @@ test('termops.uniqPermutations', (t) => {
     ], '## leading housenum');
 
     a = termops.permutations(['2##','b','c']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '2## b c',
         '2## b',
         'b c',
@@ -53,7 +52,7 @@ test('termops.uniqPermutations', (t) => {
     ], '2## leading housenum');
 
     a = termops.permutations(['a','b','##']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '## a b',
         'a b',
         '## b',
@@ -63,7 +62,7 @@ test('termops.uniqPermutations', (t) => {
     ], 'trailing housenum ##');
 
     a = termops.permutations(['a','b','2##']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '2## a b',
         'a b',
         '2## b',
@@ -73,7 +72,7 @@ test('termops.uniqPermutations', (t) => {
     ], 'trailing housenum 2##');
 
     a = termops.permutations(['a','##','c']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '## a',
         '## c',
         'a',
@@ -82,7 +81,7 @@ test('termops.uniqPermutations', (t) => {
     ], 'landlocked housenum ##');
 
     a = termops.permutations(['a','2##','c']);
-    t.deepEqual(termops.uniqPermutations(a).map(debug), [
+    t.deepEqual(termops.addressPermutations(a).map(debug), [
         '2## a',
         '2## c',
         'a',

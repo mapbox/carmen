@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 'use strict';
 const permute = require('../../../lib/util/permute');
 const test = require('tape');
