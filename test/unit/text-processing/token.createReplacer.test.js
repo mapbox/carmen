@@ -83,7 +83,7 @@ test('createReplacer: substring complex token replacement + diacritics', (t) => 
 
 test('createReplacer: subword complex token replacement', (t) => {
     const replacer = token.createComplexReplacer({
-        '([a-z]+)gatan': '$1g'
+        '([a-z]+)gatan': { text: '$1g', regex: true }
     });
     const expected = [{
         from: new RegExp('([a-z]+)gatan$', 'iuy'),
@@ -115,7 +115,8 @@ test('createReplacer: subword complex token replacement', (t) => {
 test('createReplacer: subword complex token replacement + diacritics', (t) => {
     const replacer = token.createComplexReplacer({
         '([a-z]+)vägen': {
-            'text': '$1v'
+            'text': '$1v',
+            'regex': true
         }
     });
     const expected = [{

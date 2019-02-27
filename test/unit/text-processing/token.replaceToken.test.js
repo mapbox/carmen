@@ -234,11 +234,11 @@ test('replaceTokens - complex', (t) => {
         },
         {
             from: 'Suite [0-9]+',
-            to: { text: '', spanBoundaries: 1 }
+            to: { text: '', spanBoundaries: 1, regex: true }
         },
         {
             from: 'Lot [0-9]+',
-            to: ''
+            to: { text: '', regex: true }
         }
     ]);
     const replaceToken = function(query) {
@@ -263,7 +263,7 @@ test('replaceTokens - complex', (t) => {
 test('replaceTokens - complex, numeric replacement groups', (t) => {
     const replacer = token.createComplexReplacer({
         'abc': 'xyz',
-        '(1\\d+)': '@@@$1@@@'
+        '(1\\d+)': { text: '@@@$1@@@', regex: true }
     });
     const replaceToken = function(query) {
         return token.replaceToken(replacer, termops.tokenize(query));
@@ -335,7 +335,7 @@ test('enumerateTokenReplacement', (t) => {
 
     replacer = token.createComplexReplacer({
         'abc': 'xyz',
-        '(1\\d+)': '@@@$1@@@'
+        '(1\\d+)': { text: '@@@$1@@@', regex: true }
     });
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('abc 123 def')),
