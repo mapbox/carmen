@@ -13,7 +13,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
 (() => {
     const conf = {
         postcode: new mem({
-            maxzoom: 6    
+            maxzoom: 6
         }, () => {}),
         place: new mem({
             maxzoom: 6
@@ -58,13 +58,13 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
                 'carmen:text': 'fake street',
                 'carmen:center': [0,0],
                 'carmen:addressnumber': ['9B', '10C', '7'],
-                // The default postcode resides in 'override:postcode' it is simply 
+                // The default postcode resides in 'override:postcode' it is simply
                 // the postcode that was most commonly found in a given address cluster
-                'override:postcode': null,
+                'override:postcode': false,
                 'carmen:addressprops': {
                     // Addresses that differ from the default postcode
                     // live in the addressprops fields
-                    'override:postcode': [ '20002', '20003', null ]
+                    'override:postcode': { 0: '20002', 1: '20003' }
                     // After the address
                     // parsing section of verifymatch - the correct postcode will be populated
                     // in the `override:<type>` field. Do not access carmenaddressprops directly
@@ -85,7 +85,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
             q.defer((cb) => {
                 buildQueued(conf[c], cb);
             });
-        }); 
+        });
         q.awaitAll(t.end);
     });
 
