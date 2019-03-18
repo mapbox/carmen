@@ -58,9 +58,16 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
                 'carmen:text': 'fake street',
                 'carmen:center': [0,0],
                 'carmen:addressnumber': ['9B', '10C', '7'],
+                // The default postcode resides in 'override:postcode' it is simply 
+                // the postcode that was most commonly found in a given address cluster
                 'override:postcode': null,
                 'carmen:addressprops': {
+                    // Addresses that differ from the default postcode
+                    // live in the addressprops fields
                     'override:postcode': [ '20002', '20003', null ]
+                    // After the address
+                    // parsing section of verifymatch - the correct postcode will be populated
+                    // in the `override:<type>` field. Do not access carmenaddressprops directly
                 }
             },
             geometry: {
@@ -85,7 +92,25 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
     tape('Test Address Override', (t) => {
         c.geocode('9B FAKE STREET', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
-            t.equals(res.features[0].place_name, '9b fake street', 'found 9b fake street');
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('10C FAKE STREET', { limit_verify: 1 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '10c fake street Parker 20003', 'found 10c fake street');
+            t.equals(res.features[0].relevance, 1.00);
+            t.end();
+        });
+    });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('7 FAKE STREET', { limit_verify: 1 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '7 fake street Parker 80138', 'found 7 fake street');
             t.equals(res.features[0].relevance, 1.00);
             t.end();
         });
