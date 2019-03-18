@@ -69,10 +69,18 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
             }
         };
 
-        queueFeature(conf.address, address, () => { buildQueued(conf.address, t.end); });
+        queueFeature(conf.address, address, t.end);
     });
 
-
+    tape('build queued features', (t) => {
+        const q = queue();
+        Object.keys(conf).forEach((c) => {
+            q.defer((cb) => {
+                buildQueued(conf[c], cb);
+            });
+        }); 
+        q.awaitAll(t.end);
+    });
 
     tape('Test Address Override', (t) => {
         c.geocode('9B FAKE STREET', { limit_verify: 1 }, (err, res) => {
