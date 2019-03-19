@@ -10,7 +10,7 @@ const queue = require('d3-queue').queue;
 const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
 
 const conf = {
-    test: new mem({ maxzoom: 6 }, () => {})
+    test: new mem({ maxzoom:6 }, () => {})
 };
 const c = new Carmen(conf);
 tape('index 京都市', (t) => {
