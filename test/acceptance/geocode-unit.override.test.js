@@ -13,7 +13,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
 (() => {
     const conf = {
         postcode: new mem({
-            maxzoom: 6
+            maxzoom: 12
         }, () => {}),
         place: new mem({
             maxzoom: 6
@@ -31,9 +31,23 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         const postcode = {
             id:1,
             properties: {
-                'carmen:text':'80138',
-                'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
+                'carmen:text':'20001',
+                'carmen:zxy':['12/2048/2048'],
+                'carmen:center':[0,0],
+                'carmen:score': 100
+            }
+        };
+        queueFeature(conf.postcode, postcode, t.end);
+    });
+
+    tape('index postcode', (t) => {
+        const postcode = {
+            id:2,
+            properties: {
+                'carmen:text':'20002',
+                'carmen:zxy':['12/2049/2048'],
+                'carmen:center':[0.1, 0],
+                'carmen:score': 100
             }
         };
         queueFeature(conf.postcode, postcode, t.end);
@@ -41,11 +55,12 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
 
     tape('index place', (t) => {
         const place = {
-            id:1,
+            id:3,
             properties: {
                 'carmen:text':'Parker',
                 'carmen:zxy':['6/32/32'],
-                'carmen:center':[0,0]
+                'carmen:center':[0,0],
+                'carmen:score': 200
             }
         };
         queueFeature(conf.place, place, t.end);
@@ -53,7 +68,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
 
     tape('index address', (t) => {
         const address = {
-            id:1,
+            id:4,
             properties: {
                 'carmen:text': 'fake street',
                 'carmen:center': [0,0],
@@ -110,7 +125,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
     tape('Test Address Override', (t) => {
         c.geocode('7 FAKE STREET', { limit_verify: 1 }, (err, res) => {
             t.ifError(err);
-            t.equals(res.features[0].place_name, '7 fake street Parker 80138', 'found 7 fake street');
+            t.equals(res.features[0].place_name, '7 fake street Parker 20001', 'found 7 fake street');
             t.equals(res.features[0].relevance, 1.00);
             t.end();
         });
