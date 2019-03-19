@@ -130,6 +130,43 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
             t.end();
         });
     });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('9B FAKE STREET 20002', { limit_verify: 10 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street 20002'); // ERROR "20002"
+            t.equals(res.features[0].relevance, 0.50);
+            t.end();
+        });
+    });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('9B FAKE STREET 20001', { limit_verify: 10 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street 20002 w/ 20001 query');
+            t.equals(res.features[0].relevance, 0.50);
+            t.end();
+        });
+    });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('9B FAKE STREET PARKER 20002', { limit_verify: 10 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002'); // ERROR "fake street Parker 20001"
+            t.equals(res.features[0].relevance, 2 / 3);
+            t.end();
+        });
+    });
+
+    tape('Test Address Override', (t) => {
+        c.geocode('9B FAKE STREET PARKER 20001', { limit_verify: 10 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002 w/ 20001 query');
+            t.equals(res.features[0].relevance, 2 / 3);
+            t.end();
+        });
+    });
+
 })();
 
 tape('teardown', (t) => {
