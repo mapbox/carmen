@@ -152,7 +152,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
     tape('Test Address Override', (t) => {
         c.geocode('9B FAKE STREET PARKER 20002', { limit_verify: 10 }, (err, res) => {
             t.ifError(err);
-            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002'); // ERROR "fake street Parker 20001"
+            t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002');
             t.equals(res.features[0].relevance, 2 / 3);
             t.end();
         });
