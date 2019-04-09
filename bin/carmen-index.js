@@ -47,9 +47,6 @@ if (argv.tokens) {
 let conf;
 const config = JSON.parse(fs.readFileSync(argv.config, 'utf8'));
 
-const freqPath = argv.index.replace('.mbtiles', '.freq.rocksdb');
-const gridPath = argv.index.replace('.mbtiles', '.grid.rocksdb');
-
 argv.index = Carmen.auto(argv.index, () => {
     conf = {
         to: argv.index
@@ -79,10 +76,8 @@ function stopWriting(err) {
 function index(err) {
     if (err) throw err;
 
-    config.tokens = tokens;
-
     const carmen = new Carmen(conf, {
-        tokens: tokens,
+        tokens: config.tokens,
     });
     config.output = process.stdout;
 
@@ -91,9 +86,6 @@ function index(err) {
         console.error('Indexed %s docs @ %s/s', num, Math.floor(num * 1000 / (+new Date - last)));
         last = +new Date;
     });
-
-    conf.to.freqPath = freqPath;
-    conf.to.gridPath = gridPath;
 
     carmen.on('open', () => {
         carmen.index(process.stdin, conf.to, config, (err) => {
