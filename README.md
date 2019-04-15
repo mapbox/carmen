@@ -30,11 +30,11 @@ Carmen comes with command line utilities that also act as examples of API usage.
 
 To query the default indexes:
 
-    ./scripts/carmen-index.js --query="new york"
+    ./bin/carmen-index.js --query="new york"
 
 To analyze an index:
 
-    ./scripts/carmen-analyze.js tiles/01-ne.country.mbtiles
+    ./bin/carmen-analyze.js tiles/01-ne.country.mbtiles
 
 ## Documentation
 

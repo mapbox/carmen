@@ -357,7 +357,7 @@ The main interface for building an index
 
 [lib/util/analyze.js:23-55][75]
 
-Generate summary statistics about a source. Used by `scripts/carmen-analyze.js`.
+Generate summary statistics about a source. Used by `bin/carmen-analyze.js`.
 
 Summary stats include:
 
