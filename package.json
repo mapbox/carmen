@@ -15,7 +15,7 @@
     "@mapbox/tile-cover": "^3.0.2",
     "@mapbox/tilebelt": "1.0.x",
     "@mapbox/tilelive": "^6.0.0",
-    "@mapbox/vtquery": "^0.3.0",
+    "@mapbox/vtquery": "^0.4.0",
     "@turf/bbox": "^6.0.1",
     "@turf/bbox-clip": "^6.0.3",
     "@turf/bearing": "^6.0.1",
