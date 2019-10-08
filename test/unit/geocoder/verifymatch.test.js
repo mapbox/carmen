@@ -106,7 +106,7 @@ tape('verifymatch.verifyFeatures', (t) => {
         ]
     };
     doc.properties['carmen:types'] = ['address'];
-    const filtered = verifymatch.verifyFeatures(query, geocoder, spatialmatches, [doc], {});
+    const filtered = verifymatch.verifyFeatures(query, geocoder, spatialmatches, [doc], {}).verified;
     t.ok(filtered.length <= 10, 'limit dupe address numbers to 10');
     t.end();
 
