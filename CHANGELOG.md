@@ -1,5 +1,24 @@
 # Changelog
 
+## 30.3.0
+
+- Improve outlier detection for interpolation ranges
+
+## 30.2.0
+
+- Enable selective filtering in VTQuery
+- Improve VTQuery performance
+
+## 30.1.0
+
+- Revert VTQuery Filtering
+
+## 30.0.0
+
+- Changes templating engine to handlebars
+- Enabled per feature templating overwrites
+- Enable filtering in VTQuery
+
 ## 29.3.1
 
 - Decrease VERIFYMATCH_STACK_LIMIT to 50
