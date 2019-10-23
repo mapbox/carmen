@@ -898,12 +898,13 @@ test('queens', (t) => {
         type: 'Feature',
         properties: {
             accuracy: 'building',
-            'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
+            'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
             'carmen:address_style': standardStyle,
             'carmen:addressprops': {
                 'carmen:address_style': {
                     0: queensStyle,
-                    2: queensStyle
+                    2: queensStyle,
+                    6: queensStyle
                 }
             }
         },
@@ -911,7 +912,7 @@ test('queens', (t) => {
             type: 'GeometryCollection',
             geometries: [{
                 type: 'MultiPoint',
-                coordinates: [[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]]
+                coordinates: [[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7]]
             }]
         }
     };
@@ -921,12 +922,13 @@ test('queens', (t) => {
             type: 'Feature',
             properties: {
                 accuracy: 'building',
-                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
+                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
                 'carmen:address_style': queensStyle,
                 'carmen:addressprops': {
                     'carmen:address_style': {
                         0: queensStyle,
-                        2: queensStyle
+                        2: queensStyle,
+                        6: queensStyle
                     }
                 }
             },
@@ -938,12 +940,13 @@ test('queens', (t) => {
             type: 'Feature',
             properties: {
                 accuracy: 'building',
-                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
+                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
                 'carmen:address_style': standardStyle,
                 'carmen:addressprops': {
                     'carmen:address_style': {
                         0: queensStyle,
-                        2: queensStyle
+                        2: queensStyle,
+                        6: queensStyle
                     }
                 }
             },
@@ -1016,6 +1019,12 @@ test('queens', (t) => {
                 number: 1010,
                 numberAsInt: 1010,
                 geometry: { type: 'Point', coordinates: [6, 6] },
+            },
+            {
+                idx: 6,
+                number: '1-010',
+                numberAsInt: 1,
+                geometry: { type: 'Point', coordinates: [7, 7] },
             }
         ],
         'Prefix on Queens Addresses Hyphen in Incorrect Spot',
