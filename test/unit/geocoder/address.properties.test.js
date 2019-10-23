@@ -242,3 +242,111 @@ test('reverse: override property', (t) => {
 
     t.end();
 });
+
+test('getAddressStyle', (t) => {
+    const standardStyle = 'standard';
+    const queensStyle = 'queens';
+    const defaultStyleFeature = {
+        type: 'Feature',
+        properties: {
+            accuracy: 'building',
+            'carmen:addressnumber': [[100, 200, 300]],
+            'carmen:addressprops': {
+            }
+        },
+        geometry: {
+            type: 'GeometryCollection',
+            geometries: [{
+                type: 'MultiPoint',
+                coordinates: [[1,1],[2,2],[3,3]]
+            }]
+        }
+    };
+    const standardStyleFeature = {
+        type: 'Feature',
+        properties: {
+            accuracy: 'building',
+            'carmen:addressnumber': [[100, 200, 300]],
+            'carmen:address_style': standardStyle,
+            'carmen:addressprops': {
+                'carmen:address_style': {
+                }
+            }
+        },
+        geometry: {
+            type: 'GeometryCollection',
+            geometries: [{
+                type: 'MultiPoint',
+                coordinates: [[1,1],[2,2],[3,3]]
+            }]
+        }
+    };
+    const queensStyleFeature = {
+        type: 'Feature',
+        properties: {
+            accuracy: 'building',
+            'carmen:addressnumber': [[100, 200, 300]],
+            'carmen:address_style': queensStyle,
+            'carmen:addressprops': {
+                'carmen:address_style': {
+                    1: standardStyle,
+                    '2': 'invalid'
+                }
+            }
+        },
+        geometry: {
+            type: 'GeometryCollection',
+            geometries: [{
+                type: 'MultiPoint',
+                coordinates: [[1,1],[2,2],[3,3]]
+            }]
+        }
+    };
+    const invalidStyleFeature = {
+        type: 'Feature',
+        properties: {
+            accuracy: 'building',
+            'carmen:addressnumber': [[100, 200, 300]],
+            'carmen:address_style': 'invalid'
+        },
+        geometry: {
+            type: 'GeometryCollection',
+            geometries: [{
+                type: 'MultiPoint',
+                coordinates: [[1,1],[2,2],[3,3]]
+            }]
+        }
+    };
+    t.deepEqual(
+        cluster.getAddressStyle(defaultStyleFeature, 0),
+        standardStyle,
+        'Default to standard'
+    );
+    t.deepEqual(
+        cluster.getAddressStyle(standardStyleFeature, 0),
+        standardStyle,
+        'Specified standard'
+    );
+    t.deepEqual(
+        cluster.getAddressStyle(queensStyleFeature, 0),
+        queensStyle,
+        'Specified queens'
+    );
+    t.deepEqual(
+        cluster.getAddressStyle(invalidStyleFeature, 0),
+        standardStyle,
+        'Unrecognized defaults to standard'
+    );
+    t.deepEqual(
+        cluster.getAddressStyle(queensStyleFeature, 1),
+        standardStyle,
+        'Override feature default'
+    );
+    t.deepEqual(
+        cluster.getAddressStyle(queensStyleFeature, 2),
+        standardStyle,
+        'Unrecognized defaults to standard'
+    );
+    t.end();
+});
+

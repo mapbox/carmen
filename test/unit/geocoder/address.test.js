@@ -891,33 +891,19 @@ test('prefix', (t) => {
     t.end();
 });
 
-test('getAddressStyle', (t) => {
+test('queens', (t) => {
     const standardStyle = 'standard';
     const queensStyle = 'queens';
-    const defaultStyleFeature = {
+    const feature = {
         type: 'Feature',
         properties: {
             accuracy: 'building',
-            'carmen:addressnumber': [[100, 200, 300]],
-            'carmen:addressprops': {
-            }
-        },
-        geometry: {
-            type: 'GeometryCollection',
-            geometries: [{
-                type: 'MultiPoint',
-                coordinates: [[1,1],[2,2],[3,3]]
-            }]
-        }
-    };
-    const standardStyleFeature = {
-        type: 'Feature',
-        properties: {
-            accuracy: 'building',
-            'carmen:addressnumber': [[100, 200, 300]],
+            'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
             'carmen:address_style': standardStyle,
             'carmen:addressprops': {
                 'carmen:address_style': {
+                    0: queensStyle,
+                    2: queensStyle
                 }
             }
         },
@@ -925,75 +911,114 @@ test('getAddressStyle', (t) => {
             type: 'GeometryCollection',
             geometries: [{
                 type: 'MultiPoint',
-                coordinates: [[1,1],[2,2],[3,3]]
+                coordinates: [[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]]
             }]
         }
     };
-    const queensStyleFeature = {
-        type: 'Feature',
-        properties: {
-            accuracy: 'building',
-            'carmen:addressnumber': [[100, 200, 300]],
-            'carmen:address_style': queensStyle,
-            'carmen:addressprops': {
-                'carmen:address_style': {
-                    1: standardStyle,
-                    '2': 'invalid'
+    t.deepEqual(
+        addressCluster.forward(feature, '10-10'),
+        [{
+            type: 'Feature',
+            properties: {
+                accuracy: 'building',
+                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
+                'carmen:address_style': queensStyle,
+                'carmen:addressprops': {
+                    'carmen:address_style': {
+                        0: queensStyle,
+                        2: queensStyle
+                    }
                 }
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [1,1]
             }
-        },
-        geometry: {
-            type: 'GeometryCollection',
-            geometries: [{
-                type: 'MultiPoint',
-                coordinates: [[1,1],[2,2],[3,3]]
-            }]
-        }
-    };
-    const invalidStyleFeature = {
-        type: 'Feature',
-        properties: {
-            accuracy: 'building',
-            'carmen:addressnumber': [[100, 200, 300]],
-            'carmen:address_style': 'invalid'
-        },
-        geometry: {
-            type: 'GeometryCollection',
-            geometries: [{
-                type: 'MultiPoint',
-                coordinates: [[1,1],[2,2],[3,3]]
-            }]
-        }
-    };
-    t.deepEqual(
-        addressCluster.getAddressStyle(defaultStyleFeature, 0),
-        standardStyle,
-        'Default to standard'
+        }, {
+            type: 'Feature',
+            properties: {
+                accuracy: 'building',
+                'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010]],
+                'carmen:address_style': standardStyle,
+                'carmen:addressprops': {
+                    'carmen:address_style': {
+                        0: queensStyle,
+                        2: queensStyle
+                    }
+                }
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [6,6]
+            }
+        }],
+        'Retrieve Queens Address with Hyphen'
     );
     t.deepEqual(
-        addressCluster.getAddressStyle(standardStyleFeature, 0),
-        standardStyle,
-        'Specified standard'
+        addressCluster.forwardPrefix(feature, '10-'),
+        [
+            {
+                idx: 0,
+                number: '10-10',
+                numberAsInt: 10,
+                geometry: { type: 'Point', coordinates: [1, 1] },
+            },
+            {
+                idx: 2,
+                number: '10-200',
+                numberAsInt: 10,
+                geometry: { type: 'Point', coordinates: [3, 3] },
+            },
+            {
+                idx: 3,
+                number: 10,
+                numberAsInt: 10,
+                geometry: { type: 'Point', coordinates: [4, 4] },
+            },
+            {
+                idx: 4,
+                number: 100,
+                numberAsInt: 100,
+                geometry: { type: 'Point', coordinates: [5, 5] },
+            },
+            {
+                idx: 5,
+                number: 1010,
+                numberAsInt: 1010,
+                geometry: { type: 'Point', coordinates: [6, 6] },
+            }
+        ],
+        'Prefix on Queens Addresses',
     );
     t.deepEqual(
-        addressCluster.getAddressStyle(queensStyleFeature, 0),
-        queensStyle,
-        'Specified queens'
+        addressCluster.forwardPrefix(feature, '10-1'),
+        [
+            {
+                idx: 0,
+                number: '10-10',
+                numberAsInt: 10,
+                geometry: { type: 'Point', coordinates: [1, 1] },
+            },
+            {
+                idx: 5,
+                number: 1010,
+                numberAsInt: 1010,
+                geometry: { type: 'Point', coordinates: [6, 6] },
+            }
+        ],
+        'Prefix on Queens Addresses Hyphen in Correct Spot',
     );
     t.deepEqual(
-        addressCluster.getAddressStyle(invalidStyleFeature, 0),
-        standardStyle,
-        'Unrecognized defaults to standard'
-    );
-    t.deepEqual(
-        addressCluster.getAddressStyle(queensStyleFeature, 1),
-        standardStyle,
-        'Override feature default'
-    );
-    t.deepEqual(
-        addressCluster.getAddressStyle(queensStyleFeature, 2),
-        standardStyle,
-        'Unrecognized defaults to standard'
+        addressCluster.forwardPrefix(feature, '1-01'),
+        [
+            {
+                idx: 5,
+                number: 1010,
+                numberAsInt: 1010,
+                geometry: { type: 'Point', coordinates: [6, 6] },
+            }
+        ],
+        'Prefix on Queens Addresses Hyphen in Incorrect Spot',
     );
     t.end();
 });
