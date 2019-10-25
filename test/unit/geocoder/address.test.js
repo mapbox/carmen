@@ -900,6 +900,7 @@ test('queens', (t) => {
             accuracy: 'building',
             'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
             'carmen:address_style': standardStyle,
+            'carmen:address_styles': [standardStyle, queensStyle],
             'carmen:addressprops': {
                 'carmen:address_style': {
                     0: queensStyle,
@@ -924,6 +925,7 @@ test('queens', (t) => {
                 accuracy: 'building',
                 'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
                 'carmen:address_style': queensStyle,
+                'carmen:address_styles': [standardStyle, queensStyle],
                 'carmen:address': '10-10',
                 'carmen:addressprops': {
                     'carmen:address_style': {
@@ -943,6 +945,7 @@ test('queens', (t) => {
                 accuracy: 'building',
                 'carmen:addressnumber': [['10-10', 200, '10-200', 10, 100, 1010, '1-010']],
                 'carmen:address_style': standardStyle,
+                'carmen:address_styles': [standardStyle, queensStyle],
                 'carmen:addressprops': {
                     'carmen:address_style': {
                         0: queensStyle,
