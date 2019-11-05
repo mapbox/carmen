@@ -10,3 +10,4 @@ npm-debug.log
 /.nyc_output/
 coverage.lcov
 yarn-error.log
+.idea/
