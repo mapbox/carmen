@@ -1038,9 +1038,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/tiletype/-/tiletype-0.3.1.tgz#1a1498f6a1b777630e0b4d3a2fed9d94959560cc"
   integrity sha1-GhSY9qG3d2MOC006L+2dlJWVYMw=
 
-"@mapbox/vtquery@mapbox/vtquery.git#1b4d8980aa8481796c131df27d0af91bed88579b":
-  version "0.4.2-dhp-01"
-  resolved "https://codeload.github.com/mapbox/vtquery/tar.gz/1b4d8980aa8481796c131df27d0af91bed88579b"
+"@mapbox/vtquery@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/vtquery/-/vtquery-0.5.0.tgz#2919fbccd95233f13d6c670c6be37f6f1012f581"
+  integrity sha512-bNwot8w9i9fNCsAvuCG8YGvPTqDcBBih+ip6h45tPlh+rjXNKpHp81SwshqAL/YmAR/8jvgKQbQwZN1GYhRqtQ==
   dependencies:
     "@mapbox/mason-js" "^0.1.5"
     nan "^2.14.0"
