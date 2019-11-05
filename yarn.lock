@@ -1038,9 +1038,9 @@
   resolved "https://registry.yarnpkg.com/@mapbox/tiletype/-/tiletype-0.3.1.tgz#1a1498f6a1b777630e0b4d3a2fed9d94959560cc"
   integrity sha1-GhSY9qG3d2MOC006L+2dlJWVYMw=
 
-"@mapbox/vtquery@git://github.com/mapbox/vtquery.git#a0a27f01536c4a14a7f4024d19527d7a2e8cbf3c":
-  version "0.4.1"
-  resolved "git://github.com/mapbox/vtquery.git#a0a27f01536c4a14a7f4024d19527d7a2e8cbf3c"
+"@mapbox/vtquery@git://github.com/mapbox/vtquery.git#1b4d8980aa8481796c131df27d0af91bed88579b":
+  version "0.4.2-dhp-01"
+  resolved "git://github.com/mapbox/vtquery.git#1b4d8980aa8481796c131df27d0af91bed88579b"
   dependencies:
     "@mapbox/mason-js" "^0.1.5"
     nan "^2.14.0"
