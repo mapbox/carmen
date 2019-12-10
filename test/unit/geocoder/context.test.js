@@ -472,6 +472,55 @@ test('contextVector restricts distance', (t) => {
     });
 });
 
+test('contextVector near miss polygons', (t) => {
+    context.getTile.cache.reset();
+
+    const vtile = new mapnik.VectorTile(0,0,0);
+    vtile.addGeoJSON(JSON.stringify({
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[
+                        [-40, -40],
+                        [-40, 40],
+                        [40, 40],
+                        [40, -40],
+                        [-40, -40],
+                    ]],
+                },
+                'properties': { 'carmen:text': 'A' },
+            },
+        ],
+    }), 'data');
+    zlib.gzip(vtile.getData(), (err, buffer) => {
+        t.ifError(err);
+        const source = {
+            getTile: (z,x,y,cb) => {
+                return cb(null, buffer);
+            },
+            geocoder_layer: 'data',
+            maxzoom: 0,
+            minzoom: 0,
+            name: 'test',
+            type: 'test',
+            id: 'testA',
+            idx: 0
+        };
+        context.contextVector(source, 39, 39, false, {}, null, false, false, undefined, (err, data) => {
+            t.ifError(err);
+            t.equal(data['properties']['carmen:text'], 'A');
+        });
+        context.contextVector(source, 40.0001, 40.0001, false, {}, null, false, false, undefined, (err, data) => {
+            t.ifError(err);
+            t.equal(data, false);
+            t.end();
+        });
+    });
+});
+
 (() => {
     // +-----+ <-- query is equidistant from two features
     // |     |
