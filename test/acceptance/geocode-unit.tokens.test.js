@@ -578,3 +578,95 @@ tape('teardown', (t) => {
         });
     });
 })();
+
+// test to see if phrases that have both frequentWords and reduceRelevance are indexed
+// we need the resultant relevance to be 0.8 otherwise we lose the functionality of being able to surface 4 street northwest
+(() => {
+    const conf = {
+        address: new mem({
+            maxzoom: 6,
+            geocoder_frequent_word_list: ['Street'],
+            geocoder_tokens: {
+                // regex to drop ordinals
+                // changes 4th -> 4
+                '([0-9]+)(?:st|nd|rd|th)': {
+                    'regex': true,
+                    'text': '$1',
+                    'reduceRelevance': true
+                },
+                'Street': 'st',
+                'Northwest': 'nw'
+            }
+        }, () => {})
+    };
+    const c = new Carmen(conf);
+    tape('geocoder token test', (t) => {
+        const address = {
+            id:1,
+            properties: {
+                'carmen:text':'4th Street Northwest',
+                'carmen:center':[0,0],
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        };
+        queueFeature(conf.address, address, () => { buildQueued(conf.address, t.end); });
+    });
+    tape('test for when both relevance reducing and frequentWords are in the phrase', (t) => {
+        c.geocode('4 Street Northwest', { fuzzyMatch: 1 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].relevance, 0.8, '4 Street Northwest; relevance = 0.8');
+            t.end();
+        });
+    });
+})();
+
+(() => {
+    const conf = {
+        address: new mem({
+            maxzoom: 6,
+            geocoder_tokens: {
+                // regex to drop ordinals
+                // changes 4th -> 4
+                '([0-9]+)(?:st|nd|rd|th)': {
+                    'regex': true,
+                    'text': '$1',
+                    'reduceRelevance': true
+                },
+                'Street': 'st',
+                'Northwest': 'nw'
+            }
+        }, () => {})
+    };
+    const c = new Carmen(conf);
+    tape('geocoder token test', (t) => {
+        const address = {
+            id:1,
+            properties: {
+                'carmen:text':'4th Street Northwest',
+                'carmen:center':[0,0],
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [0,0]
+            }
+        };
+        queueFeature(conf.address, address, () => { buildQueued(conf.address, t.end); });
+    });
+    tape('test token replacement', (t) => {
+        c.geocode('4th Street Northwest', { fuzzyMatch: 1 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].relevance, 1, '4th Street Northwest; relevance = 1');
+            t.end();
+        });
+    });
+    tape('test token replacement', (t) => {
+        c.geocode('4 Street Northwest', { fuzzyMatch: 1 }, (err, res) => {
+            t.ifError(err);
+            t.equals(res.features[0].relevance, 0.8, '4 Street Northwest; relevance = 0.8');
+            t.end();
+        });
+    });
+})();

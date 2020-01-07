@@ -299,17 +299,17 @@ test('enumerateTokenReplacement', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('fargo street northeast, san francisco')),
         [
-            'fargo street ne sf',
-            'fargo street ne san francisco',
-            'fargo street northeast sf',
-            'fargo street northeast san francisco'
+            { phrase: 'fargo street ne sf', reduceRelevance: false },
+            { phrase: 'fargo street ne san francisco', reduceRelevance: false },
+            { phrase: 'fargo street northeast sf', reduceRelevance: false },
+            { phrase: 'fargo street northeast san francisco', reduceRelevance: false }
         ],
         'fargo street northeast, san francisco - correct permutations'
     );
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('fargo street ne, sf')),
         [
-            'fargo street ne sf'
+            { phrase: 'fargo street ne sf', reduceRelevance: false }
         ],
         'fargo street ne sf - correct permutations'
     );
@@ -321,20 +321,20 @@ test('enumerateTokenReplacement', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('fargo street northeast, san francisco')),
         [
-            'fargo street ne sf',
-            'fargo street ne san francisco',
-            'fargo street northeast sf',
-            'fargo street northeast san francisco'
+            { phrase: 'fargo street ne sf', reduceRelevance: false },
+            { phrase: 'fargo street ne san francisco', reduceRelevance: false },
+            { phrase: 'fargo street northeast sf', reduceRelevance: false },
+            { phrase: 'fargo street northeast san francisco', reduceRelevance: false }
         ],
         'fargo street northeast, san francisco - inverse, correct permutations'
     );
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('fargo street ne, sf')),
         [
-            'fargo street ne sf',
-            'fargo street ne san francisco',
-            'fargo street northeast sf',
-            'fargo street northeast san francisco'
+            { phrase: 'fargo street ne sf', reduceRelevance: false },
+            { phrase: 'fargo street ne san francisco', reduceRelevance: false },
+            { phrase: 'fargo street northeast sf', reduceRelevance: false },
+            { phrase: 'fargo street northeast san francisco', reduceRelevance: false }
         ],
         'fargo street ne sf - inverse, correct permutations'
     );
@@ -346,10 +346,10 @@ test('enumerateTokenReplacement', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(replacer, termops.tokenize('abc 123 def')),
         [
-            'xyz @@@123@@@ def',
-            'xyz 123 def',
-            'abc @@@123@@@ def',
-            'abc 123 def'
+            { phrase: 'xyz @@@123@@@ def', reduceRelevance: false },
+            { phrase: 'xyz 123 def', reduceRelevance: false },
+            { phrase: 'abc @@@123@@@ def', reduceRelevance: false },
+            { phrase: 'abc 123 def', reduceRelevance: false }
         ],
         'numeric capture groups - correct permutations'
     );
@@ -372,10 +372,10 @@ test('enumerateTokenReplacement cascades', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(ubTokens, termops.tokenize('Jüdenstraße 17')),
         [
-            'jueden str 17',
-            'jüden str 17',
-            'juedenstraße 17',
-            'jüdenstraße 17'
+            { phrase: 'jueden str 17', reduceRelevance: false },
+            { phrase: 'jüden str 17', reduceRelevance: false },
+            { phrase: 'juedenstraße 17', reduceRelevance: false },
+            { phrase: 'jüdenstraße 17', reduceRelevance: false }
         ],
         'Jüdenstraße 17 - correct permutations'
     );
@@ -392,10 +392,10 @@ test('enumerateTokenReplacement cascades', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(ubTokens, termops.tokenize('Jüdenstraße 17')),
         [
-            'jueden str 17',
-            'jüden str 17',
-            'juedenstraße 17',
-            'jüdenstraße 17'
+            { phrase: 'jueden str 17', reduceRelevance: false },
+            { phrase: 'jüden str 17', reduceRelevance: false },
+            { phrase: 'juedenstraße 17', reduceRelevance: false },
+            { phrase: 'jüdenstraße 17', reduceRelevance: false }
         ],
         'Jüdenstraße 17 - correct permutations, reversed replacement order'
     );
@@ -413,14 +413,14 @@ test('enumerateTokenReplacement cascades', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(ubTokens, termops.tokenize('Kölnerstraße 27 40211 Düsseldorf')),
         [
-            'koelner str 27 40211 duesseldorf',
-            'koelner str 27 40211 düsseldorf',
-            'kölner str 27 40211 duesseldorf',
-            'kölner str 27 40211 düsseldorf',
-            'koelnerstraße 27 40211 duesseldorf',
-            'koelnerstraße 27 40211 düsseldorf',
-            'kölnerstraße 27 40211 duesseldorf',
-            'kölnerstraße 27 40211 düsseldorf'
+            { phrase: 'koelner str 27 40211 duesseldorf', reduceRelevance: false },
+            { phrase: 'koelner str 27 40211 düsseldorf', reduceRelevance: false },
+            { phrase: 'kölner str 27 40211 duesseldorf', reduceRelevance: false },
+            { phrase: 'kölner str 27 40211 düsseldorf', reduceRelevance: false },
+            { phrase: 'koelnerstraße 27 40211 duesseldorf', reduceRelevance: false },
+            { phrase: 'koelnerstraße 27 40211 düsseldorf', reduceRelevance: false },
+            { phrase: 'kölnerstraße 27 40211 duesseldorf', reduceRelevance: false },
+            { phrase: 'kölnerstraße 27 40211 düsseldorf', reduceRelevance: false }
         ],
         'Kölnerstraße 27 40211 Düsseldorf - correct permutations'
     );
@@ -435,18 +435,18 @@ test('enumerateTokenReplacement - inverse behavior', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(replacers, termops.tokenize('saint street term')),
         [
-            'st st',
-            'st street term',
-            'saint st',
-            'saint street term'
+            { phrase: 'st st', reduceRelevance: false },
+            { phrase: 'st street term', reduceRelevance: false },
+            { phrase: 'saint st', reduceRelevance: false },
+            { phrase: 'saint street term', reduceRelevance: false }
         ],
         'correct permutations for replacement with identical output'
     );
     t.deepEqual(
         token.enumerateTokenReplacements(replacers, termops.tokenize('st street term')),
         [
-            'st st',
-            'st street term'
+            { phrase: 'st st', reduceRelevance: false },
+            { phrase: 'st street term', reduceRelevance: false }
         ],
         'correct permutations for replacement with identical output'
     );
@@ -457,18 +457,18 @@ test('enumerateTokenReplacement - inverse behavior', (t) => {
     t.deepEqual(
         token.enumerateTokenReplacements(replacers, termops.tokenize('saint street term')),
         [
-            'saint st',
-            'saint street term'
+            { phrase: 'saint st', reduceRelevance: false },
+            { phrase: 'saint street term', reduceRelevance: false }
         ],
         'replaced terms are not re-expanded by inverse replacers'
     );
     t.deepEqual(
         token.enumerateTokenReplacements(replacers, termops.tokenize('st street term')),
         [
-            'st st',
-            'st street term',
-            'street term st',
-            'street term street term'
+            { phrase: 'st st', reduceRelevance: false },
+            { phrase: 'st street term', reduceRelevance: false },
+            { phrase: 'street term st', reduceRelevance: false },
+            { phrase: 'street term street term', reduceRelevance: false }
         ],
         'inverse replacement are used on input, but do not re-expanded previous replacement'
     );
@@ -490,17 +490,17 @@ test('enumerateTokenReplacement limits', (t) => {
 
     query = new Array(1).fill('Kölnerstraße').join(' ');
     enumerated = token.enumerateTokenReplacements(replacements, termops.tokenize(query));
-    t.equal(enumerated[0], 'koelner str');
+    t.deepEqual(enumerated[0], { phrase: 'koelner str', reduceRelevance: false });
     t.deepEqual(enumerated.length, 4, '1 double replaced input');
 
     query = new Array(2).fill('Kölnerstraße').join(' ');
     enumerated = token.enumerateTokenReplacements(replacements, termops.tokenize(query));
-    t.equal(enumerated[0], 'koelner str koelner str');
+    t.deepEqual(enumerated[0], { phrase: 'koelner str koelner str', reduceRelevance: false });
     t.deepEqual(enumerated.length, 8, '2 double replaced inputs');
 
     query = new Array(4).fill('Kölnerstraße').join(' ');
     enumerated = token.enumerateTokenReplacements(replacements, termops.tokenize(query));
-    t.equal(enumerated[0], 'koelner str koelner str koelner str koelner str');
+    t.deepEqual(enumerated[0], { phrase: 'koelner str koelner str koelner str koelner str', reduceRelevance: false });
     t.deepEqual(enumerated.length, 8, '4 double replaced inputs');
 
     t.end();

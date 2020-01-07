@@ -1,12 +1,12 @@
 {
   "name": "@mapbox/carmen",
   "description": "Mapnik vector-tile-based geocoder with support for swappable data sources.",
-  "version": "30.7.1",
+  "version": "30.7.2",
   "url": "http://github.com/mapbox/carmen",
   "author": "Mapbox (https://www.mapbox.com)",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@mapbox/carmen-core": "github:mapbox/carmen-core#bc95462aa2bfd724d1fa1556d04f889c9f3fa38f",
+    "@mapbox/carmen-core": "github:mapbox/carmen-core#nocomp-acadia",
     "@mapbox/geojsonhint": "^2.0.1",
     "@mapbox/locking": "^3.0.0",
     "@mapbox/mbtiles": "^0.10.0",

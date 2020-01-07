@@ -196,8 +196,8 @@ function Geocoder(indexes, options) {
             }
             source.categorized_replacement_words = token.categorizeTokenReplacements(info.geocoder_tokens);
             source.simple_replacer = token.createSimpleReplacer(source.categorized_replacement_words.simple);
-            source.complex_query_replacer = token.createComplexReplacer(source.categorized_replacement_words.complex);
-            source.complex_indexing_replacer = token.createComplexReplacer(source.categorized_replacement_words.complex, { includeUnambiguous: true });
+            source.complex_query_replacer = token.createComplexReplacer(source.categorized_replacement_words.complex, { includeRelevanceReduction: false });
+            source.complex_indexing_replacer = token.createComplexReplacer(source.categorized_replacement_words.complex, { includeUnambiguous: true , includeRelevanceReduction: true });
             source.format_helpers = options.formatHelpers;
 
             if (source._fuzzyset.writer && !source._fuzzyset.replacementsLoaded) {
@@ -409,8 +409,11 @@ function Geocoder(indexes, options) {
                 // create gridstore at load time to allow incremental gc
                 } else if (loaded[2].exists) {
                     // read cache
+                    const reader = new carmenCore.GridStore(loaded[2].path);
+                    reader.path = loaded[2].path;
+                    reader.pathname = loaded[2].pathname;
                     props.gridstore = {
-                        reader: new carmenCore.GridStore(loaded[2].path),
+                        reader: reader,
                         writer: null
                     };
                 } else {

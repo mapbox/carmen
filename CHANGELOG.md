@@ -1,5 +1,9 @@
 # Changelog
 
+## 30.7.2
+- Indexes features with ordinals dropped with lower relevance to handle missing ordinals in queries
+- Performance improvements from removing deadcode
+
 ## 30.7.1
 
 - Give a slight boost to scorefactors of 1 when adjusting scoredist in spatialmatch

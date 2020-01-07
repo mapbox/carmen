@@ -24,6 +24,24 @@ test('termops.getIndexablePhrases', (t) => {
     t.end();
 });
 
+test('termops.getIndexablePhrases', (t) => {
+    const tokens =
+        {
+            tokens: ['4', 'st', 'nw'],
+            languages: ['default'],
+            reduceRelevance: true
+        };
+
+    const freq = {};
+    freq['__COUNT__'] = [101];
+    freq[tokens.tokens[0]] = [1];
+    freq[tokens.tokens[1]] = [1];
+    freq[tokens.tokens[2]] = [1];
+
+    t.deepEqual(termops.getIndexablePhrases(tokens , freq), [{ relev: 0.8, text: '4 st nw', phrase: '4 st nw' }]);
+    t.end();
+});
+
 test('termops.getIndexablePhrases - frequentWords', (t) => {
     const tokens = ['main', 'st', 'nw'];
     const frequentWords = new Set(['st', 'nw']);
