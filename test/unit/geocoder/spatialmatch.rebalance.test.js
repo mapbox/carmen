@@ -82,7 +82,7 @@ test('rebalance copies', (t) => {
     const stackB = {
         entries: []
     };
-    stackB.entries[0] = JSON.parse(JSON.stringify(stackA.entries[0]));
+    stackB.entries[0] = stackA.entries[0];
 
     const rebalancedA = rebalance(query, stackA, phrasematches);
     const rebalancedB = rebalance(query, stackB, phrasematches);
