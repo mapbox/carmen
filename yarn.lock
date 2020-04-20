@@ -904,9 +904,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@mapbox/carmen-core@github:mapbox/carmen-core#a3052827fab58b61bd75769ff306b393525b9bcf":
-  version "0.1.1-stack-and-coalesce-4"
-  resolved "https://codeload.github.com/mapbox/carmen-core/tar.gz/a3052827fab58b61bd75769ff306b393525b9bcf"
+"@mapbox/carmen-core@github:mapbox/carmen-core#6754ba2e5dc339946257b6ad6744f88e84f258eb":
+  version "0.1.1-put-idx-back-1"
+  resolved "https://codeload.github.com/mapbox/carmen-core/tar.gz/6754ba2e5dc339946257b6ad6744f88e84f258eb"
   dependencies:
     neon-cli "^0.2.0"
     node-pre-gyp "~0.13.0"
