@@ -104,7 +104,7 @@ tape('find new york', (t) => {
 tape('find nueva york, language=es', (t) => {
     c.geocode('nueva york usa', { language: 'es' }, (err, res) => {
         t.equal(res.features[0].id, 'place.1');
-        t.equal(res.features[0].relevance, 0.823333, "query has penalty applied because 'usa' has no es translation");
+        t.equal(res.features[0].relevance, 0.986667, "query has penalty applied because 'usa' has no es translation");
         t.end();
     });
 });

@@ -99,7 +99,7 @@ tape('Check order, 632 中黒 Japan 岩出市', (t) => {
     c.geocode('632 中黒 Japan 岩出市', { limit_verify: 1 }, (err, res) => {
         t.ifError(err);
         t.equal(res.features[0].address, '632', 'Gets correct address');
-        t.equal(res.features[0].relevance, 0.82619, 'Mixed-up order lowers relevance');
+        t.equal(res.features[0].relevance, 0.918571, 'Mixed-up order lowers relevance');
         t.end();
     });
 });
