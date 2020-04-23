@@ -5,16 +5,21 @@ const rebalance = require('../../../lib/geocoder/spatialmatch').rebalance;
 const Phrasematch = require('../../../lib/geocoder/phrasematch').Phrasematch;
 const test = require('tape');
 
-function old_to_new(phrase_matches) {
+/**
+ * Converts an array of PhraseMatches to Stacks
+ *
+ * @param phraseMatches {Array} An array of phraseMatches
+ */
+function convertPhraseMatchesToStacks(phraseMatches) {
     const stack = {
         entries: []
     };
-    for (let k = 0; k < phrase_matches.length; k++) {
+    for (let k = 0; k < phraseMatches.length; k++) {
         stack.entries.push({
             grid_entry: {
-                relev: phrase_matches[k].weight
+                relev: phraseMatches[k].weight
             },
-            mask: phrase_matches[k].mask,
+            mask: phraseMatches[k].mask,
             phrasematch_id: k
         });
     }
@@ -31,7 +36,7 @@ test('rebalance, no garbage', (t) => {
         new Phrasematch(['washington'], 0.16666666666666666, 32, null, [0, 0], null, null, null),
     ];
 
-    const stack = old_to_new(phraseMatches);
+    const stack = convertPhraseMatchesToStacks(phraseMatches);
 
     stack.relev = 1;
 
@@ -53,7 +58,7 @@ test('rebalance, with garbage', (t) => {
         new Phrasematch(['washington'], 0.16666666666666666, 32, null, [0, 0], null, null, null),
     ];
 
-    const stack = old_to_new(phrasematches);
+    const stack = convertPhraseMatchesToStacks(phrasematches);
 
     stack.relev = 0.8333333333333333;
 
@@ -75,7 +80,7 @@ test('rebalance copies', (t) => {
         new Phrasematch(['washington'], 0.16666666666666666, 32, null, [0, 0], null, null, null),
     ];
 
-    const stackA = old_to_new(phrasematches);
+    const stackA = convertPhraseMatchesToStacks(phrasematches);
 
     stackA.relev = 1;
 
