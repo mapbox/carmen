@@ -37,10 +37,10 @@ test('rebalance, no garbage', (t) => {
 
     const rebalanced = rebalance(query, stack, phraseMatches);
     t.equal(rebalanced.relev, 1, 'relev = 1');
-    t.equal(rebalanced.entries[0].grid_entry.relev, 0.5, '1## main st weight = 0.265');
-    t.equal(rebalanced.entries[1].grid_entry.relev, 0.16666666666666666, '12345 weight = 0.245');
-    t.equal(rebalanced.entries[2].grid_entry.relev, 0.16666666666666666, 'seattle weight = 0.245');
-    t.equal(rebalanced.entries[3].grid_entry.relev, 0.16666666666666666, 'washington weight = 0.245');
+    t.equal(rebalanced.entries[0].grid_entry.relev, 0.5, '1## main st weight = 0.5');
+    t.equal(rebalanced.entries[1].grid_entry.relev, 0.16666666666666666, '12345 weight = 0.167');
+    t.equal(rebalanced.entries[2].grid_entry.relev, 0.16666666666666666, 'seattle weight = 0.167');
+    t.equal(rebalanced.entries[3].grid_entry.relev, 0.16666666666666666, 'washington weight = 0.167');
     t.end();
 });
 
@@ -59,9 +59,9 @@ test('rebalance, with garbage', (t) => {
 
     const rebalanced = rebalance(query, stack, phrasematches);
     t.equal(rebalanced.relev, 0.77777779, 'relev = 0.75');
-    t.equal(rebalanced.entries[0].grid_entry.relev, 0.34666667, '1## main st weight = 0.263');
-    t.equal(rebalanced.entries[1].grid_entry.relev, 0.21555556, '12345 weight = 0.243');
-    t.equal(rebalanced.entries[2].grid_entry.relev, 0.21555556, 'washington weight = 0.243');
+    t.equal(rebalanced.entries[0].grid_entry.relev, 0.34666667, '1## main st weight = 0.347');
+    t.equal(rebalanced.entries[1].grid_entry.relev, 0.21555556, '12345 weight = 0.216');
+    t.equal(rebalanced.entries[2].grid_entry.relev, 0.21555556, 'washington weight = 0.216');
     t.end();
 });
 
@@ -91,10 +91,10 @@ test('rebalance copies', (t) => {
     // Assert that the subqueries in rebalancedA are not affected by
     // the rebalance done to rebalancedB.
     t.equal(rebalancedA.relev, 1, 'relev = 1');
-    t.equal(rebalancedA.entries[0].grid_entry.relev, 0.5, 'weight = 0.265');
-    t.equal(rebalancedA.entries[1].grid_entry.relev, 0.16666666666666666, 'weight = 0.245');
-    t.equal(rebalancedA.entries[2].grid_entry.relev, 0.16666666666666666, 'weight = 0.245');
-    t.equal(rebalancedA.entries[3].grid_entry.relev, 0.16666666666666666, 'weight = 0.245');
+    t.equal(rebalancedA.entries[0].grid_entry.relev, 0.5, 'weight = 0.5');
+    t.equal(rebalancedA.entries[1].grid_entry.relev, 0.16666666666666666, 'weight = 0.167');
+    t.equal(rebalancedA.entries[2].grid_entry.relev, 0.16666666666666666, 'weight = 0.167');
+    t.equal(rebalancedA.entries[3].grid_entry.relev, 0.16666666666666666, 'weight = 0.167');
 
     // Vice versa.
     t.equal(rebalancedB.relev, 0.5, 'relev = 0.50');
