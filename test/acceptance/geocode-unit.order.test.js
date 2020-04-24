@@ -116,7 +116,7 @@ tape('Log Cabin Ln North Carolina Winston-Salem', (t) => {
     c.geocode('Log Cabin Ln North Carolina Winston-Salem', { limit_verify: 2 }, (err, res) => {
         t.ifError(err);
         t.equal(res.features[0].text, 'Log Cabin Ln', 'ok when query order is mixed up');
-        t.equal(res.features[0].relevance, 0.84127, 'Mixed-up order lowers relevance');
+        t.equal(res.features[0].relevance, 0.843915, 'Mixed-up order lowers relevance');
         t.end();
     });
 });

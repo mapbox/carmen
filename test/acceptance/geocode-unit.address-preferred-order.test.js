@@ -75,7 +75,7 @@ tape('full address first-preferred (541 + #522)', (t) => {
         t.equal(res.features.length, 1);
         t.equal(res.features[0].id, 'address.12345', 'found correct feature');
         t.equal(res.features[0].address, '541', 'selected first-position housenumber');
-        t.equal(res.features[0].relevance, 0.6, 'penalty from coverage');
+        t.equal(res.features[0].relevance, 0.633333, 'penalty from coverage');
         t.end();
     });
 });
@@ -86,7 +86,7 @@ tape('full address first-preferred (522 + #541)', (t) => {
         t.equal(res.features.length, 1);
         t.equal(res.features[0].id, 'address.12345', 'found correct feature');
         t.equal(res.features[0].address, '522', 'selected first-position housenumber');
-        t.equal(res.features[0].relevance, 0.6, 'penalty from coverage');
+        t.equal(res.features[0].relevance, 0.633333, 'penalty from coverage');
         t.end();
     });
 });
@@ -119,7 +119,7 @@ tape('full address last-preferred (541 + #522)', (t) => {
         t.equal(res.features.length, 1);
         t.equal(res.features[0].id, 'address.12345', 'found correct feature');
         t.equal(res.features[0].address, '541', 'selected last-position housenumber');
-        t.equal(res.features[0].relevance, 0.6, 'penalty from coverage');
+        t.equal(res.features[0].relevance, 0.633333, 'penalty from coverage');
         t.end();
     });
 });
@@ -130,7 +130,7 @@ tape('full address last-preferred (522 + #541)', (t) => {
         t.equal(res.features.length, 1);
         t.equal(res.features[0].id, 'address.12345', 'found correct feature');
         t.equal(res.features[0].address, '522', 'selected last-position housenumber');
-        t.equal(res.features[0].relevance, 0.6, 'penalty from coverage');
+        t.equal(res.features[0].relevance, 0.633333, 'penalty from coverage');
         t.end();
     });
 });

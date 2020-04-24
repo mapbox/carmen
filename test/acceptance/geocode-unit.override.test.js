@@ -160,7 +160,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         c.geocode('10C FAKE STREET 20003', { limit_verify: 2 }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, '10c fake street Parker 20003', 'found 10c fake street');
-            t.equals(res.features[0].relevance, 0.633333);
+            t.equals(res.features[0].relevance, 0.661111);
             t.deepEquals(res.features[0].context, [
                 { id: 'place.4', text: 'Parker' },
                 { id: 'postcode.5', text: '20003' }
@@ -173,7 +173,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         c.geocode('9B FAKE STREET 20002', { limit_verify: 10 }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street 20002');
-            t.equals(res.features[0].relevance, 0.633333);
+            t.equals(res.features[0].relevance, 0.661111);
             t.deepEquals(res.features[0].context, [
                 { id: 'place.4', text: 'Parker' },
                 { id: 'postcode.5', text: '20002' }
@@ -186,7 +186,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         c.geocode('9B FAKE STREET 20001', { limit_verify: 10 }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street 20002 w/ 20001 query');
-            t.equals(res.features[0].relevance, 0.583333);
+            t.equals(res.features[0].relevance, 0.611111);
             t.deepEquals(res.features[0].context, [
                 { id: 'place.4', text: 'Parker' },
                 { id: 'postcode.5', text: '20002' }
@@ -199,7 +199,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         c.geocode('9B FAKE STREET PARKER 20002', { limit_verify: 10 }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002');
-            t.equals(res.features[0].relevance, 0.711111);
+            t.equals(res.features[0].relevance, 0.725926);
             t.deepEquals(res.features[0].context, [
                 { id: 'place.4', text: 'Parker' },
                 { id: 'postcode.5', text: '20002' }
@@ -212,7 +212,7 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
         c.geocode('9B FAKE STREET PARKER 20001', { limit_verify: 10 }, (err, res) => {
             t.ifError(err);
             t.equals(res.features[0].place_name, '9b fake street Parker 20002', 'found 9b fake street parker 20002 w/ 20001 query');
-            t.equals(res.features[0].relevance, 0.822222);
+            t.equals(res.features[0].relevance, 0.818519);
             t.deepEquals(res.features[0].context, [
                 { id: 'place.4', text: 'Parker' },
                 { id: 'postcode.5', text: '20002' }
