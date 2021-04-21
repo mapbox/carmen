@@ -35,7 +35,6 @@
     "handlebars-helpers": "^0.10.0",
     "iter-tools": "^6.1.6",
     "leven": "^3.1.0",
-    "mapnik": "^4.5.5",
     "minimist": "1.2.0",
     "model-un": "0.0.3",
     "murmurhash-native": "^3.5.0",
@@ -50,6 +49,7 @@
     "documentation": "^13.1.1",
     "eslint": "^5.3.0",
     "eslint-plugin-node": "^8.0.0",
+    "mapnik": "^4.5.5",
     "nyc": "^15.1.0",
     "retire": "^2.0.1",
     "tape": "^5.2.0"
