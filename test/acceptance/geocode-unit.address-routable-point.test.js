@@ -89,17 +89,17 @@ const { queueFeature, buildQueued } = require('../../lib/indexer/addfeature');
                 'carmen:center': [0,0], // not used
                 'carmen:addressnumber': [null, ['9','11','13']],
                 'carmen:types': ['address'],
-                "carmen:routable_points": [
+                'carmen:routable_points': [
                     2.111,
                     2.11
                 ],
-                "carmen:addressprops": {
-                    "carmen:routable_points": {
-                        "1": [
+                'carmen:addressprops': {
+                    'carmen:routable_points': {
+                        '1': [
                             3.111,
                             3.11
                         ],
-                        "2": null
+                        '2': null
                     }
                 }
             },

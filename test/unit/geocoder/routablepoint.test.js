@@ -526,7 +526,7 @@ const routablePoints = require('../../../lib/geocoder/routablepoint.js');
             coordinates: [-122.22083, 37.72139]
         }
     };
-    const carmenOverride = featureroutablePoints.properties['carmen:routable_points']
+    const carmenOverride = featureroutablePoints.properties['carmen:routable_points'];
     // TODO: Confirm these assumpitons - Both what routable_points looks like on the feature,
     // and the expected result of routablePoints if so.
     tape('routablePoints input validation: feature containing routable_points', (assert) => {
