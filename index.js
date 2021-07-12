@@ -213,6 +213,7 @@ function Geocoder(indexes, options) {
             source.geocoder_expected_number_order = info.geocoder_expected_number_order || false;
             source.geocoder_intersection_token = info.geocoder_intersection_token || '';
             source.geocoder_coalesce_radius = info.geocoder_coalesce_radius;
+            source.geocoder_stack_bounds = info.geocoder_stack_bounds || {};
 
             source.geocoder_frequent_word_list = false;
             if (info.geocoder_frequent_word_list) {

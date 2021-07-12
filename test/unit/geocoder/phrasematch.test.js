@@ -677,3 +677,39 @@ tape('fuzzyMatchMulti - masks for intersection queries', (t) => {
         t.end();
     });
 });
+
+tape('stackBounds', (t) => {
+    const c = fakeCarmen({
+        fuzzyMatchWindows: (a, b, c, d) => {
+            return [
+                { start_position: 0, phrase: ['query'], edit_distance: 0, ending_type: 0, phrase_id_range: [0, 0] }
+            ];
+        }
+    });
+    c.geocoder_stack_bounds = {
+        at: [9.530734, 46.372056, 17.158411, 49.020374],
+        ch: [5.955907, 45.817981, 10.492063, 47.808454]
+    };
+    c.geocoder_stack = ['at', 'ch'];
+
+    t.plan(8);
+    phrasematch(c, termops.tokenize('query'), { stacks: ['at', 'ch'] }, (err, results, source) => {
+        t.deepEquals(results[0].bounds, [5.955907, 45.817981, 17.158411, 49.020374]);
+        t.error(err);
+    });
+
+    phrasematch(c, termops.tokenize('query'), { stacks: ['at'] }, (err, results, source) => {
+        t.deepEquals(results[0].bounds, [9.530734, 46.372056, 17.158411, 49.020374]);
+        t.error(err);
+    });
+
+    phrasematch(c, termops.tokenize('query'), { stacks: ['ch', 'zz'] }, (err, results, source) => {
+        t.deepEquals(results[0].bounds, [5.955907, 45.817981, 10.492063, 47.808454]);
+        t.error(err);
+    });
+
+    phrasematch(c, termops.tokenize('query'), { stacks: ['aa', 'zz'] }, (err, results, source) => {
+        t.deepEquals(results[0].bounds, undefined);
+        t.error(err);
+    });
+});
